@@ -1,0 +1,185 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Enums
+enum CategoryType {
+  PRODUCT
+  MATERIAL
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
+// Models
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  password     String
+  name         String
+  businessName String?
+  phone        String?
+  address      String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  // Relations
+  clients    Client[]
+  categories Category[]
+  products   Product[]
+  materials  Material[]
+  quotes     Quote[]
+
+  @@map("users")
+}
+
+model Client {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  userId String
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quotes Quote[]
+
+  @@map("clients")
+}
+
+model Category {
+  id        String       @id @default(cuid())
+  name      String
+  type      CategoryType
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  // Relations
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products  Product[]
+  materials Material[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  laborCost   Float    @default(0)
+  quantity    Int      @default(0)
+  minStock    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId     String
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId String?
+  category   Category?         @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  materials  ProductMaterial[]
+  quoteItems QuoteItem[]
+
+  @@map("products")
+}
+
+model Material {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  unit        String
+  unitPrice   Float
+  quantity    Float    @default(0)
+  minStock    Float    @default(0)
+  supplier    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId     String
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId String?
+  category   Category?         @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  products   ProductMaterial[]
+
+  @@map("materials")
+}
+
+model ProductMaterial {
+  id          String   @id @default(cuid())
+  quantity    Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  materialId String
+  material   Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, materialId])
+  @@map("product_materials")
+}
+
+model Quote {
+  id          String      @id @default(cuid())
+  number      Int
+  title       String?
+  description String?
+  status      QuoteStatus @default(DRAFT)
+  validUntil  DateTime?
+  notes       String?
+  subtotal    Float       @default(0)
+  laborCost   Float       @default(0)
+  discount    Float       @default(0)
+  total       Float       @default(0)
+  manualTotal Float?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  userId   String
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientId String
+  client   Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  items    QuoteItem[]
+
+  @@unique([userId, number])
+  @@map("quotes")
+}
+
+model QuoteItem {
+  id          String   @id @default(cuid())
+  description String
+  quantity    Int
+  unitPrice   Float
+  total       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  quoteId   String
+  quote     Quote    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@map("quote_items")
+}

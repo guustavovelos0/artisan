@@ -1,3 +1,28 @@
 # Ralph Progress Log
 Started: Sex 16 Jan 2026 00:29:35 -03
+
+## Codebase Patterns
+- Prisma 7 requires DATABASE_URL in prisma.config.ts, NOT in schema.prisma
+- Use `npm run db:migrate -w @artisan/api` to run migrations (requires Docker PostgreSQL running)
+- Generated Prisma client goes to node_modules/@prisma/client
+- API runs on port 3001, Web will run on port 5173
+
+---
+
+## 2026-01-16 03:38 - US-004
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Prisma ORM with complete database schema
+- Files changed:
+  - apps/api/package.json (added Prisma dependencies and db scripts)
+  - apps/api/prisma/schema.prisma (complete schema with all models)
+  - apps/api/prisma.config.ts (Prisma 7 config)
+  - apps/api/.env (DATABASE_URL)
+  - apps/api/.env.example (template for DATABASE_URL)
+  - apps/api/.gitignore (exclude .env and generated Prisma)
+- **Learnings for future iterations:**
+  - Prisma 7 moved datasource URL from schema.prisma to prisma.config.ts
+  - Docker Desktop on macOS can be unstable - be prepared for long image pulls
+  - `prisma generate` works without database, `prisma migrate dev` requires running DB
+  - Schema includes: User, Client, Category, Product, ProductMaterial, Material, Quote, QuoteItem
+  - Enums: CategoryType (PRODUCT, MATERIAL), QuoteStatus (DRAFT, SENT, APPROVED, REJECTED, COMPLETED)
 ---
