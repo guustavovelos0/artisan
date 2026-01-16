@@ -85,4 +85,57 @@ router.post('/register', async (req, res) => {
   }
 });
 
+interface LoginBody {
+  email: string;
+  password: string;
+}
+
+// POST /api/auth/login
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body as LoginBody;
+
+    // Validate required fields
+    if (!email || !password) {
+      res.status(400).json({ error: 'Email and password are required' });
+      return;
+    }
+
+    // Find user by email
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      res.status(401).json({ error: 'Invalid credentials' });
+      return;
+    }
+
+    // Compare password
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      res.status(401).json({ error: 'Invalid credentials' });
+      return;
+    }
+
+    // Generate JWT token (expires in 7 days)
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    // Return user data (without password) and token
+    const { password: _, ...userWithoutPassword } = user;
+    res.json({
+      user: userWithoutPassword,
+      token,
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;
