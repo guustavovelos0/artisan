@@ -155,7 +155,80 @@ export default function MaterialsPage() {
         </div>
       )}
 
-      <Card>
+      {/* Mobile Card Layout */}
+      <div className="md:hidden space-y-4">
+        {materials.length === 0 ? (
+          <Card>
+            <CardContent className="py-8">
+              <p className="text-muted-foreground text-center">
+                {lowStockFilter
+                  ? 'Nenhum material encontrado. Todos os materiais estão acima dos níveis mínimos de estoque.'
+                  : 'Nenhum material encontrado. Crie seu primeiro material para começar.'}
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          materials.map((material) => (
+            <Card key={material.id}>
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h3 className="font-medium">{material.name}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {material.category?.name || 'Sem categoria'}
+                    </p>
+                  </div>
+                  {isLowStock(material) && (
+                    <span className="inline-flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
+                      <AlertTriangle className="h-3 w-3" />
+                      Estoque Baixo
+                    </span>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm mb-4">
+                  <div>
+                    <span className="text-muted-foreground">Estoque:</span>{' '}
+                    <span className={isLowStock(material) ? 'text-amber-600 font-medium' : ''}>
+                      {material.quantity}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Unidade:</span>{' '}
+                    {material.unit}
+                  </div>
+                  <div className="col-span-2">
+                    <span className="text-muted-foreground">Preço Unitário:</span>{' '}
+                    {formatCurrency(material.unitPrice)}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 border-t pt-3">
+                  <Button variant="outline" size="sm" asChild className="flex-1">
+                    <Link to={`/materials/${material.id}`}>
+                      <Pencil className="h-4 w-4 mr-1" />
+                      Editar
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDelete(material.id)}
+                    disabled={deleting === material.id}
+                  >
+                    {deleting === material.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Trash2 className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Desktop Table Layout */}
+      <Card className="hidden md:block">
         <CardHeader>
           <CardTitle>{lowStockFilter ? 'Materiais com Estoque Baixo' : 'Todos os Materiais'}</CardTitle>
         </CardHeader>
@@ -202,7 +275,7 @@ export default function MaterialsPage() {
                     <TableCell>{formatCurrency(material.unitPrice)}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="icon" asChild>
+                        <Button variant="ghost" size="icon" asChild title="Editar">
                           <Link to={`/materials/${material.id}`}>
                             <Pencil className="h-4 w-4" />
                             <span className="sr-only">Editar</span>
@@ -213,6 +286,7 @@ export default function MaterialsPage() {
                           size="icon"
                           onClick={() => handleDelete(material.id)}
                           disabled={deleting === material.id}
+                          title="Excluir"
                         >
                           {deleting === material.id ? (
                             <Loader2 className="h-4 w-4 animate-spin" />
