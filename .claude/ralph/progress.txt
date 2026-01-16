@@ -6,7 +6,27 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 - Use `npm run db:migrate -w @artisan/api` to run migrations (requires Docker PostgreSQL running)
 - Generated Prisma client goes to node_modules/@prisma/client
 - API runs on port 3001, Web will run on port 5173
+- Pages go in apps/web/src/pages/ directory
+- Use react-hook-form + zod for form validation with Shadcn form components
+- API URL is http://localhost:3001/api
+- Token and user stored in localStorage after auth
 
+---
+
+## 2026-01-16 08:45 - US-010
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Login and registration pages with form validation
+- Files changed:
+  - apps/web/src/pages/LoginPage.tsx (new - login form with email/password)
+  - apps/web/src/pages/RegisterPage.tsx (new - registration form with name/email/password/businessName)
+  - apps/web/src/App.tsx (added /login and /register routes)
+  - .claude/ralph/prd.json (marked US-005 through US-010 as passes: true)
+- **Learnings for future iterations:**
+  - Shadcn form components use react-hook-form Controller pattern via FormField
+  - Use zodResolver from @hookform/resolvers for form schema validation
+  - API returns { user, token } on successful auth
+  - Store token in localStorage and redirect to / on success
+  - Login page can display server errors via useState error state
 ---
 
 ## 2026-01-16 03:38 - US-004
