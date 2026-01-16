@@ -213,4 +213,67 @@ router.put('/profile', authMiddleware, async (req: AuthenticatedRequest, res: Re
   }
 });
 
+interface ChangePasswordBody {
+  currentPassword: string;
+  newPassword: string;
+}
+
+// PUT /api/auth/password - Change password
+router.put('/password', authMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    const { currentPassword, newPassword } = req.body as ChangePasswordBody;
+
+    // Validate required fields
+    if (!currentPassword || !newPassword) {
+      res.status(400).json({ error: 'Current password and new password are required' });
+      return;
+    }
+
+    // Validate new password length
+    if (newPassword.length < 6) {
+      res.status(400).json({ error: 'New password must be at least 6 characters' });
+      return;
+    }
+
+    // Get user with password
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    // Verify current password
+    const passwordMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!passwordMatch) {
+      res.status(401).json({ error: 'Current password is incorrect' });
+      return;
+    }
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+    // Update password
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword },
+    });
+
+    res.json({ message: 'Password changed successfully' });
+  } catch (error) {
+    console.error('Change password error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;

@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Card, CardContent } from '@/components/ui/card'
 import { Toaster } from '@/components/ui/sonner'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { LowStockProvider } from '@/contexts/LowStockContext'
@@ -18,19 +17,7 @@ import TechnicalSheetPage from '@/pages/TechnicalSheetPage'
 import QuotesPage from '@/pages/QuotesPage'
 import QuoteFormPage from '@/pages/QuoteFormPage'
 import QuotePreviewPage from '@/pages/QuotePreviewPage'
-
-function PlaceholderPage({ title }: { title: string }) {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">{title}</h1>
-      <Card>
-        <CardContent className="p-6">
-          <p className="text-muted-foreground">This page is under construction.</p>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
+import SettingsPage from '@/pages/SettingsPage'
 
 function App() {
   return (
@@ -199,7 +186,7 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <PlaceholderPage title="Settings" />
+                  <SettingsPage />
                 </Layout>
               </ProtectedRoute>
             }
