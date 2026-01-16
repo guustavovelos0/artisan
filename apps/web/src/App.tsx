@@ -12,6 +12,7 @@ import MaterialsPage from '@/pages/MaterialsPage'
 import MaterialFormPage from '@/pages/MaterialFormPage'
 import ProductsPage from '@/pages/ProductsPage'
 import ProductFormPage from '@/pages/ProductFormPage'
+import TechnicalSheetPage from '@/pages/TechnicalSheetPage'
 
 function Dashboard() {
   return (
@@ -122,6 +123,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <ProductFormPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products/:id/technical-sheet"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <TechnicalSheetPage />
                 </Layout>
               </ProtectedRoute>
             }
