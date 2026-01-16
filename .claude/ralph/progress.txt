@@ -12,7 +12,28 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 - Token and user stored in localStorage after auth
 - Use ApiError class for typed error handling in catch blocks
 - AuthContext provides isLoading state for showing loading spinners during auth check
+- Layout component wraps protected routes for consistent sidebar/header navigation
+- Use cn() utility from lib/utils to merge Tailwind classes conditionally
 
+---
+
+## 2026-01-16 - US-012
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: App layout with sidebar navigation
+- Files changed:
+  - apps/web/src/components/Layout.tsx (new - main layout with sidebar and header)
+  - apps/web/src/components/ui/sheet.tsx (new - Shadcn sheet component for mobile drawer)
+  - apps/web/src/components/ui/separator.tsx (new - Shadcn separator component)
+  - apps/web/src/components/ui/tooltip.tsx (new - Shadcn tooltip component)
+  - apps/web/src/App.tsx (integrated Layout with protected routes)
+  - apps/web/package.json (added @radix-ui/react-separator dependency)
+- **Learnings for future iterations:**
+  - Use Shadcn Sheet component for mobile sidebar drawer (slide in from left)
+  - Layout uses fixed sidebar on desktop (md:w-64) with content offset (md:pl-64)
+  - Mobile sidebar state managed with useState and Sheet open/onOpenChange
+  - NavLink component uses useLocation() to determine active state
+  - Active nav item uses bg-sidebar-accent and font-medium for visual distinction
+  - Icons from lucide-react: LayoutDashboard, Users, Package, Boxes, FileText, Settings
 ---
 
 ## 2026-01-16 09:15 - US-011
