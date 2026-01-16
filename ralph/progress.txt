@@ -242,3 +242,22 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Toast notifications use sonner library via toast.success()
 ---
 
+## 2026-01-16 - US-023
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Technical sheet endpoints for managing product materials
+- Files changed:
+  - apps/api/src/routes/products.ts (added 5 new endpoints for technical sheet)
+- New endpoints:
+  - GET /api/products/:id/materials - list product materials with quantities
+  - POST /api/products/:id/materials - add material to product
+  - PUT /api/products/:id/materials/:materialId - update material quantity
+  - DELETE /api/products/:id/materials/:materialId - remove material from product
+  - GET /api/products/:id/cost - calculate total cost (materialCost + laborCost)
+- **Learnings for future iterations:**
+  - Use Prisma's unique compound key syntax: `where: { productId_materialId: { productId, materialId } }`
+  - Cost calculation returns materialBreakdown array with individual material costs
+  - All endpoints verify product belongs to user via userId filter
+  - POST checks if material already exists in product to prevent duplicates
+  - Material validation ensures materialId belongs to the same user
+---
+
