@@ -10,8 +10,10 @@
 - API runs on port 3001, Web runs on port 5173
 - PostgreSQL runs on port 5433 (Docker) to avoid local PostgreSQL conflicts
 - Prisma 7: Use `env("DATABASE_URL")` in prisma.config.ts, NOT `process.env` or schema.prisma url
+- Prisma 7 Runtime: MUST use @prisma/adapter-pg with PrismaPg adapter for PrismaClient initialization
 - TailwindCSS v4 uses CSS-based config (no tailwind.config.js), import via `@import "tailwindcss"` in CSS
 - Shadcn/ui: Uses @/* path alias, components at src/components/ui/, utils at src/lib/utils.ts
+- Auth: JWT_SECRET from env or default, bcrypt with 10 salt rounds, 7d token expiry
 ---
 
 ## 2026-01-16 - US-001
@@ -122,5 +124,23 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Add components with `npx shadcn@latest add button input card dialog table select form -y`
   - Theme variables are defined in CSS using oklch color space (CSS Color Level 4)
   - Light/dark theme support via CSS custom properties and `.dark` class
+---
+
+## 2026-01-16 - US-007
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: User registration endpoint with validation and JWT
+- Files changed:
+  - apps/api/package.json (added bcrypt, jsonwebtoken, @prisma/adapter-pg dependencies)
+  - apps/api/src/index.ts (added auth routes)
+  - apps/api/src/routes/auth.ts (POST /api/auth/register endpoint)
+  - apps/api/src/lib/prisma.ts (centralized Prisma client with PG adapter)
+- **Learnings for future iterations:**
+  - Prisma 7 requires @prisma/adapter-pg with PrismaPg for runtime database connections
+  - PrismaClient must be initialized with: `new PrismaClient({ adapter: new PrismaPg({ connectionString }) })`
+  - Import dotenv/config at the top of lib/prisma.ts to load environment variables
+  - bcrypt.hash() with 10 salt rounds for password hashing
+  - jwt.sign() with { expiresIn: '7d' } for 7-day token expiry
+  - Use destructuring to exclude password: `const { password: _, ...userWithoutPassword } = user`
+  - Email validation regex: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
 ---
 
