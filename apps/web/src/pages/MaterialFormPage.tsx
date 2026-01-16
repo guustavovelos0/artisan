@@ -28,6 +28,17 @@ import {
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import CategoryManager from '@/components/CategoryManager'
 
+// Predefined unit options for materials
+const UNIT_OPTIONS = [
+  { value: 'm', label: 'm (metros)' },
+  { value: 'cm', label: 'cm (centímetros)' },
+  { value: 'kg', label: 'kg (quilogramas)' },
+  { value: 'g', label: 'g (gramas)' },
+  { value: 'ml', label: 'ml (mililitros)' },
+  { value: 'L', label: 'L (litros)' },
+  { value: 'un', label: 'un (unidades)' },
+] as const
+
 const materialSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório'),
   description: z.string().optional(),
@@ -238,9 +249,23 @@ export default function MaterialFormPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Unidade *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="ex: metros, kg, unidades" {...field} />
-                      </FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione a unidade" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {UNIT_OPTIONS.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
