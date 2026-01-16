@@ -10,6 +10,7 @@ import ClientsPage from '@/pages/ClientsPage'
 import ClientFormPage from '@/pages/ClientFormPage'
 import MaterialsPage from '@/pages/MaterialsPage'
 import MaterialFormPage from '@/pages/MaterialFormPage'
+import ProductsPage from '@/pages/ProductsPage'
 
 function Dashboard() {
   return (
@@ -95,11 +96,11 @@ function App() {
             }
           />
           <Route
-            path="/products/*"
+            path="/products"
             element={
               <ProtectedRoute>
                 <Layout>
-                  <PlaceholderPage title="Products" />
+                  <ProductsPage />
                 </Layout>
               </ProtectedRoute>
             }
