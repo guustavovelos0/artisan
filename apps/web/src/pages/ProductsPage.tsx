@@ -12,6 +12,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Plus, Pencil, Trash2, Loader2, AlertTriangle, FileText, Factory } from 'lucide-react'
+import ManufactureDialog from '@/components/ManufactureDialog'
 
 interface Category {
   id: string
@@ -48,6 +49,8 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [manufactureProductId, setManufactureProductId] = useState<string | null>(null)
+  const [manufactureDialogOpen, setManufactureDialogOpen] = useState(false)
 
   const fetchProducts = async () => {
     try {
@@ -92,6 +95,15 @@ export default function ProductsPage() {
 
   const isLowStock = (product: Product) => {
     return product.quantity < product.minStock
+  }
+
+  const handleManufactureClick = (productId: string) => {
+    setManufactureProductId(productId)
+    setManufactureDialogOpen(true)
+  }
+
+  const handleManufactureSuccess = () => {
+    fetchProducts()
   }
 
   const formatCurrency = (value: number) => {
@@ -189,7 +201,12 @@ export default function ProductsPage() {
                             <span className="sr-only">Technical Sheet</span>
                           </Link>
                         </Button>
-                        <Button variant="ghost" size="icon" title="Manufacture" disabled>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          title="Manufacture"
+                          onClick={() => handleManufactureClick(product.id)}
+                        >
                           <Factory className="h-4 w-4" />
                           <span className="sr-only">Manufacture</span>
                         </Button>
@@ -216,6 +233,13 @@ export default function ProductsPage() {
           )}
         </CardContent>
       </Card>
+
+      <ManufactureDialog
+        productId={manufactureProductId}
+        open={manufactureDialogOpen}
+        onOpenChange={setManufactureDialogOpen}
+        onSuccess={handleManufactureSuccess}
+      />
     </div>
   )
 }
