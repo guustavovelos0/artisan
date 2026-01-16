@@ -323,56 +323,16 @@ export default function TechnicalSheetPage() {
               Nenhum material adicionado ainda. Adicione materiais acima para construir a ficha técnica.
             </p>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Material</TableHead>
-                  <TableHead>Unidade</TableHead>
-                  <TableHead>Quantidade</TableHead>
-                  <TableHead>Preço Unitário</TableHead>
-                  <TableHead>Total</TableHead>
-                  <TableHead className="w-[100px]">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+            <>
+              {/* Mobile card layout */}
+              <div className="md:hidden space-y-4">
                 {productMaterials.map((pm) => (
-                  <TableRow key={pm.materialId}>
-                    <TableCell className="font-medium">{pm.material.name}</TableCell>
-                    <TableCell>{pm.material.unit}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Input
-                          type="number"
-                          step="0.01"
-                          min="0.01"
-                          className="w-24"
-                          value={editingQuantity[pm.materialId] || ''}
-                          onChange={(e) =>
-                            setEditingQuantity({
-                              ...editingQuantity,
-                              [pm.materialId]: e.target.value,
-                            })
-                          }
-                          onBlur={() => {
-                            if (editingQuantity[pm.materialId] !== String(pm.quantity)) {
-                              handleUpdateQuantity(pm.materialId)
-                            }
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              handleUpdateQuantity(pm.materialId)
-                            }
-                          }}
-                          disabled={updatingMaterial === pm.materialId}
-                        />
-                        {updatingMaterial === pm.materialId && (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        )}
+                  <div key={pm.materialId} className="border rounded-lg p-4 space-y-3">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h3 className="font-medium">{pm.material.name}</h3>
+                        <p className="text-sm text-muted-foreground">{pm.material.unit}</p>
                       </div>
-                    </TableCell>
-                    <TableCell>{formatCurrency(pm.material.unitPrice)}</TableCell>
-                    <TableCell>{formatCurrency(pm.quantity * pm.material.unitPrice)}</TableCell>
-                    <TableCell>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -387,22 +347,144 @@ export default function TechnicalSheetPage() {
                         )}
                         <span className="sr-only">Remover</span>
                       </Button>
-                    </TableCell>
-                  </TableRow>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div>
+                        <span className="text-muted-foreground">Quantidade</span>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Input
+                            type="number"
+                            step="0.01"
+                            min="0.01"
+                            className="w-20 h-8"
+                            value={editingQuantity[pm.materialId] || ''}
+                            onChange={(e) =>
+                              setEditingQuantity({
+                                ...editingQuantity,
+                                [pm.materialId]: e.target.value,
+                              })
+                            }
+                            onBlur={() => {
+                              if (editingQuantity[pm.materialId] !== String(pm.quantity)) {
+                                handleUpdateQuantity(pm.materialId)
+                              }
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                handleUpdateQuantity(pm.materialId)
+                              }
+                            }}
+                            disabled={updatingMaterial === pm.materialId}
+                          />
+                          {updatingMaterial === pm.materialId && (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          )}
+                        </div>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Preço Unit.</span>
+                        <p className="font-medium mt-1">{formatCurrency(pm.material.unitPrice)}</p>
+                      </div>
+                    </div>
+                    <div className="pt-2 border-t flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Total</span>
+                      <span className="font-semibold">{formatCurrency(pm.quantity * pm.material.unitPrice)}</span>
+                    </div>
+                  </div>
                 ))}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableCell colSpan={4} className="text-right font-medium">
-                    Custo de Materiais
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    {formatCurrency(cost?.materialCost || 0)}
-                  </TableCell>
-                  <TableCell />
-                </TableRow>
-              </TableFooter>
-            </Table>
+                {/* Mobile materials cost footer */}
+                <div className="border rounded-lg p-4 bg-muted/50">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Custo de Materiais</span>
+                    <span className="font-semibold">{formatCurrency(cost?.materialCost || 0)}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop table layout */}
+              <div className="hidden md:block">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Material</TableHead>
+                      <TableHead>Unidade</TableHead>
+                      <TableHead>Quantidade</TableHead>
+                      <TableHead>Preço Unitário</TableHead>
+                      <TableHead>Total</TableHead>
+                      <TableHead className="w-[100px]">Ações</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {productMaterials.map((pm) => (
+                      <TableRow key={pm.materialId}>
+                        <TableCell className="font-medium">{pm.material.name}</TableCell>
+                        <TableCell>{pm.material.unit}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Input
+                              type="number"
+                              step="0.01"
+                              min="0.01"
+                              className="w-24"
+                              value={editingQuantity[pm.materialId] || ''}
+                              onChange={(e) =>
+                                setEditingQuantity({
+                                  ...editingQuantity,
+                                  [pm.materialId]: e.target.value,
+                                })
+                              }
+                              onBlur={() => {
+                                if (editingQuantity[pm.materialId] !== String(pm.quantity)) {
+                                  handleUpdateQuantity(pm.materialId)
+                                }
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  handleUpdateQuantity(pm.materialId)
+                                }
+                              }}
+                              disabled={updatingMaterial === pm.materialId}
+                            />
+                            {updatingMaterial === pm.materialId && (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell>{formatCurrency(pm.material.unitPrice)}</TableCell>
+                        <TableCell>{formatCurrency(pm.quantity * pm.material.unitPrice)}</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleRemoveMaterial(pm.materialId)}
+                            disabled={deletingMaterial === pm.materialId}
+                            title="Remover material"
+                          >
+                            {deletingMaterial === pm.materialId ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Trash2 className="h-4 w-4" />
+                            )}
+                            <span className="sr-only">Remover</span>
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-right font-medium">
+                        Custo de Materiais
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {formatCurrency(cost?.materialCost || 0)}
+                      </TableCell>
+                      <TableCell />
+                    </TableRow>
+                  </TableFooter>
+                </Table>
+              </div>
+            </>
           )}
         </CardContent>
       </Card>
