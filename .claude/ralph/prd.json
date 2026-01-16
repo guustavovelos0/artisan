@@ -564,8 +564,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 34,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "QuotePreviewPage with PDF viewer using PDFViewer from @react-pdf/renderer. Download button with correct filename format."
     },
     {
       "id": "US-035",
@@ -580,8 +580,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 35,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Dashboard with metric cards, recent quotes list, and quick action buttons. API endpoints for metrics and recent quotes."
     },
     {
       "id": "US-036",
@@ -597,8 +597,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 36,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Low stock alerts section on dashboard, LowStockContext for shared state, alert icons in sidebar, filtered list views with ?lowStock=true parameter."
     },
     {
       "id": "US-037",
@@ -613,8 +613,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 37,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Settings page with profile form (name, email disabled, businessName, phone, address) and change password section. PUT /api/auth/password endpoint added."
     }
   ]
 }

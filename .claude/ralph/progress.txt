@@ -417,3 +417,73 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - manualTotal takes precedence over calculated total when set
   - position: 'absolute' with bottom/left/right for footer positioning
 ---
+
+## 2026-01-16 - US-034
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: PDF preview and download for quotes
+- Files changed:
+  - apps/web/src/pages/QuotePreviewPage.tsx (new - PDF viewer with download button)
+  - apps/web/src/App.tsx (added route for /quotes/:id/preview)
+- **Learnings for future iterations:**
+  - Use PDFViewer from @react-pdf/renderer for in-browser PDF preview
+  - Use pdf() function from @react-pdf/renderer to generate blob for download
+  - Filename format: `orcamento-{number}-{sanitizedClientName}.pdf`
+  - Sanitize client name for filename by removing spaces and special characters
+  - PDFViewer requires width and height styles for proper display
+  - Add PDF Preview button in QuoteFormPage header when editing
+---
+
+## 2026-01-16 - US-035
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Dashboard with metrics, recent quotes, and quick actions
+- Files changed:
+  - apps/api/src/routes/dashboard.ts (new - metrics, recent quotes endpoints)
+  - apps/api/src/index.ts (registered dashboard routes)
+  - apps/web/src/pages/DashboardPage.tsx (new - metric cards, recent quotes, quick actions)
+  - apps/web/src/App.tsx (updated to use DashboardPage instead of inline component)
+- **Learnings for future iterations:**
+  - Dashboard metrics fetched with Promise.all for parallel queries
+  - Metrics: totalClients, totalProducts, totalMaterials, pendingQuotes (DRAFT status), approvedQuotes (APPROVED status)
+  - Recent quotes limited to 5 with orderBy createdAt desc
+  - Quick action buttons: New Client, New Product, New Quote
+  - Use Card components with CardHeader/CardContent for metric cards
+  - Include client info in quotes response for display
+---
+
+## 2026-01-16 - US-036
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Low stock alerts on dashboard and sidebar
+- Files changed:
+  - apps/api/src/routes/dashboard.ts (added /low-stock endpoint)
+  - apps/web/src/contexts/LowStockContext.tsx (new - shared state for low stock alerts)
+  - apps/web/src/pages/DashboardPage.tsx (added Low Stock Alerts section)
+  - apps/web/src/components/Layout.tsx (added alert icons on sidebar nav items)
+  - apps/web/src/pages/ProductsPage.tsx (added ?lowStock=true filter support)
+  - apps/web/src/pages/MaterialsPage.tsx (added ?lowStock=true filter support)
+  - apps/web/src/App.tsx (added LowStockProvider wrapper)
+- **Learnings for future iterations:**
+  - Prisma doesn't support comparing fields in where clause, use findMany + filter in JS
+  - Create context (LowStockProvider) to share low stock state between Dashboard and Layout
+  - Alert icons (AlertTriangle from lucide-react) shown on Products and Materials nav items
+  - Use amber colors for warnings: text-amber-600, bg-amber-50, border-amber-200
+  - Filter pages with useSearchParams: ?lowStock=true shows only low stock items
+  - Add "Clear filter" button when filter is active
+---
+
+## 2026-01-16 - US-037
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Settings page with profile form and change password
+- Files changed:
+  - apps/api/src/routes/auth.ts (added PUT /api/auth/password endpoint)
+  - apps/web/src/pages/SettingsPage.tsx (new - profile form and change password sections)
+  - apps/web/src/App.tsx (updated to use SettingsPage instead of PlaceholderPage)
+- **Learnings for future iterations:**
+  - Profile form fields: name, email (disabled), businessName, phone, address
+  - Email field uses disabled prop and bg-muted class for visual distinction
+  - Password change requires currentPassword, newPassword, confirmPassword
+  - Use zod refine() for password confirmation validation
+  - Server validates currentPassword before allowing password change
+  - Reset password form after successful change: passwordForm.reset()
+  - Separate submit handlers and loading states for profile vs password forms
+  - Use two Card sections separated by Separator component
+---
