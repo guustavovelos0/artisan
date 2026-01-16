@@ -10,6 +10,8 @@
 - API runs on port 3001, Web runs on port 5173
 - PostgreSQL runs on port 5433 (Docker) to avoid local PostgreSQL conflicts
 - Prisma 7: Use `env("DATABASE_URL")` in prisma.config.ts, NOT `process.env` or schema.prisma url
+- TailwindCSS v4 uses CSS-based config (no tailwind.config.js), import via `@import "tailwindcss"` in CSS
+- Shadcn/ui: Uses @/* path alias, components at src/components/ui/, utils at src/lib/utils.ts
 ---
 
 ## 2026-01-16 - US-001
@@ -91,5 +93,34 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Vite config uses `@vitejs/plugin-react` for React support
   - Frontend dev server runs on port 5173 by default (configured in vite.config.ts)
   - Use `tsc -b --noEmit` for typecheck in Vite projects (uses project references)
+---
+
+## 2026-01-16 - US-006
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: TailwindCSS v4 and Shadcn/ui configuration
+- Files changed:
+  - apps/web/package.json (added tailwindcss, @tailwindcss/vite, and shadcn dependencies)
+  - apps/web/vite.config.ts (added tailwindcss plugin and @/* path alias)
+  - apps/web/tsconfig.json (added baseUrl and paths for @/* alias)
+  - apps/web/src/index.css (TailwindCSS v4 directives and CSS variables for themes)
+  - apps/web/components.json (Shadcn/ui configuration)
+  - apps/web/src/lib/utils.ts (cn utility for class merging)
+  - apps/web/src/components/ui/button.tsx (Shadcn Button component)
+  - apps/web/src/components/ui/input.tsx (Shadcn Input component)
+  - apps/web/src/components/ui/card.tsx (Shadcn Card component)
+  - apps/web/src/components/ui/dialog.tsx (Shadcn Dialog component)
+  - apps/web/src/components/ui/table.tsx (Shadcn Table component)
+  - apps/web/src/components/ui/select.tsx (Shadcn Select component)
+  - apps/web/src/components/ui/form.tsx (Shadcn Form component)
+  - apps/web/src/components/ui/label.tsx (Shadcn Label component)
+  - apps/web/src/App.tsx (updated with sample Shadcn components for verification)
+- **Learnings for future iterations:**
+  - TailwindCSS v4 is CSS-first configuration (no tailwind.config.js needed)
+  - Use `@import "tailwindcss"` instead of `@tailwind base/components/utilities` directives
+  - Shadcn/ui requires path alias (@/*) configured in both tsconfig.json and vite.config.ts
+  - Use `npx shadcn@latest init -d` for default configuration
+  - Add components with `npx shadcn@latest add button input card dialog table select form -y`
+  - Theme variables are defined in CSS using oklch color space (CSS Color Level 4)
+  - Light/dark theme support via CSS custom properties and `.dark` class
 ---
 
