@@ -70,3 +70,26 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Generated Prisma client goes to node_modules/@prisma/client
 ---
 
+## 2026-01-16 - US-005
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Frontend with Vite, React 18, and TypeScript
+- Files changed:
+  - apps/web/package.json (replaced placeholder with Vite/React config)
+  - apps/web/tsconfig.json (configured for React/Vite bundler mode)
+  - apps/web/vite.config.ts (Vite config with React plugin, port 5173)
+  - apps/web/index.html (Vite entry HTML)
+  - apps/web/src/main.tsx (React root with StrictMode)
+  - apps/web/src/App.tsx (BrowserRouter with basic Dashboard route)
+  - apps/web/src/index.css (basic styling)
+  - apps/web/src/vite-env.d.ts (Vite type definitions)
+  - apps/web/public/vite.svg (favicon)
+  - .gitignore (added *.tsbuildinfo)
+- **Learnings for future iterations:**
+  - Vite 6.x is the current version for React projects
+  - React Router v6 uses BrowserRouter, Routes, and Route components
+  - tsconfig uses `"jsx": "react-jsx"` for React 18
+  - Vite config uses `@vitejs/plugin-react` for React support
+  - Frontend dev server runs on port 5173 by default (configured in vite.config.ts)
+  - Use `tsc -b --noEmit` for typecheck in Vite projects (uses project references)
+---
+
