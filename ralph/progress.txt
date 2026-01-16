@@ -144,3 +144,14 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Email validation regex: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
 ---
 
+## 2026-01-16 - US-008
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Login endpoint with password verification
+- Files changed:
+  - apps/api/src/routes/auth.ts (added POST /api/auth/login endpoint)
+- **Learnings for future iterations:**
+  - Use bcrypt.compare(plainPassword, hashedPassword) to verify passwords
+  - Return generic "Invalid credentials" message for both wrong email and wrong password (security)
+  - jwt.sign() with { expiresIn: '7d' } creates a token that expires in 7 days
+---
+
