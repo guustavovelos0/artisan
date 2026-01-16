@@ -17,6 +17,7 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 - API routes: use `router.use(authMiddleware)` for protected routes, cast params with `as string`
 - ProductMaterial composite key pattern: use `productId_materialId: { productId, materialId }` for findUnique/update/delete
 - CategoryManager pattern: inline CRUD modal with DialogTrigger, type prop for filtering, onCategoriesChange callback for refreshing
+- Mobile responsiveness pattern: use `md:hidden` for mobile card layout, `hidden md:block` for desktop table layout
 
 ---
 
@@ -522,4 +523,18 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Inline editing in table: use state to track editingCategory and editName
   - onKeyDown handler for Enter/Escape for quick save/cancel during editing
   - Always add type="button" to buttons inside forms to prevent form submission
+---
+
+## 2026-01-16 23:15 - US-044
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Mobile responsive card layout for products page
+- Files changed:
+  - apps/web/src/pages/ProductsPage.tsx (updated - added mobile card layout with md:hidden, kept desktop table with hidden md:block)
+- **Learnings for future iterations:**
+  - Mobile responsiveness pattern: use md:hidden for mobile-only elements, hidden md:block for desktop-only
+  - Card layout should include: product name (h3), category (p with text-muted-foreground), grid for stats, action buttons in border-t section
+  - Use flex-1 on primary action button (Edit) to make it take remaining space
+  - Keep icon-only buttons for secondary actions (Technical Sheet, Manufacture, Delete) on mobile to save space
+  - Empty state should be handled in both layouts separately
+  - Same isLowStock helper function and amber styling works for both layouts
 ---
