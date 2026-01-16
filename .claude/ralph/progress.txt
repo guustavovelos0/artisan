@@ -18,6 +18,21 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 
 ---
 
+## 2026-01-16 13:20 - US-022
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Product form page for creating and editing products
+- Files changed:
+  - apps/web/src/pages/ProductFormPage.tsx (new - form for create/edit products with category dropdown)
+  - apps/web/src/App.tsx (added routes for /products/new and /products/:id)
+- **Learnings for future iterations:**
+  - Same pattern as MaterialFormPage for form pages
+  - Use string type for numeric form fields to avoid z.coerce.number() typing issues with react-hook-form
+  - Convert strings to numbers with parseFloat()/parseInt() in onSubmit before sending to API
+  - Fetch categories with type filter: `/categories?type=PRODUCT`
+  - Products use Int for quantity (not Float like materials) since they're whole units
+  - Edit mode shows "Update Product" button, create mode shows "Create Product"
+---
+
 ## 2026-01-16 13:05 - US-021
 Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
 - Implemented: Products list page with table and low stock indicator
