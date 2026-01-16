@@ -2,16 +2,24 @@
   "name": "@artisan/web",
   "version": "1.0.0",
   "description": "Artisan web application",
-  "main": "dist/index.js",
+  "type": "module",
   "scripts": {
-    "dev": "echo 'Web dev server (placeholder)'",
-    "build": "tsc",
-    "typecheck": "tsc --noEmit"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {
-    "@artisan/shared": "*"
+    "@artisan/shared": "*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.22.3"
   },
   "devDependencies": {
-    "typescript": "^5.3.3"
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.5"
   }
 }
