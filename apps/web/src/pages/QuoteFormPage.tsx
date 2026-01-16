@@ -51,6 +51,7 @@ import {
 } from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
+import { Badge } from '@/components/ui/badge'
 
 const quoteSchema = z.object({
   clientId: z.string().min(1, 'Client is required'),
@@ -90,6 +91,8 @@ interface QuoteItem {
   } | null
 }
 
+type QuoteStatus = 'DRAFT' | 'SENT' | 'APPROVED' | 'REJECTED' | 'COMPLETED'
+
 interface Quote {
   id: string
   number: number
@@ -97,6 +100,7 @@ interface Quote {
   description: string | null
   validUntil: string | null
   notes: string | null
+  status: QuoteStatus
   clientId: string
   client: Client
   items: QuoteItem[]
@@ -105,6 +109,22 @@ interface Quote {
   discount: number
   total: number
   manualTotal: number | null
+}
+
+const STATUS_OPTIONS: { value: QuoteStatus; label: string }[] = [
+  { value: 'DRAFT', label: 'Draft' },
+  { value: 'SENT', label: 'Sent' },
+  { value: 'APPROVED', label: 'Approved' },
+  { value: 'REJECTED', label: 'Rejected' },
+  { value: 'COMPLETED', label: 'Completed' },
+]
+
+const STATUS_BADGE_STYLES: Record<QuoteStatus, string> = {
+  DRAFT: 'bg-slate-100 text-slate-800 hover:bg-slate-200',
+  SENT: 'bg-blue-100 text-blue-800 hover:bg-blue-200',
+  APPROVED: 'bg-green-100 text-green-800 hover:bg-green-200',
+  REJECTED: 'bg-red-100 text-red-800 hover:bg-red-200',
+  COMPLETED: 'bg-purple-100 text-purple-800 hover:bg-purple-200',
 }
 
 interface ProductsResponse {
@@ -143,6 +163,9 @@ export default function QuoteFormPage() {
   const [discount, setDiscount] = useState<number>(0)
   const [manualTotal, setManualTotal] = useState<number | null>(null)
   const [useManualTotal, setUseManualTotal] = useState(false)
+  const [quoteStatus, setQuoteStatus] = useState<QuoteStatus>('DRAFT')
+  const [quoteNumber, setQuoteNumber] = useState<number | null>(null)
+  const [statusUpdating, setStatusUpdating] = useState(false)
 
   const form = useForm<QuoteFormValues>({
     resolver: zodResolver(quoteSchema),
@@ -214,6 +237,9 @@ export default function QuoteFormPage() {
         setManualTotal(data.quote.manualTotal)
         setUseManualTotal(true)
       }
+      // Load status and number
+      setQuoteStatus(data.quote.status || 'DRAFT')
+      setQuoteNumber(data.quote.number)
       setError(null)
     } catch (err) {
       if (err instanceof ApiError) {
@@ -294,6 +320,26 @@ export default function QuoteFormPage() {
   const calculatedTotal = subtotal + laborCost - discount
   const finalTotal = useManualTotal && manualTotal !== null ? manualTotal : calculatedTotal
 
+  // Handle status change (immediate API call)
+  const handleStatusChange = async (newStatus: QuoteStatus) => {
+    if (!isEditing || !id) return
+
+    try {
+      setStatusUpdating(true)
+      await api.put(`/quotes/${id}/status`, { status: newStatus })
+      setQuoteStatus(newStatus)
+      toast.success(`Status updated to ${STATUS_OPTIONS.find(s => s.value === newStatus)?.label}`)
+    } catch (err) {
+      if (err instanceof ApiError) {
+        toast.error(`Failed to update status: ${err.message}`)
+      } else {
+        toast.error('Failed to update status')
+      }
+    } finally {
+      setStatusUpdating(false)
+    }
+  }
+
   async function onSubmit(data: QuoteFormValues) {
     setError(null)
     setIsSubmitting(true)
@@ -366,16 +412,49 @@ export default function QuoteFormPage() {
 
   return (
     <div>
-      <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" size="icon" asChild>
-          <Link to="/quotes">
-            <ArrowLeft className="h-4 w-4" />
-            <span className="sr-only">Back to quotes</span>
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold">
-          {isEditing ? 'Edit Quote' : 'New Quote'}
-        </h1>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" asChild>
+            <Link to="/quotes">
+              <ArrowLeft className="h-4 w-4" />
+              <span className="sr-only">Back to quotes</span>
+            </Link>
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold">
+              {isEditing ? `Edit Quote #${quoteNumber}` : 'New Quote'}
+            </h1>
+          </div>
+        </div>
+        {isEditing && (
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-muted-foreground">Status:</span>
+            <Select
+              value={quoteStatus}
+              onValueChange={(value) => handleStatusChange(value as QuoteStatus)}
+              disabled={statusUpdating}
+            >
+              <SelectTrigger className="w-[160px]">
+                {statusUpdating ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Badge className={STATUS_BADGE_STYLES[quoteStatus]} variant="secondary">
+                    {STATUS_OPTIONS.find(s => s.value === quoteStatus)?.label}
+                  </Badge>
+                )}
+              </SelectTrigger>
+              <SelectContent>
+                {STATUS_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    <Badge className={STATUS_BADGE_STYLES[option.value]} variant="secondary">
+                      {option.label}
+                    </Badge>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
       </div>
 
       <Form {...form}>
