@@ -1,0 +1,22 @@
+{
+  "name": "artisan",
+  "version": "1.0.0",
+  "description": "Full-stack management app for artisans",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently --names \"api,web\" --prefix-colors \"cyan,magenta\" \"npm run dev -w @artisan/api\" \"npm run dev -w @artisan/web\"",
+    "build": "npm run build -w @artisan/shared && npm run build -w @artisan/api && npm run build -w @artisan/web",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

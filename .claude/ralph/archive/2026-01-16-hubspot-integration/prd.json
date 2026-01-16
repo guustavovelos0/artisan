@@ -1,0 +1,620 @@
+{
+  "project": "Artisan App",
+  "branchName": "ralph/artisan-management-app",
+  "description": "Full-stack management app for artisans (seamstresses, craftspeople, embroiderers, tailors) with inventory, clients, quotes with PDF generation, and technical sheets for products",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Create monorepo structure with npm workspaces",
+      "description": "As a developer, I need the project structure set up as a monorepo with apps/api, apps/web, and packages/shared.",
+      "acceptanceCriteria": [
+        "Root package.json with workspaces configuration for apps/* and packages/*",
+        "Create apps/api directory with package.json",
+        "Create apps/web directory with package.json",
+        "Create packages/shared directory with package.json",
+        "Root package.json has dev script that runs both api and web concurrently",
+        "Typecheck passes"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-002",
+      "title": "Configure Docker Compose for PostgreSQL",
+      "description": "As a developer, I need a PostgreSQL database running locally via Docker.",
+      "acceptanceCriteria": [
+        "docker-compose.yml at root with PostgreSQL 15 service",
+        "Database name: artisan_db, user: artisan, password: artisan123",
+        "Port 5432 exposed",
+        "Volume for data persistence",
+        "Typecheck passes"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "Configure backend with Express and TypeScript",
+      "description": "As a developer, I need the API project configured with Express, TypeScript, and basic structure.",
+      "acceptanceCriteria": [
+        "apps/api has express, typescript, ts-node-dev, @types/express dependencies",
+        "tsconfig.json configured for Node.js",
+        "src/index.ts with Express server on port 3001",
+        "CORS enabled for localhost:5173",
+        "Health check endpoint GET /api/health returns { status: 'ok' }",
+        "npm run dev starts the server with hot reload",
+        "Typecheck passes"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "Configure Prisma with database schema",
+      "description": "As a developer, I need Prisma ORM set up with the complete database schema.",
+      "acceptanceCriteria": [
+        "Prisma installed in apps/api",
+        "schema.prisma with User, Client, Category, Product, ProductMaterial, Material, Quote, QuoteItem models",
+        "All models have proper relations as defined in the PRD",
+        "CategoryType enum (PRODUCT, MATERIAL) and QuoteStatus enum (DRAFT, SENT, APPROVED, REJECTED, COMPLETED)",
+        "DATABASE_URL configured in .env",
+        "prisma generate and prisma migrate dev work successfully",
+        "Typecheck passes"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-005",
+      "title": "Configure frontend with Vite, React and TypeScript",
+      "description": "As a developer, I need the web project configured with Vite, React, and TypeScript.",
+      "acceptanceCriteria": [
+        "apps/web initialized with Vite React TypeScript template",
+        "React Router v6 installed and configured",
+        "Basic App.tsx with router setup",
+        "npm run dev starts on port 5173",
+        "Typecheck passes"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-006",
+      "title": "Configure Shadcn/ui and TailwindCSS",
+      "description": "As a developer, I need the UI library set up with Shadcn/ui components.",
+      "acceptanceCriteria": [
+        "TailwindCSS installed and configured in apps/web",
+        "Shadcn/ui initialized with default theme",
+        "Button, Input, Card, Dialog, Table, Select, Form components added",
+        "globals.css with Tailwind directives",
+        "Typecheck passes"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-007",
+      "title": "Implement user registration endpoint",
+      "description": "As a user, I want to create an account so that I can use the app.",
+      "acceptanceCriteria": [
+        "POST /api/auth/register endpoint",
+        "Accepts email, password, name, businessName (optional), phone (optional)",
+        "Password hashed with bcrypt before storing",
+        "Returns user data (without password) and JWT token",
+        "Validates email format and password min length (6 chars)",
+        "Returns 400 if email already exists",
+        "Typecheck passes"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-008",
+      "title": "Implement login endpoint",
+      "description": "As a user, I want to login to access my data.",
+      "acceptanceCriteria": [
+        "POST /api/auth/login endpoint",
+        "Accepts email and password",
+        "Compares password with bcrypt",
+        "Returns user data and JWT token on success",
+        "Returns 401 on invalid credentials",
+        "JWT expires in 7 days",
+        "Typecheck passes"
+      ],
+      "priority": 8,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-009",
+      "title": "Implement auth middleware and profile endpoints",
+      "description": "As a developer, I need middleware to protect routes and profile endpoints.",
+      "acceptanceCriteria": [
+        "Auth middleware that validates JWT from Authorization header",
+        "Middleware adds userId to request object",
+        "GET /api/auth/me returns current user data",
+        "PUT /api/auth/profile updates user profile",
+        "Protected routes return 401 without valid token",
+        "Typecheck passes"
+      ],
+      "priority": 9,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-010",
+      "title": "Create login and registration pages",
+      "description": "As a user, I want login and registration forms to access the app.",
+      "acceptanceCriteria": [
+        "/login page with email and password fields",
+        "/register page with name, email, password, businessName fields",
+        "Form validation with error messages",
+        "Redirects to dashboard on successful auth",
+        "Uses Shadcn/ui form components",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 10,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-011",
+      "title": "Implement auth context and protected routes",
+      "description": "As a developer, I need auth state management and route protection.",
+      "acceptanceCriteria": [
+        "AuthContext with user state, login, logout, register functions",
+        "Token stored in localStorage",
+        "ProtectedRoute component that redirects to /login if not authenticated",
+        "API client with automatic token injection",
+        "Typecheck passes"
+      ],
+      "priority": 11,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-012",
+      "title": "Create app layout with navigation",
+      "description": "As a user, I want a sidebar navigation to access all sections.",
+      "acceptanceCriteria": [
+        "Layout component with sidebar navigation",
+        "Nav items: Dashboard, Clients, Products, Materials, Quotes, Settings",
+        "Header with user name and logout button",
+        "Responsive design (sidebar collapses on mobile)",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 12,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-013",
+      "title": "Implement categories CRUD endpoints",
+      "description": "As a developer, I need backend endpoints to manage categories.",
+      "acceptanceCriteria": [
+        "GET /api/categories returns user's categories",
+        "POST /api/categories creates category with name and type",
+        "PUT /api/categories/:id updates category",
+        "DELETE /api/categories/:id deletes category",
+        "All endpoints filter by userId from auth middleware",
+        "Typecheck passes"
+      ],
+      "priority": 13,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-014",
+      "title": "Implement clients CRUD endpoints",
+      "description": "As a developer, I need backend endpoints to manage clients.",
+      "acceptanceCriteria": [
+        "GET /api/clients returns user's clients with pagination",
+        "GET /api/clients/:id returns single client",
+        "POST /api/clients creates client",
+        "PUT /api/clients/:id updates client",
+        "DELETE /api/clients/:id deletes client",
+        "Typecheck passes"
+      ],
+      "priority": 14,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-015",
+      "title": "Create clients list page",
+      "description": "As a user, I want to see all my clients in a list.",
+      "acceptanceCriteria": [
+        "/clients page with table of clients",
+        "Columns: Name, Email, Phone, Actions",
+        "New client button links to /clients/new",
+        "Edit and Delete action buttons per row",
+        "Loading state while fetching",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 15,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-016",
+      "title": "Create client form page",
+      "description": "As a user, I want to create and edit clients.",
+      "acceptanceCriteria": [
+        "/clients/new page with client form",
+        "/clients/:id page for editing existing client",
+        "Fields: name, email, phone, address, notes",
+        "Form validation with Zod",
+        "Success toast and redirect to /clients after save",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 16,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-017",
+      "title": "Implement materials CRUD endpoints",
+      "description": "As a developer, I need backend endpoints to manage raw materials.",
+      "acceptanceCriteria": [
+        "GET /api/materials returns user's materials with pagination",
+        "GET /api/materials/:id returns single material",
+        "POST /api/materials creates material",
+        "PUT /api/materials/:id updates material",
+        "PUT /api/materials/:id/stock adjusts stock quantity",
+        "DELETE /api/materials/:id deletes material",
+        "Typecheck passes"
+      ],
+      "priority": 17,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-018",
+      "title": "Create materials list page",
+      "description": "As a user, I want to see all my raw materials in a list.",
+      "acceptanceCriteria": [
+        "/materials page with table of materials",
+        "Columns: Name, Category, Quantity, Unit, Unit Price, Actions",
+        "Low stock indicator when quantity < minStock",
+        "New material button links to /materials/new",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 18,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-019",
+      "title": "Create material form page",
+      "description": "As a user, I want to create and edit raw materials.",
+      "acceptanceCriteria": [
+        "/materials/new page with material form",
+        "/materials/:id page for editing existing material",
+        "Fields: name, description, unit, unitPrice, quantity, minStock, supplier, category",
+        "Category dropdown with MATERIAL type categories",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 19,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-020",
+      "title": "Implement products CRUD endpoints",
+      "description": "As a developer, I need backend endpoints to manage finished products.",
+      "acceptanceCriteria": [
+        "GET /api/products returns user's products with pagination",
+        "GET /api/products/:id returns product with materials (technical sheet)",
+        "POST /api/products creates product",
+        "PUT /api/products/:id updates product",
+        "PUT /api/products/:id/stock adjusts stock quantity",
+        "DELETE /api/products/:id deletes product",
+        "Typecheck passes"
+      ],
+      "priority": 20,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-021",
+      "title": "Create products list page",
+      "description": "As a user, I want to see all my finished products in a list.",
+      "acceptanceCriteria": [
+        "/products page with table of products",
+        "Columns: Name, Category, Quantity, Price, Cost, Actions",
+        "Low stock indicator when quantity < minStock",
+        "Buttons: New, Technical Sheet, Manufacture",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 21,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-022",
+      "title": "Create product form page",
+      "description": "As a user, I want to create and edit products.",
+      "acceptanceCriteria": [
+        "/products/new page with product form",
+        "/products/:id page for editing existing product",
+        "Fields: name, description, price, laborCost, quantity, minStock, category",
+        "Category dropdown with PRODUCT type categories",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 22,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-023",
+      "title": "Implement technical sheet endpoints",
+      "description": "As a developer, I need endpoints to manage product materials (technical sheet).",
+      "acceptanceCriteria": [
+        "GET /api/products/:id/materials returns product's materials with quantities",
+        "POST /api/products/:id/materials adds material to product",
+        "PUT /api/products/:id/materials/:materialId updates quantity",
+        "DELETE /api/products/:id/materials/:materialId removes material",
+        "GET /api/products/:id/cost calculates total cost based on materials + laborCost",
+        "Typecheck passes"
+      ],
+      "priority": 23,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-024",
+      "title": "Create technical sheet page",
+      "description": "As a user, I want to define which materials are used to produce a product.",
+      "acceptanceCriteria": [
+        "/products/:id/technical-sheet page",
+        "Table showing materials, quantities, unit prices, totals",
+        "Add material dropdown to add new material to sheet",
+        "Editable quantity field per material",
+        "Remove button per material",
+        "Shows calculated material cost, labor cost, and total cost",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 24,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-025",
+      "title": "Implement manufacture endpoint",
+      "description": "As a developer, I need an endpoint to manufacture products and consume materials.",
+      "acceptanceCriteria": [
+        "POST /api/products/:id/manufacture with quantity parameter",
+        "Validates all materials have sufficient stock",
+        "Returns error with list of insufficient materials if any",
+        "On success: deducts materials from stock, increments product quantity",
+        "Returns warning if any material will go below minStock",
+        "Typecheck passes"
+      ],
+      "priority": 25,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-026",
+      "title": "Create manufacture dialog",
+      "description": "As a user, I want to manufacture products and automatically consume materials.",
+      "acceptanceCriteria": [
+        "Manufacture button on products list opens dialog",
+        "Input for quantity to manufacture",
+        "Shows materials that will be consumed with quantities",
+        "Shows warning if any material will go below minStock",
+        "Shows error if insufficient stock and disables confirm button",
+        "Success updates product list",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 26,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-027",
+      "title": "Implement quotes CRUD endpoints",
+      "description": "As a developer, I need backend endpoints to manage quotes.",
+      "acceptanceCriteria": [
+        "GET /api/quotes returns user's quotes with client info and pagination",
+        "GET /api/quotes/:id returns quote with items",
+        "POST /api/quotes creates quote with items",
+        "PUT /api/quotes/:id updates quote and items",
+        "PUT /api/quotes/:id/status updates quote status",
+        "DELETE /api/quotes/:id deletes quote",
+        "Quote number auto-increments per user",
+        "Typecheck passes"
+      ],
+      "priority": 27,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-028",
+      "title": "Create quotes list page",
+      "description": "As a user, I want to see all my quotes in a list.",
+      "acceptanceCriteria": [
+        "/quotes page with table of quotes",
+        "Columns: Number, Client, Date, Status, Total, Actions",
+        "Status badge with color per status",
+        "Filter by status dropdown",
+        "New quote button",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 28,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-029",
+      "title": "Create quote form page - basic info",
+      "description": "As a user, I want to create quotes with client and basic info.",
+      "acceptanceCriteria": [
+        "/quotes/new page with quote form",
+        "/quotes/:id page for editing",
+        "Client dropdown selector",
+        "Title and description fields",
+        "Valid until date picker",
+        "Notes textarea",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 29,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-030",
+      "title": "Create quote items section",
+      "description": "As a user, I want to add items to a quote.",
+      "acceptanceCriteria": [
+        "Items section in quote form",
+        "Add item button opens product selector or manual entry",
+        "Each item has: description, quantity, unitPrice, total",
+        "Remove item button",
+        "Product selector auto-fills description and price",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 30,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-031",
+      "title": "Implement quote totals calculation",
+      "description": "As a user, I want automatic and manual total calculation for quotes.",
+      "acceptanceCriteria": [
+        "Subtotal auto-calculated from items",
+        "Labor cost field (manual input)",
+        "Discount field (manual input)",
+        "Total = subtotal + laborCost - discount",
+        "Manual total override field (optional)",
+        "If manualTotal is set, it overrides calculated total",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 31,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-032",
+      "title": "Implement quote status management",
+      "description": "As a user, I want to change quote status.",
+      "acceptanceCriteria": [
+        "Status dropdown on quote detail page",
+        "Options: Draft, Sent, Approved, Rejected, Completed",
+        "Status change updates immediately",
+        "Status badge updates in list",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 32,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-033",
+      "title": "Create PDF template component",
+      "description": "As a developer, I need a PDF template for quotes using @react-pdf/renderer.",
+      "acceptanceCriteria": [
+        "@react-pdf/renderer installed",
+        "QuotePdf component in apps/web/src/pdf/",
+        "Header with business name, address, phone from user profile",
+        "Client info section",
+        "Quote number, date, valid until",
+        "Items table with columns: Description, Qty, Unit Price, Total",
+        "Totals section: Subtotal, Labor, Discount, Total",
+        "Notes section",
+        "Typecheck passes"
+      ],
+      "priority": 33,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-034",
+      "title": "Implement PDF preview and download",
+      "description": "As a user, I want to preview and download quote PDFs.",
+      "acceptanceCriteria": [
+        "PDF Preview button on quote detail page",
+        "/quotes/:id/preview page shows PDF in browser",
+        "Download PDF button downloads the file",
+        "PDF filename: orcamento-{number}-{clientName}.pdf",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 34,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-035",
+      "title": "Create dashboard with metrics",
+      "description": "As a user, I want to see key metrics on the dashboard.",
+      "acceptanceCriteria": [
+        "/ (dashboard) page with metric cards",
+        "Cards: Total Clients, Total Products, Total Materials, Pending Quotes, Approved Quotes",
+        "Recent quotes list (last 5)",
+        "Quick action buttons: New Client, New Product, New Quote",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 35,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-036",
+      "title": "Add low stock alerts",
+      "description": "As a user, I want to be alerted when materials or products are low on stock.",
+      "acceptanceCriteria": [
+        "Low stock alerts section on dashboard",
+        "Shows products with quantity < minStock",
+        "Shows materials with quantity < minStock",
+        "Alert icon on sidebar when there are low stock items",
+        "Link to respective list filtered by low stock",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 36,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-037",
+      "title": "Create settings page",
+      "description": "As a user, I want to edit my profile and business information.",
+      "acceptanceCriteria": [
+        "/settings page",
+        "Edit profile form: name, email, businessName, phone, address",
+        "Change password section",
+        "Save button with success feedback",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 37,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}

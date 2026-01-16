@@ -1,0 +1,17 @@
+{
+  "name": "@artisan/web",
+  "version": "1.0.0",
+  "description": "Artisan web application",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "echo 'Web dev server (placeholder)'",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@artisan/shared": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}

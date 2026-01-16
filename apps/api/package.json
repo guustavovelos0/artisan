@@ -1,0 +1,19 @@
+{
+  "name": "@artisan/api",
+  "version": "1.0.0",
+  "description": "Artisan API server",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "echo 'API dev server (placeholder)'",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@artisan/shared": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.9",
+    "typescript": "^5.3.3"
+  }
+}

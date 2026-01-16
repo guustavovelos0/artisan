@@ -1,0 +1,5 @@
+# Ralph Progress Log - Artisan App
+# Branch: ralph/artisan-management-app
+# Started:
+# =========================================
+
