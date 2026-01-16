@@ -300,3 +300,25 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Check for empty technical sheet before attempting manufacture (prevents manufacturing products without defined materials)
 ---
 
+## 2026-01-16 - US-026
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Verified manufacture dialog (already implemented in prior iteration)
+- Files verified:
+  - apps/web/src/components/ManufactureDialog.tsx (complete dialog component)
+  - apps/web/src/pages/ProductsPage.tsx (Manufacture button integration at lines 100-103, 204-212, 237-242)
+- Browser testing confirmed:
+  - Manufacture button opens dialog correctly
+  - Quantity input works (spinbutton)
+  - Materials table shows Required/Available/Status columns
+  - Low stock warning displays when materials will go below minStock
+  - Insufficient stock error shows with disabled Manufacture button
+  - Successful manufacture: toast shows "Successfully manufactured X unit(s)", product list updates quantity
+  - Low stock warning toast also appears after successful manufacture if applicable
+- **Learnings for future iterations:**
+  - ManufactureDialog uses client-side stock checking (checkStockLevels) for real-time UI updates
+  - Dialog fetches product with materials on open, resets state on close
+  - canManufacture computed property controls button disabled state
+  - Toast notifications from sonner library: toast.success(), toast.warning(), toast.error()
+  - onSuccess callback triggers fetchProducts() in parent to refresh the list
+---
+

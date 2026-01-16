@@ -425,8 +425,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 26,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Verified in browser - dialog opens, shows materials, warnings for low stock, errors for insufficient stock with disabled button, successful manufacture updates list"
     },
     {
       "id": "US-027",
