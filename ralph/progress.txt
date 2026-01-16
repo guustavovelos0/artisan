@@ -480,3 +480,18 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - h-[calc(100vh-Xrem)] with min-h-[Ypx] provides predictable vertical sizing
   - min-h-[600px] ensures usable size even on smaller viewports
 ---
+
+## 2026-01-16 - US-040
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Phone required and isWhatsapp flag for clients
+- Files changed:
+  - apps/api/prisma/schema.prisma (added isWhatsapp Boolean field to Client model)
+  - apps/api/prisma/migrations/20260116214707_add_iswhatsapp_to_client/migration.sql (new migration)
+  - apps/api/src/routes/clients.ts (updated interfaces and data handling for isWhatsapp)
+  - apps/web/src/pages/ClientFormPage.tsx (made phone required, added WhatsApp checkbox)
+- **Learnings for future iterations:**
+  - z.boolean().default(false) in zod makes output type boolean but input type boolean | undefined
+  - Use z.boolean() without .default() when defaultValue is set in useForm
+  - Checkbox component needs checked={field.value} and onCheckedChange={field.onChange}
+  - FormItem for checkbox uses flex-row items-start space-x-3 space-y-0 layout
+---

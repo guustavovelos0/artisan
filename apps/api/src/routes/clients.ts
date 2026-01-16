@@ -80,6 +80,7 @@ interface CreateClientBody {
   name: string;
   email?: string;
   phone?: string;
+  isWhatsapp?: boolean;
   address?: string;
   notes?: string;
 }
@@ -94,7 +95,7 @@ router.post('/', async (req: AuthenticatedRequest, res: Response) => {
       return;
     }
 
-    const { name, email, phone, address, notes } = req.body as CreateClientBody;
+    const { name, email, phone, isWhatsapp, address, notes } = req.body as CreateClientBody;
 
     // Validate required fields
     if (!name) {
@@ -107,6 +108,7 @@ router.post('/', async (req: AuthenticatedRequest, res: Response) => {
         name,
         email,
         phone,
+        isWhatsapp: isWhatsapp ?? false,
         address,
         notes,
         userId,
@@ -124,6 +126,7 @@ interface UpdateClientBody {
   name?: string;
   email?: string;
   phone?: string;
+  isWhatsapp?: boolean;
   address?: string;
   notes?: string;
 }
@@ -149,7 +152,7 @@ router.put('/:id', async (req: AuthenticatedRequest, res: Response) => {
       return;
     }
 
-    const { name, email, phone, address, notes } = req.body as UpdateClientBody;
+    const { name, email, phone, isWhatsapp, address, notes } = req.body as UpdateClientBody;
 
     const client = await prisma.client.update({
       where: { id },
@@ -157,6 +160,7 @@ router.put('/:id', async (req: AuthenticatedRequest, res: Response) => {
         ...(name !== undefined && { name }),
         ...(email !== undefined && { email }),
         ...(phone !== undefined && { phone }),
+        ...(isWhatsapp !== undefined && { isWhatsapp }),
         ...(address !== undefined && { address }),
         ...(notes !== undefined && { notes }),
       },

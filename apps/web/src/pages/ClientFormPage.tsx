@@ -17,12 +17,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Checkbox } from '@/components/ui/checkbox'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 
 const clientSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email address').optional().or(z.literal('')),
-  phone: z.string().optional(),
+  phone: z.string().min(1, 'Phone is required'),
+  isWhatsapp: z.boolean(),
   address: z.string().optional(),
   notes: z.string().optional(),
 })
@@ -34,6 +36,7 @@ interface Client {
   name: string
   email: string | null
   phone: string | null
+  isWhatsapp: boolean
   address: string | null
   notes: string | null
 }
@@ -53,6 +56,7 @@ export default function ClientFormPage() {
       name: '',
       email: '',
       phone: '',
+      isWhatsapp: false,
       address: '',
       notes: '',
     },
@@ -72,6 +76,7 @@ export default function ClientFormPage() {
         name: data.client.name,
         email: data.client.email || '',
         phone: data.client.phone || '',
+        isWhatsapp: data.client.isWhatsapp ?? false,
         address: data.client.address || '',
         notes: data.client.notes || '',
       })
@@ -95,7 +100,8 @@ export default function ClientFormPage() {
       const payload = {
         name: data.name,
         email: data.email || null,
-        phone: data.phone || null,
+        phone: data.phone,
+        isWhatsapp: data.isWhatsapp,
         address: data.address || null,
         notes: data.notes || null,
       }
@@ -191,11 +197,31 @@ export default function ClientFormPage() {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone</FormLabel>
+                    <FormLabel>Phone *</FormLabel>
                     <FormControl>
                       <Input placeholder="Phone number" {...field} />
                     </FormControl>
                     <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="isWhatsapp"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel className="cursor-pointer">
+                        This number is WhatsApp
+                      </FormLabel>
+                    </div>
                   </FormItem>
                 )}
               />

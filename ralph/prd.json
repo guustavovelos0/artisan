@@ -661,8 +661,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 40,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Added isWhatsapp Boolean field to Client model, made phone required in form validation, added WhatsApp checkbox to ClientFormPage."
     },
     {
       "id": "US-041",
