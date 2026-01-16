@@ -218,3 +218,27 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - lucide-react icons used: LayoutDashboard, Users, Package, Boxes, FileText, Settings, Menu, LogOut
 ---
 
+## 2026-01-16 - US-013 to US-022 (Batch Verification)
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was verified: Multiple backend and frontend features (all already implemented in previous iterations)
+- US-013: Categories CRUD endpoints - apps/api/src/routes/categories.ts
+- US-014: Clients CRUD endpoints - apps/api/src/routes/clients.ts
+- US-015: Clients list page - apps/web/src/pages/ClientsPage.tsx
+- US-016: Client form page - apps/web/src/pages/ClientFormPage.tsx
+- US-017: Materials CRUD endpoints - apps/api/src/routes/materials.ts
+- US-018: Materials list page - apps/web/src/pages/MaterialsPage.tsx
+- US-019: Material form page - apps/web/src/pages/MaterialFormPage.tsx
+- US-020: Products CRUD endpoints - apps/api/src/routes/products.ts
+- US-021: Products list page - apps/web/src/pages/ProductsPage.tsx
+- US-022: Product form page - apps/web/src/pages/ProductFormPage.tsx
+- **Learnings for future iterations:**
+  - All CRUD endpoints follow same pattern: router.use(authMiddleware), then GET /, GET /:id, POST /, PUT /:id, DELETE /:id
+  - Pagination pattern: page/limit query params, returns { items, pagination: { page, limit, total, totalPages } }
+  - Form pages use react-hook-form with zod resolver, same pattern as Login/Register
+  - List pages use loading/error states with Loader2 spinner and retry button
+  - Low stock indicator: isLowStock(item) checks item.quantity < item.minStock
+  - Currency formatting uses Intl.NumberFormat with pt-BR locale and BRL currency
+  - Category dropdowns filter by type (MATERIAL or PRODUCT) when fetching
+  - Toast notifications use sonner library via toast.success()
+---
+
