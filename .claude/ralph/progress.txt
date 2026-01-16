@@ -296,3 +296,20 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Disabled state on button: `disabled={!canManufacture || loading}`
   - Color coding: red (bg-red-50/text-red-800) for errors, amber for warnings, green for OK
 ---
+
+## 2026-01-16 13:26 - US-027
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Quotes CRUD backend endpoints with pagination, status filter, and auto-increment
+- Files changed:
+  - apps/api/src/routes/quotes.ts (new - full CRUD for quotes with items)
+  - apps/api/src/index.ts (registered quotes routes)
+- **Learnings for future iterations:**
+  - Quote model has `@@unique([userId, number])` for per-user auto-increment
+  - Use `findFirst` with `orderBy: { number: 'desc' }` to get last quote number for user
+  - Quote totals: subtotal = sum of items, total = subtotal + laborCost - discount (or manualTotal if set)
+  - Items are managed in transaction: delete all existing items then create new ones on update
+  - Include `_count: { select: { items: true } }` in list queries for item count without full items
+  - QuoteStatus enum from @prisma/client: DRAFT, SENT, APPROVED, REJECTED, COMPLETED
+  - Validate all productIds belong to user before creating quote items
+  - QuoteItem has optional productId for linking to products or manual entry
+---
