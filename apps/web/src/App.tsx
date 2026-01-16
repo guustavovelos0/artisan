@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Toaster } from '@/components/ui/sonner'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { LowStockProvider } from '@/contexts/LowStockContext'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { Layout } from '@/components/Layout'
 import LoginPage from '@/pages/LoginPage'
@@ -35,8 +36,9 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Toaster />
-        <Routes>
+        <LowStockProvider>
+          <Toaster />
+          <Routes>
           {/* Public routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -203,6 +205,7 @@ function App() {
             }
           />
         </Routes>
+        </LowStockProvider>
       </AuthProvider>
     </BrowserRouter>
   )

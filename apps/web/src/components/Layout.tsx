@@ -9,11 +9,13 @@ import {
   Settings,
   Menu,
   LogOut,
+  AlertTriangle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Separator } from '@/components/ui/separator'
 import { useAuth } from '@/contexts/AuthContext'
+import { useLowStock } from '@/contexts/LowStockContext'
 import { cn } from '@/lib/utils'
 
 interface NavItem {
@@ -35,7 +37,7 @@ interface LayoutProps {
   children: React.ReactNode
 }
 
-function NavLink({ item, onClick }: { item: NavItem; onClick?: () => void }) {
+function NavLink({ item, onClick, showAlert }: { item: NavItem; onClick?: () => void; showAlert?: boolean }) {
   const location = useLocation()
   const isActive = location.pathname === item.href ||
     (item.href !== '/' && location.pathname.startsWith(item.href))
@@ -53,11 +55,16 @@ function NavLink({ item, onClick }: { item: NavItem; onClick?: () => void }) {
     >
       <item.icon className="h-4 w-4" />
       {item.title}
+      {showAlert && (
+        <AlertTriangle className="h-4 w-4 text-amber-500 ml-auto" />
+      )}
     </Link>
   )
 }
 
 function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
+  const { hasLowStock } = useLowStock()
+
   return (
     <div className="flex h-full flex-col">
       <div className="flex h-14 items-center px-4">
@@ -68,9 +75,13 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
       </div>
       <Separator />
       <nav className="flex-1 space-y-1 p-4">
-        {navItems.map((item) => (
-          <NavLink key={item.href} item={item} onClick={onNavClick} />
-        ))}
+        {navItems.map((item) => {
+          // Show alert icon on Products and Materials nav items when there are low stock items
+          const showAlert = hasLowStock && (item.href === '/products' || item.href === '/materials')
+          return (
+            <NavLink key={item.href} item={item} onClick={onNavClick} showAlert={showAlert} />
+          )
+        })}
       </nav>
     </div>
   )

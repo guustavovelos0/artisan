@@ -80,4 +80,43 @@ router.get('/recent-quotes', async (req: AuthenticatedRequest, res: Response) =>
   }
 });
 
+// GET /api/dashboard/low-stock - Get low stock products and materials
+router.get('/low-stock', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    // Get all products and materials, then filter in code
+    // Prisma doesn't support comparing fields directly in where clause
+    const [allProducts, allMaterials] = await Promise.all([
+      prisma.product.findMany({
+        where: { userId },
+        select: { id: true, name: true, quantity: true, minStock: true },
+        orderBy: { name: 'asc' },
+      }),
+      prisma.material.findMany({
+        where: { userId },
+        select: { id: true, name: true, quantity: true, minStock: true, unit: true },
+        orderBy: { name: 'asc' },
+      }),
+    ]);
+
+    const lowStockProducts = allProducts.filter((p) => p.quantity < p.minStock);
+    const lowStockMaterials = allMaterials.filter((m) => m.quantity < m.minStock);
+
+    res.json({
+      products: lowStockProducts,
+      materials: lowStockMaterials,
+      hasLowStock: lowStockProducts.length > 0 || lowStockMaterials.length > 0,
+    });
+  } catch (error) {
+    console.error('Get low stock error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;

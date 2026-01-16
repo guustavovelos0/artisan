@@ -13,6 +13,7 @@ import {
   CheckCircle,
   Plus,
   Loader2,
+  AlertTriangle,
 } from 'lucide-react'
 
 type QuoteStatus = 'DRAFT' | 'SENT' | 'APPROVED' | 'REJECTED' | 'COMPLETED'
@@ -36,6 +37,27 @@ interface RecentQuote {
     id: string
     name: string
   }
+}
+
+interface LowStockProduct {
+  id: string
+  name: string
+  quantity: number
+  minStock: number
+}
+
+interface LowStockMaterial {
+  id: string
+  name: string
+  quantity: number
+  minStock: number
+  unit: string
+}
+
+interface LowStockData {
+  products: LowStockProduct[]
+  materials: LowStockMaterial[]
+  hasLowStock: boolean
 }
 
 const STATUS_BADGE_STYLES: Record<QuoteStatus, string> = {
@@ -68,6 +90,7 @@ const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState<Metrics | null>(null)
   const [recentQuotes, setRecentQuotes] = useState<RecentQuote[]>([])
+  const [lowStock, setLowStock] = useState<LowStockData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -75,12 +98,14 @@ export default function DashboardPage() {
     const fetchDashboardData = async () => {
       try {
         setLoading(true)
-        const [metricsData, quotesData] = await Promise.all([
+        const [metricsData, quotesData, lowStockData] = await Promise.all([
           api.get<{ metrics: Metrics }>('/dashboard/metrics'),
           api.get<{ quotes: RecentQuote[] }>('/dashboard/recent-quotes'),
+          api.get<LowStockData>('/dashboard/low-stock'),
         ])
         setMetrics(metricsData.metrics)
         setRecentQuotes(quotesData.quotes)
+        setLowStock(lowStockData)
         setError(null)
       } catch (err) {
         if (err instanceof ApiError) {
@@ -118,6 +143,69 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Dashboard</h1>
+
+      {/* Low Stock Alerts */}
+      {lowStock?.hasLowStock && (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-amber-600" />
+              <CardTitle className="text-amber-800">Low Stock Alerts</CardTitle>
+            </div>
+            <CardDescription className="text-amber-700">
+              The following items are below minimum stock levels
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {lowStock.products.length > 0 && (
+              <div>
+                <h4 className="text-sm font-medium text-amber-800 mb-2">Products</h4>
+                <div className="space-y-2">
+                  {lowStock.products.map((product) => (
+                    <div key={product.id} className="flex items-center justify-between text-sm">
+                      <Link
+                        to={`/products/${product.id}`}
+                        className="text-amber-900 hover:underline"
+                      >
+                        {product.name}
+                      </Link>
+                      <span className="text-amber-700">
+                        {product.quantity} / {product.minStock} units
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <Button variant="link" className="p-0 h-auto mt-2 text-amber-800" asChild>
+                  <Link to="/products?lowStock=true">View all low stock products →</Link>
+                </Button>
+              </div>
+            )}
+            {lowStock.materials.length > 0 && (
+              <div>
+                <h4 className="text-sm font-medium text-amber-800 mb-2">Materials</h4>
+                <div className="space-y-2">
+                  {lowStock.materials.map((material) => (
+                    <div key={material.id} className="flex items-center justify-between text-sm">
+                      <Link
+                        to={`/materials/${material.id}`}
+                        className="text-amber-900 hover:underline"
+                      >
+                        {material.name}
+                      </Link>
+                      <span className="text-amber-700">
+                        {material.quantity} / {material.minStock} {material.unit}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <Button variant="link" className="p-0 h-auto mt-2 text-amber-800" asChild>
+                  <Link to="/materials?lowStock=true">View all low stock materials →</Link>
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Metric Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">

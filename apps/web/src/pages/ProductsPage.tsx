@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { api, ApiError } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -45,6 +45,7 @@ interface ProductsResponse {
 }
 
 export default function ProductsPage() {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -52,11 +53,17 @@ export default function ProductsPage() {
   const [manufactureProductId, setManufactureProductId] = useState<string | null>(null)
   const [manufactureDialogOpen, setManufactureDialogOpen] = useState(false)
 
+  const lowStockFilter = searchParams.get('lowStock') === 'true'
+
   const fetchProducts = async () => {
     try {
       setLoading(true)
       const data = await api.get<ProductsResponse>('/products')
-      setProducts(data.products)
+      let filteredProducts = data.products
+      if (lowStockFilter) {
+        filteredProducts = data.products.filter((p) => p.quantity < p.minStock)
+      }
+      setProducts(filteredProducts)
       setError(null)
     } catch (err) {
       if (err instanceof ApiError) {
@@ -71,7 +78,12 @@ export default function ProductsPage() {
 
   useEffect(() => {
     fetchProducts()
-  }, [])
+  }, [lowStockFilter])
+
+  const clearLowStockFilter = () => {
+    searchParams.delete('lowStock')
+    setSearchParams(searchParams)
+  }
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this product?')) {
@@ -144,9 +156,19 @@ export default function ProductsPage() {
         </Button>
       </div>
 
+      {lowStockFilter && (
+        <div className="flex items-center gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg mb-4">
+          <AlertTriangle className="h-4 w-4 text-amber-600" />
+          <span className="text-sm text-amber-800">Showing only low stock products</span>
+          <Button variant="ghost" size="sm" onClick={clearLowStockFilter} className="ml-auto text-amber-800 hover:text-amber-900">
+            Clear filter
+          </Button>
+        </div>
+      )}
+
       <Card>
         <CardHeader>
-          <CardTitle>All Products</CardTitle>
+          <CardTitle>{lowStockFilter ? 'Low Stock Products' : 'All Products'}</CardTitle>
         </CardHeader>
         <CardContent>
           {products.length === 0 ? (

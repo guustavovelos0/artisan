@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { api, ApiError } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -45,16 +45,23 @@ interface MaterialsResponse {
 }
 
 export default function MaterialsPage() {
+  const [searchParams, setSearchParams] = useSearchParams()
   const [materials, setMaterials] = useState<Material[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [deleting, setDeleting] = useState<string | null>(null)
 
+  const lowStockFilter = searchParams.get('lowStock') === 'true'
+
   const fetchMaterials = async () => {
     try {
       setLoading(true)
       const data = await api.get<MaterialsResponse>('/materials')
-      setMaterials(data.materials)
+      let filteredMaterials = data.materials
+      if (lowStockFilter) {
+        filteredMaterials = data.materials.filter((m) => m.quantity < m.minStock)
+      }
+      setMaterials(filteredMaterials)
       setError(null)
     } catch (err) {
       if (err instanceof ApiError) {
@@ -69,7 +76,12 @@ export default function MaterialsPage() {
 
   useEffect(() => {
     fetchMaterials()
-  }, [])
+  }, [lowStockFilter])
+
+  const clearLowStockFilter = () => {
+    searchParams.delete('lowStock')
+    setSearchParams(searchParams)
+  }
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this material?')) {
@@ -133,14 +145,26 @@ export default function MaterialsPage() {
         </Button>
       </div>
 
+      {lowStockFilter && (
+        <div className="flex items-center gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg mb-4">
+          <AlertTriangle className="h-4 w-4 text-amber-600" />
+          <span className="text-sm text-amber-800">Showing only low stock materials</span>
+          <Button variant="ghost" size="sm" onClick={clearLowStockFilter} className="ml-auto text-amber-800 hover:text-amber-900">
+            Clear filter
+          </Button>
+        </div>
+      )}
+
       <Card>
         <CardHeader>
-          <CardTitle>All Materials</CardTitle>
+          <CardTitle>{lowStockFilter ? 'Low Stock Materials' : 'All Materials'}</CardTitle>
         </CardHeader>
         <CardContent>
           {materials.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">
-              No materials yet. Create your first material to get started.
+              {lowStockFilter
+                ? 'No low stock materials. All materials are above minimum stock levels.'
+                : 'No materials yet. Create your first material to get started.'}
             </p>
           ) : (
             <Table>
