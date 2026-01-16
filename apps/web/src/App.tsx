@@ -5,6 +5,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { Layout } from '@/components/Layout'
 import LoginPage from '@/pages/LoginPage'
 import RegisterPage from '@/pages/RegisterPage'
+import ClientsPage from '@/pages/ClientsPage'
 
 function Dashboard() {
   return (
@@ -59,11 +60,11 @@ function App() {
             }
           />
           <Route
-            path="/clients/*"
+            path="/clients"
             element={
               <ProtectedRoute>
                 <Layout>
-                  <PlaceholderPage title="Clients" />
+                  <ClientsPage />
                 </Layout>
               </ProtectedRoute>
             }
