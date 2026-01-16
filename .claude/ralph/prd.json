@@ -529,8 +529,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 32,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Status dropdown in header of quote edit page. Immediate API status updates with loading state. Colored badges match quotes list."
     },
     {
       "id": "US-033",

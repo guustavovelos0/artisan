@@ -382,3 +382,18 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Initialize manualTotal with calculatedTotal when checkbox is first enabled
   - Load totals fields from API response in edit mode
 ---
+
+## 2026-01-16 14:15 - US-032
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Quote status management on detail/form page
+- Files changed:
+  - apps/web/src/pages/QuoteFormPage.tsx (added status dropdown with immediate API updates)
+- **Learnings for future iterations:**
+  - Status dropdown only shown in edit mode (isEditing check)
+  - Use immediate API call on status change rather than including in form submission
+  - Show loading spinner during status update: `statusUpdating` state
+  - Status badge styles match QuotesPage: Draft=slate, Sent=blue, Approved=green, Rejected=red, Completed=purple
+  - API endpoint already existed: PUT /api/quotes/:id/status
+  - toast.success() for successful status updates, toast.error() for failures
+  - Quote number shown in header when editing: "Edit Quote #N"
+---
