@@ -478,8 +478,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 29,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Browser verified - all form fields working correctly with validation"
     },
     {
       "id": "US-030",
@@ -495,8 +495,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 30,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Browser verified - items section with From Product dialog and Manual Entry, all fields editable"
     },
     {
       "id": "US-031",
@@ -513,8 +513,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 31,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Browser verified - Quote Totals section with auto-calculated subtotal, labor cost, discount, manual total override checkbox"
     },
     {
       "id": "US-032",
@@ -529,8 +529,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 32,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Browser verified - status dropdown with all options, immediate API update on change"
     },
     {
       "id": "US-033",
@@ -548,8 +548,8 @@
         "Typecheck passes"
       ],
       "priority": 33,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "QuotePdf component created with all required sections and BRL currency formatting"
     },
     {
       "id": "US-034",
@@ -564,8 +564,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 34,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Browser verified - PDF Preview button on quote form, QuotePreviewPage with PDFViewer, Download button with correct filename"
     },
     {
       "id": "US-035",

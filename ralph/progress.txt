@@ -363,3 +363,28 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Currency formatting uses pt-BR locale with BRL currency
   - Date formatting uses pt-BR locale with day/month/year format
 ---
+
+## 2026-01-16 - US-029, US-030, US-031, US-032, US-033, US-034 (Batch Verification)
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Verified all quote form features (already implemented in prior iteration)
+- Files verified/committed:
+  - apps/web/src/pages/QuoteFormPage.tsx (complete quote form with all features)
+  - apps/web/src/pages/QuotePreviewPage.tsx (PDF preview page)
+  - apps/web/src/pdf/QuotePdf.tsx (PDF template component)
+  - apps/web/src/App.tsx (routes for /quotes/new, /quotes/:id, /quotes/:id/preview)
+  - apps/api/src/index.ts (CORS config updated for multiple dev ports)
+- US-029: Quote form basic info - client dropdown, title, description, validUntil date picker, notes
+- US-030: Quote items section - From Product dialog, Manual Entry button, editable fields, remove button
+- US-031: Quote totals - auto-calculated subtotal, labor cost, discount, manual total override
+- US-032: Status management - status dropdown with immediate API update on change
+- US-033: QuotePdf component with header, client info, items table, totals, notes sections
+- US-034: PDF Preview button, QuotePreviewPage with PDFViewer, Download with correct filename
+- **Learnings for future iterations:**
+  - All quote form features share same QuoteFormPage component with isEditing flag
+  - useForm from react-hook-form with zodResolver for form validation
+  - Items managed in local state (items array), not in form
+  - Totals calculated in real-time (subtotal, calculatedTotal, finalTotal)
+  - Status change uses handleStatusChange for immediate API call
+  - @react-pdf/renderer uses PDFViewer for in-browser preview and pdf().toBlob() for download
+  - CORS should use array of origins for multiple dev server ports
+---
