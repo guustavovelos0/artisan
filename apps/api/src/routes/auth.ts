@@ -1,7 +1,8 @@
-import { Router } from 'express';
+import { Router, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import prisma from '../lib/prisma';
+import { authMiddleware, AuthenticatedRequest } from '../middleware/auth';
 
 const router = Router();
 
@@ -134,6 +135,80 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// GET /api/auth/me - Get current user data
+router.get('/me', authMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    // Return user data without password
+    const { password: _, ...userWithoutPassword } = user;
+    res.json({ user: userWithoutPassword });
+  } catch (error) {
+    console.error('Get user error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+interface UpdateProfileBody {
+  name?: string;
+  businessName?: string;
+  phone?: string;
+  address?: string;
+}
+
+// PUT /api/auth/profile - Update user profile
+router.put('/profile', authMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    const { name, businessName, phone, address } = req.body as UpdateProfileBody;
+
+    // Validate at least one field is provided
+    if (!name && !businessName && !phone && address === undefined) {
+      res.status(400).json({ error: 'At least one field must be provided to update' });
+      return;
+    }
+
+    // Build update data object with only provided fields
+    const updateData: UpdateProfileBody = {};
+    if (name) updateData.name = name;
+    if (businessName !== undefined) updateData.businessName = businessName;
+    if (phone !== undefined) updateData.phone = phone;
+    if (address !== undefined) updateData.address = address;
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+    });
+
+    // Return updated user data without password
+    const { password: _, ...userWithoutPassword } = user;
+    res.json({ user: userWithoutPassword });
+  } catch (error) {
+    console.error('Update profile error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
