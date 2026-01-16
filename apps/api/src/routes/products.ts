@@ -297,4 +297,300 @@ router.delete('/:id', async (req: AuthenticatedRequest, res: Response) => {
   }
 });
 
+// ==================== Technical Sheet Endpoints ====================
+
+// GET /api/products/:id/materials - Get product's materials (technical sheet)
+router.get('/:id/materials', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const id = req.params.id as string;
+
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    // First check if product exists and belongs to user
+    const existingProduct = await prisma.product.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existingProduct) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    const productMaterials = await prisma.productMaterial.findMany({
+      where: { productId: id },
+      include: {
+        material: true,
+      },
+      orderBy: { material: { name: 'asc' } },
+    });
+
+    res.json({ materials: productMaterials });
+  } catch (error) {
+    console.error('Get product materials error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+interface AddMaterialBody {
+  materialId: string;
+  quantity: number;
+}
+
+// POST /api/products/:id/materials - Add material to product
+router.post('/:id/materials', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const id = req.params.id as string;
+
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    // First check if product exists and belongs to user
+    const existingProduct = await prisma.product.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existingProduct) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    const { materialId, quantity } = req.body as AddMaterialBody;
+
+    if (!materialId || quantity === undefined) {
+      res.status(400).json({ error: 'materialId and quantity are required' });
+      return;
+    }
+
+    // Check if material exists and belongs to user
+    const material = await prisma.material.findFirst({
+      where: { id: materialId, userId },
+    });
+
+    if (!material) {
+      res.status(400).json({ error: 'Material not found' });
+      return;
+    }
+
+    // Check if material is already added to this product
+    const existingProductMaterial = await prisma.productMaterial.findUnique({
+      where: {
+        productId_materialId: {
+          productId: id,
+          materialId,
+        },
+      },
+    });
+
+    if (existingProductMaterial) {
+      res.status(400).json({ error: 'Material already added to this product' });
+      return;
+    }
+
+    const productMaterial = await prisma.productMaterial.create({
+      data: {
+        productId: id,
+        materialId,
+        quantity,
+      },
+      include: {
+        material: true,
+      },
+    });
+
+    res.status(201).json({ productMaterial });
+  } catch (error) {
+    console.error('Add product material error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+interface UpdateMaterialQuantityBody {
+  quantity: number;
+}
+
+// PUT /api/products/:id/materials/:materialId - Update material quantity
+router.put('/:id/materials/:materialId', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const id = req.params.id as string;
+    const materialId = req.params.materialId as string;
+
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    // First check if product exists and belongs to user
+    const existingProduct = await prisma.product.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existingProduct) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    // Check if material relationship exists
+    const existingProductMaterial = await prisma.productMaterial.findUnique({
+      where: {
+        productId_materialId: {
+          productId: id,
+          materialId,
+        },
+      },
+    });
+
+    if (!existingProductMaterial) {
+      res.status(404).json({ error: 'Material not found in this product' });
+      return;
+    }
+
+    const { quantity } = req.body as UpdateMaterialQuantityBody;
+
+    if (quantity === undefined) {
+      res.status(400).json({ error: 'Quantity is required' });
+      return;
+    }
+
+    const productMaterial = await prisma.productMaterial.update({
+      where: {
+        productId_materialId: {
+          productId: id,
+          materialId,
+        },
+      },
+      data: {
+        quantity,
+      },
+      include: {
+        material: true,
+      },
+    });
+
+    res.json({ productMaterial });
+  } catch (error) {
+    console.error('Update product material error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// DELETE /api/products/:id/materials/:materialId - Remove material from product
+router.delete('/:id/materials/:materialId', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const id = req.params.id as string;
+    const materialId = req.params.materialId as string;
+
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    // First check if product exists and belongs to user
+    const existingProduct = await prisma.product.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existingProduct) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    // Check if material relationship exists
+    const existingProductMaterial = await prisma.productMaterial.findUnique({
+      where: {
+        productId_materialId: {
+          productId: id,
+          materialId,
+        },
+      },
+    });
+
+    if (!existingProductMaterial) {
+      res.status(404).json({ error: 'Material not found in this product' });
+      return;
+    }
+
+    await prisma.productMaterial.delete({
+      where: {
+        productId_materialId: {
+          productId: id,
+          materialId,
+        },
+      },
+    });
+
+    res.json({ message: 'Material removed from product successfully' });
+  } catch (error) {
+    console.error('Remove product material error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// GET /api/products/:id/cost - Calculate total cost based on materials + laborCost
+router.get('/:id/cost', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const id = req.params.id as string;
+
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    // Get product with materials
+    const product = await prisma.product.findFirst({
+      where: { id, userId },
+      include: {
+        materials: {
+          include: {
+            material: true,
+          },
+        },
+      },
+    });
+
+    if (!product) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    // Calculate material cost
+    let materialCost = 0;
+    const materialBreakdown = product.materials.map((pm) => {
+      const cost = pm.quantity * pm.material.unitPrice;
+      materialCost += cost;
+      return {
+        materialId: pm.materialId,
+        materialName: pm.material.name,
+        quantity: pm.quantity,
+        unit: pm.material.unit,
+        unitPrice: pm.material.unitPrice,
+        cost,
+      };
+    });
+
+    const totalCost = materialCost + product.laborCost;
+
+    res.json({
+      productId: product.id,
+      productName: product.name,
+      materialCost,
+      laborCost: product.laborCost,
+      totalCost,
+      materialBreakdown,
+    });
+  } catch (error) {
+    console.error('Calculate product cost error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;
