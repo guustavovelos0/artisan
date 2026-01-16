@@ -9,6 +9,7 @@ import RegisterPage from '@/pages/RegisterPage'
 import ClientsPage from '@/pages/ClientsPage'
 import ClientFormPage from '@/pages/ClientFormPage'
 import MaterialsPage from '@/pages/MaterialsPage'
+import MaterialFormPage from '@/pages/MaterialFormPage'
 
 function Dashboard() {
   return (
@@ -109,6 +110,26 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <MaterialsPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/materials/new"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <MaterialFormPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/materials/:id"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <MaterialFormPage />
                 </Layout>
               </ProtectedRoute>
             }
