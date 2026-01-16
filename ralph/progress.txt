@@ -203,3 +203,18 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - API client uses class pattern with private getToken() method for automatic token injection
 ---
 
+## 2026-01-16 - US-012
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: App layout with sidebar navigation (already existed from previous iteration)
+- Files verified:
+  - apps/web/src/components/Layout.tsx (Layout component with sidebar navigation)
+- **Learnings for future iterations:**
+  - Uses Shadcn Sheet component for mobile sidebar (slides in from left)
+  - NavItems defined as array of { title, href, icon } for easy maintenance
+  - Active nav item detection uses pathname matching with startsWith for nested routes
+  - Desktop sidebar is fixed position (md:fixed md:inset-y-0), main content has md:pl-64 offset
+  - Mobile hamburger menu uses SheetTrigger inside header
+  - User name displayed in header with hidden sm:inline for mobile responsiveness
+  - lucide-react icons used: LayoutDashboard, Users, Package, Boxes, FileText, Settings, Menu, LogOut
+---
+
