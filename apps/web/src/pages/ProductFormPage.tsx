@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ArrowLeft, Loader2 } from 'lucide-react'
+import { ArrowLeft, FileText, Loader2 } from 'lucide-react'
 import CategoryManager from '@/components/CategoryManager'
 
 const productSchema = z.object({
@@ -180,6 +180,29 @@ export default function ProductFormPage() {
           {isEditing ? 'Editar Produto' : 'Novo Produto'}
         </h1>
       </div>
+
+      {isEditing && id && (
+        <Card className="max-w-2xl mb-6 border-primary/20 bg-primary/5">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <FileText className="h-5 w-5" />
+              Ficha Técnica
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">
+              Defina os materiais utilizados na produção deste produto. A ficha técnica é <strong>opcional</strong>,
+              mas permite calcular o custo de produção automaticamente e controlar o consumo de materiais.
+            </p>
+            <Button asChild variant="outline">
+              <Link to={`/products/${id}/technical-sheet`}>
+                <FileText className="h-4 w-4 mr-2" />
+                Gerenciar Ficha Técnica
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       <Card className="max-w-2xl">
         <CardHeader>
