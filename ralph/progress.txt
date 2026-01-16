@@ -344,3 +344,22 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Items can reference productId for traceability, or be manual entries (productId null)
   - Prisma $transaction used for PUT /:id to delete old items before creating new ones
 ---
+
+## 2026-01-16 - US-028
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Verified quotes list page (already implemented in prior iteration)
+- Files verified:
+  - apps/web/src/pages/QuotesPage.tsx (complete quotes list page)
+  - apps/web/src/App.tsx (route already configured at /quotes)
+- Browser testing confirmed:
+  - Table with columns: Number, Client, Date, Status, Total, Actions
+  - Status badges with colors: Draft (gray), Sent (blue), Approved (green), Rejected (red), Completed (purple)
+  - Status filter dropdown with all options: All Statuses, Draft, Sent, Approved, Rejected, Completed
+  - New Quote button links to /quotes/new
+  - Edit and Delete action buttons per row
+- **Learnings for future iterations:**
+  - QuotesPage uses useSearchParams for status filter state persistence in URL
+  - STATUS_BADGE_STYLES maps QuoteStatus to Tailwind color classes
+  - Currency formatting uses pt-BR locale with BRL currency
+  - Date formatting uses pt-BR locale with day/month/year format
+---
