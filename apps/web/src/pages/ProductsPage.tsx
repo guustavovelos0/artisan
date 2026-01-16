@@ -166,7 +166,86 @@ export default function ProductsPage() {
         </div>
       )}
 
-      <Card>
+      {/* Mobile Card Layout */}
+      <div className="md:hidden space-y-4">
+        {products.length === 0 ? (
+          <Card>
+            <CardContent className="py-8">
+              <p className="text-muted-foreground text-center">
+                Nenhum produto encontrado. Crie seu primeiro produto para começar.
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          products.map((product) => (
+            <Card key={product.id}>
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h3 className="font-medium">{product.name}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {product.category?.name || 'Sem categoria'}
+                    </p>
+                  </div>
+                  {isLowStock(product) && (
+                    <span className="inline-flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
+                      <AlertTriangle className="h-3 w-3" />
+                      Estoque Baixo
+                    </span>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm mb-4">
+                  <div>
+                    <span className="text-muted-foreground">Estoque:</span>{' '}
+                    <span className={isLowStock(product) ? 'text-amber-600 font-medium' : ''}>
+                      {product.quantity}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Preço:</span>{' '}
+                    {formatCurrency(product.price)}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 border-t pt-3">
+                  <Button variant="outline" size="sm" asChild className="flex-1">
+                    <Link to={`/products/${product.id}`}>
+                      <Pencil className="h-4 w-4 mr-1" />
+                      Editar
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to={`/products/${product.id}/technical-sheet`}>
+                      <FileText className="h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleManufactureClick(product.id)}
+                  >
+                    <Factory className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDelete(product.id)}
+                    disabled={deleting === product.id}
+                  >
+                    {deleting === product.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Trash2 className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Desktop Table Layout */}
+      <Card className="hidden md:block">
         <CardHeader>
           <CardTitle>{lowStockFilter ? 'Produtos com Estoque Baixo' : 'Todos os Produtos'}</CardTitle>
         </CardHeader>
