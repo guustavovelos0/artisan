@@ -407,8 +407,8 @@
         "Typecheck passes"
       ],
       "priority": 25,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Verified - endpoint works correctly with stock validation, deduction, and low stock warnings"
     },
     {
       "id": "US-026",

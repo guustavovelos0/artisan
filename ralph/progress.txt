@@ -282,3 +282,21 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Cost endpoint returns materialBreakdown which frontend uses for display
 ---
 
+## 2026-01-16 - US-025
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Verified manufacture endpoint (already implemented in prior iteration)
+- Files verified:
+  - apps/api/src/routes/products.ts (lines 596-761: POST /api/products/:id/manufacture endpoint)
+- API testing confirmed:
+  - Successful manufacture: Deducts materials from stock, increments product quantity
+  - Insufficient materials: Returns 400 with insufficientMaterials array containing materialId, materialName, required, available, shortage, unit
+  - Low stock warnings: Returns warnings array when materials go below minStock after manufacture
+  - Validation: Quantity must be positive number, product must have materials defined
+  - Transaction: Uses Prisma $transaction for atomic stock updates
+- **Learnings for future iterations:**
+  - Manufacture endpoint uses Prisma $transaction to ensure atomic updates (materials deducted and product incremented together)
+  - InsufficientMaterial interface includes shortage calculation for easier display
+  - LowStockWarning interface shows both currentStock and minStock for comparison
+  - Check for empty technical sheet before attempting manufacture (prevents manufacturing products without defined materials)
+---
+
