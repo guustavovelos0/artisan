@@ -8,6 +8,8 @@
 - Root dev script uses concurrently to run api and web together
 - TypeScript is used across all packages
 - API runs on port 3001, Web runs on port 5173
+- PostgreSQL runs on port 5433 (Docker) to avoid local PostgreSQL conflicts
+- Prisma 7: Use `env("DATABASE_URL")` in prisma.config.ts, NOT `process.env` or schema.prisma url
 ---
 
 ## 2026-01-16 - US-001
@@ -48,5 +50,23 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - CORS configured to allow requests from localhost:5173 (frontend)
   - Health check endpoint at GET /api/health returns { status: 'ok' }
   - Use underscore prefix for unused params (_req) to avoid TypeScript errors
+---
+
+## 2026-01-16 - US-004
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Prisma ORM with complete database schema and migrations
+- Files changed:
+  - apps/api/prisma/schema.prisma (complete schema with all models and relations)
+  - apps/api/prisma.config.ts (fixed to use env() helper for DATABASE_URL)
+  - apps/api/prisma/migrations/20260116111156_init/migration.sql (initial migration)
+  - apps/api/.env.example (updated with port 5433 documentation)
+  - docker-compose.yml (changed port to 5433 to avoid local PostgreSQL conflict)
+- **Learnings for future iterations:**
+  - Prisma 7 requires prisma.config.ts for database URL configuration
+  - Use `env("DATABASE_URL")` from `prisma/config` instead of `process.env`
+  - The `url` property is no longer supported in schema.prisma datasource block
+  - Docker port 5433 is used externally to avoid conflicts with local PostgreSQL on port 5432
+  - Run `npm run db:generate` then `npm run db:migrate -- --name init` to create migrations
+  - Generated Prisma client goes to node_modules/@prisma/client
 ---
 
