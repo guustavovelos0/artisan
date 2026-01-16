@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth';
 import categoriesRoutes from './routes/categories';
+import clientsRoutes from './routes/clients';
 
 const app = express();
 const PORT = 3001;
@@ -21,6 +22,7 @@ app.get('/api/health', (_req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoriesRoutes);
+app.use('/api/clients', clientsRoutes);
 
 // Start server
 app.listen(PORT, () => {
