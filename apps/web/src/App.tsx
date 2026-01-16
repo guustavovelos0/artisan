@@ -14,6 +14,7 @@ import ProductsPage from '@/pages/ProductsPage'
 import ProductFormPage from '@/pages/ProductFormPage'
 import TechnicalSheetPage from '@/pages/TechnicalSheetPage'
 import QuotesPage from '@/pages/QuotesPage'
+import QuoteFormPage from '@/pages/QuoteFormPage'
 
 function Dashboard() {
   return (
@@ -174,6 +175,26 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <QuotesPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/quotes/new"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <QuoteFormPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/quotes/:id"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <QuoteFormPage />
                 </Layout>
               </ProtectedRoute>
             }
