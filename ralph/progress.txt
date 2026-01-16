@@ -388,3 +388,25 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - @react-pdf/renderer uses PDFViewer for in-browser preview and pdf().toBlob() for download
   - CORS should use array of origins for multiple dev server ports
 ---
+
+## 2026-01-16 - US-035
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Dashboard with metrics, recent quotes, and quick actions
+- Files changed:
+  - apps/api/src/routes/dashboard.ts (new - dashboard API endpoints)
+  - apps/api/src/index.ts (added dashboard routes)
+  - apps/web/src/pages/DashboardPage.tsx (new - full dashboard component)
+  - apps/web/src/App.tsx (replaced inline Dashboard with DashboardPage import)
+- Features implemented:
+  - GET /api/dashboard/metrics - returns totalClients, totalProducts, totalMaterials, pendingQuotes, approvedQuotes
+  - GET /api/dashboard/recent-quotes - returns last 5 quotes with client info
+  - 5 metric cards with icons (Users, Package, Boxes, Clock, CheckCircle from lucide-react)
+  - Recent Quotes section with status badges and View All Quotes button
+  - Quick Actions: New Client, New Product, New Quote buttons
+- **Learnings for future iterations:**
+  - Use Promise.all for parallel API calls in dashboard (metrics + recent quotes)
+  - Dashboard metrics endpoint uses multiple prisma.count() calls in Promise.all
+  - Recent quotes uses orderBy: { createdAt: 'desc' } with take: 5 for last 5 items
+  - Reuse STATUS_BADGE_STYLES and STATUS_LABELS from QuotesPage pattern for consistency
+  - Dashboard layout uses CSS grid with md:grid-cols-2 and lg:grid-cols-5 for responsive design
+---
