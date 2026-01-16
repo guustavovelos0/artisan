@@ -18,6 +18,24 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 
 ---
 
+## 2026-01-16 12:20 - US-016
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Client form page for creating and editing clients
+- Files changed:
+  - apps/web/src/pages/ClientFormPage.tsx (new - form for create/edit clients)
+  - apps/web/src/components/ui/sonner.tsx (new - toast notifications via sonner)
+  - apps/web/src/components/ui/textarea.tsx (new - Shadcn textarea component)
+  - apps/web/src/App.tsx (added routes for /clients/new and /clients/:id, Toaster)
+  - apps/web/package.json (added sonner dependency)
+- **Learnings for future iterations:**
+  - Use sonner for toast notifications: `import { toast } from 'sonner'` then `toast.success('message')`
+  - Add Toaster component to App.tsx for toasts to work
+  - Use useParams hook to get route params for edit mode: `const { id } = useParams<{ id: string }>()`
+  - Check `Boolean(id)` to determine if editing vs creating
+  - Form reset with fetched data: `form.reset({ ...data })`
+  - Textarea component from Shadcn for multi-line input (notes field)
+---
+
 ## 2026-01-16 12:10 - US-015
 Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
 - Implemented: Clients list page with table, loading state, and actions
