@@ -391,8 +391,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 24,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Technical sheet page created with full CRUD for product materials. Shows material table with editable quantities, costs summary with material cost + labor cost = total cost."
     },
     {
       "id": "US-025",

@@ -249,3 +249,19 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Schema includes: User, Client, Category, Product, ProductMaterial, Material, Quote, QuoteItem
   - Enums: CategoryType (PRODUCT, MATERIAL), QuoteStatus (DRAFT, SENT, APPROVED, REJECTED, COMPLETED)
 ---
+
+## 2026-01-16 12:59 - US-024
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Technical sheet page for managing product materials
+- Files changed:
+  - apps/web/src/pages/TechnicalSheetPage.tsx (new - technical sheet page with materials table and cost summary)
+  - apps/web/src/App.tsx (added route for /products/:id/technical-sheet)
+- **Learnings for future iterations:**
+  - Use SelectContent with SelectItem for material dropdown
+  - Filter available materials to exclude those already added to the product
+  - Use onBlur and onKeyDown (Enter) to trigger quantity updates inline
+  - Cost breakdown from API includes materialBreakdown array for detailed display
+  - TableFooter component for showing subtotals in table
+  - Cost summary pattern: Material Cost + Labor Cost = Total Cost
+  - Radix UI Select dropdowns may need special handling in automated browser tests
+---
