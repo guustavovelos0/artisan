@@ -410,3 +410,29 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Reuse STATUS_BADGE_STYLES and STATUS_LABELS from QuotesPage pattern for consistency
   - Dashboard layout uses CSS grid with md:grid-cols-2 and lg:grid-cols-5 for responsive design
 ---
+
+## 2026-01-16 - US-036
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Low stock alerts on dashboard with sidebar indicators and filtered lists
+- Files changed:
+  - apps/api/src/routes/dashboard.ts (added /low-stock endpoint)
+  - apps/web/src/contexts/LowStockContext.tsx (new - context for sharing low stock state)
+  - apps/web/src/pages/DashboardPage.tsx (added Low Stock Alerts section)
+  - apps/web/src/components/Layout.tsx (added alert icons on sidebar nav items)
+  - apps/web/src/pages/ProductsPage.tsx (added lowStock filter support)
+  - apps/web/src/pages/MaterialsPage.tsx (added lowStock filter support)
+  - apps/web/src/App.tsx (wrapped with LowStockProvider)
+- Features implemented:
+  - GET /api/dashboard/low-stock - returns products/materials where quantity < minStock
+  - Low Stock Alerts card with amber styling (border-amber-200 bg-amber-50)
+  - Alert icon (AlertTriangle) on sidebar for Products/Materials when low stock exists
+  - "View all low stock products/materials →" links to filtered lists
+  - ?lowStock=true query param on Products/Materials pages with clear filter button
+- **Learnings for future iterations:**
+  - Prisma doesn't support comparing two fields in where clause; fetch all and filter in code
+  - Use Context to share low stock state between Dashboard and Layout components
+  - LowStockProvider must be inside AuthProvider (needs user state for API calls)
+  - Filter banners use amber color scheme for consistency with low stock alerts
+  - useSearchParams hook for URL query param state management
+  - Alert icons added with ml-auto class to push them to the right side of nav items
+---

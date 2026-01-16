@@ -597,8 +597,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 36,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Browser verified - Low Stock Alerts section on dashboard with amber styling, alert icons on sidebar, filtered list pages with lowStock query param"
     },
     {
       "id": "US-037",
