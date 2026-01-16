@@ -5,6 +5,7 @@ import categoriesRoutes from './routes/categories';
 import clientsRoutes from './routes/clients';
 import materialsRoutes from './routes/materials';
 import productsRoutes from './routes/products';
+import quotesRoutes from './routes/quotes';
 
 const app = express();
 const PORT = 3001;
@@ -27,6 +28,7 @@ app.use('/api/categories', categoriesRoutes);
 app.use('/api/clients', clientsRoutes);
 app.use('/api/materials', materialsRoutes);
 app.use('/api/products', productsRoutes);
+app.use('/api/quotes', quotesRoutes);
 
 // Start server
 app.listen(PORT, () => {
