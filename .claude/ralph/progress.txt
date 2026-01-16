@@ -18,6 +18,19 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 
 ---
 
+## 2026-01-16 12:30 - US-018
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Materials list page with low stock indicator
+- Files changed:
+  - apps/web/src/pages/MaterialsPage.tsx (new - materials list with table and low stock badges)
+  - apps/web/src/App.tsx (updated route to use MaterialsPage)
+- **Learnings for future iterations:**
+  - Low stock indicator: check `quantity < minStock`, show amber badge with AlertTriangle icon
+  - Use Intl.NumberFormat for currency: `new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })`
+  - Include category relation from API for display: `material.category?.name || '-'`
+  - Styling: amber colors for low stock (text-amber-600, bg-amber-50)
+---
+
 ## 2026-01-16 12:25 - US-017
 Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
 - Implemented: Materials CRUD backend endpoints with pagination and stock adjustment
