@@ -170,3 +170,22 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Profile update endpoint allows partial updates using undefined checks
 ---
 
+## 2026-01-16 - US-010
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Login and registration pages with form validation
+- Files verified (already existed from previous iteration):
+  - apps/web/src/pages/LoginPage.tsx (/login page with email and password fields)
+  - apps/web/src/pages/RegisterPage.tsx (/register page with name, email, password, businessName fields)
+  - apps/web/src/contexts/AuthContext.tsx (auth state management)
+  - apps/web/src/lib/api.ts (API client with automatic token injection)
+  - apps/web/src/components/ProtectedRoute.tsx (route protection)
+  - apps/web/src/App.tsx (routes configuration)
+- **Learnings for future iterations:**
+  - Forms use react-hook-form with zod resolver for validation
+  - Shadcn Form component integrates with react-hook-form using FormField, FormControl, FormItem
+  - Login page preserves intended destination via location.state.from for redirect after auth
+  - API errors are handled via ApiError class with status code and message
+  - Both pages show error messages from API responses in a styled error box
+  - Token and user data stored in localStorage, validated on app init via /auth/me endpoint
+---
+
