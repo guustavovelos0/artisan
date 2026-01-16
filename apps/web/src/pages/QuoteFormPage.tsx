@@ -11,6 +11,7 @@ import { api, ApiError } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { CurrencyInput } from '@/components/ui/currency-input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar } from '@/components/ui/calendar'
@@ -676,13 +677,10 @@ export default function QuoteFormPage() {
                           />
                         </TableCell>
                         <TableCell>
-                          <Input
-                            type="number"
-                            min="0"
-                            step="0.01"
+                          <CurrencyInput
                             value={item.unitPrice}
                             onChange={(e) => updateItem(index, 'unitPrice', e.target.value)}
-                            className="w-28"
+                            className="w-32"
                           />
                         </TableCell>
                         <TableCell className="text-right font-medium">
@@ -738,15 +736,12 @@ export default function QuoteFormPage() {
                 <Label htmlFor="laborCost" className="text-muted-foreground">
                   Custo de Mão de Obra
                 </Label>
-                <Input
+                <CurrencyInput
                   id="laborCost"
-                  type="number"
-                  min="0"
-                  step="0.01"
                   value={laborCost}
                   onChange={(e) => setLaborCost(parseFloat(e.target.value) || 0)}
-                  className="w-32 text-right"
-                  placeholder="0.00"
+                  className="w-36 text-right"
+                  placeholder="0,00"
                 />
               </div>
 
@@ -755,15 +750,12 @@ export default function QuoteFormPage() {
                 <Label htmlFor="discount" className="text-muted-foreground">
                   Desconto
                 </Label>
-                <Input
+                <CurrencyInput
                   id="discount"
-                  type="number"
-                  min="0"
-                  step="0.01"
                   value={discount}
                   onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
-                  className="w-32 text-right"
-                  placeholder="0.00"
+                  className="w-36 text-right"
+                  placeholder="0,00"
                 />
               </div>
 
@@ -804,15 +796,12 @@ export default function QuoteFormPage() {
                     <Label htmlFor="manualTotal" className="text-muted-foreground">
                       Total Manual
                     </Label>
-                    <Input
+                    <CurrencyInput
                       id="manualTotal"
-                      type="number"
-                      min="0"
-                      step="0.01"
                       value={manualTotal ?? 0}
                       onChange={(e) => setManualTotal(parseFloat(e.target.value) || 0)}
-                      className="w-32 text-right"
-                      placeholder="0.00"
+                      className="w-36 text-right"
+                      placeholder="0,00"
                     />
                   </div>
                 )}

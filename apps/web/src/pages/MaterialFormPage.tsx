@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { api, ApiError } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { CurrencyInput } from '@/components/ui/currency-input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -251,11 +252,8 @@ export default function MaterialFormPage() {
                     <FormItem>
                       <FormLabel>Preço Unitário *</FormLabel>
                       <FormControl>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          placeholder="0.00"
+                        <CurrencyInput
+                          placeholder="0,00"
                           {...field}
                         />
                       </FormControl>
