@@ -15,6 +15,7 @@ import ProductFormPage from '@/pages/ProductFormPage'
 import TechnicalSheetPage from '@/pages/TechnicalSheetPage'
 import QuotesPage from '@/pages/QuotesPage'
 import QuoteFormPage from '@/pages/QuoteFormPage'
+import QuotePreviewPage from '@/pages/QuotePreviewPage'
 
 function Dashboard() {
   return (
@@ -195,6 +196,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <QuoteFormPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/quotes/:id/preview"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <QuotePreviewPage />
                 </Layout>
               </ProtectedRoute>
             }

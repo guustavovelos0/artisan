@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { format } from 'date-fns'
-import { CalendarIcon, ArrowLeft, Loader2, Plus, Trash2, Package, Calculator } from 'lucide-react'
+import { CalendarIcon, ArrowLeft, Loader2, Plus, Trash2, Package, Calculator, FileText } from 'lucide-react'
 import { api, ApiError } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -428,6 +428,12 @@ export default function QuoteFormPage() {
         </div>
         {isEditing && (
           <div className="flex items-center gap-3">
+            <Button variant="outline" asChild>
+              <Link to={`/quotes/${id}/preview`}>
+                <FileText className="h-4 w-4 mr-2" />
+                PDF Preview
+              </Link>
+            </Button>
             <span className="text-sm text-muted-foreground">Status:</span>
             <Select
               value={quoteStatus}
