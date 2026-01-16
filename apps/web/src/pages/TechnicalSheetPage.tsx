@@ -108,7 +108,7 @@ export default function TechnicalSheetPage() {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to load technical sheet')
+        setError('Falha ao carregar ficha técnica')
       }
     } finally {
       setLoading(false)
@@ -143,7 +143,7 @@ export default function TechnicalSheetPage() {
 
   const handleAddMaterial = async () => {
     if (!selectedMaterialId || !newMaterialQuantity) {
-      toast.error('Please select a material and enter a quantity')
+      toast.error('Por favor, selecione um material e insira uma quantidade')
       return
     }
 
@@ -153,7 +153,7 @@ export default function TechnicalSheetPage() {
         materialId: selectedMaterialId,
         quantity: parseFloat(newMaterialQuantity),
       })
-      toast.success('Material added successfully')
+      toast.success('Material adicionado com sucesso')
       setSelectedMaterialId('')
       setNewMaterialQuantity('1')
       await Promise.all([fetchProductMaterials(), fetchCost()])
@@ -161,7 +161,7 @@ export default function TechnicalSheetPage() {
       if (err instanceof ApiError) {
         toast.error(err.message)
       } else {
-        toast.error('Failed to add material')
+        toast.error('Falha ao adicionar material')
       }
     } finally {
       setAddingMaterial(false)
@@ -177,13 +177,13 @@ export default function TechnicalSheetPage() {
       await api.put(`/products/${id}/materials/${materialId}`, {
         quantity: parseFloat(quantity),
       })
-      toast.success('Quantity updated')
+      toast.success('Quantidade atualizada')
       await Promise.all([fetchProductMaterials(), fetchCost()])
     } catch (err) {
       if (err instanceof ApiError) {
         toast.error(err.message)
       } else {
-        toast.error('Failed to update quantity')
+        toast.error('Falha ao atualizar quantidade')
       }
     } finally {
       setUpdatingMaterial(null)
@@ -191,20 +191,20 @@ export default function TechnicalSheetPage() {
   }
 
   const handleRemoveMaterial = async (materialId: string) => {
-    if (!confirm('Are you sure you want to remove this material?')) {
+    if (!confirm('Tem certeza que deseja remover este material?')) {
       return
     }
 
     try {
       setDeletingMaterial(materialId)
       await api.delete(`/products/${id}/materials/${materialId}`)
-      toast.success('Material removed')
+      toast.success('Material removido')
       await Promise.all([fetchProductMaterials(), fetchCost()])
     } catch (err) {
       if (err instanceof ApiError) {
         toast.error(err.message)
       } else {
-        toast.error('Failed to remove material')
+        toast.error('Falha ao remover material')
       }
     } finally {
       setDeletingMaterial(null)
@@ -236,7 +236,7 @@ export default function TechnicalSheetPage() {
       <div className="py-12 text-center">
         <p className="text-destructive">{error}</p>
         <Button variant="outline" className="mt-4" onClick={fetchAll}>
-          Try again
+          Tentar novamente
         </Button>
       </div>
     )
@@ -248,11 +248,11 @@ export default function TechnicalSheetPage() {
         <Button variant="ghost" size="icon" asChild>
           <Link to="/products">
             <ArrowLeft className="h-4 w-4" />
-            <span className="sr-only">Back to products</span>
+            <span className="sr-only">Voltar para produtos</span>
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">Technical Sheet</h1>
+          <h1 className="text-3xl font-bold">Ficha Técnica</h1>
           <p className="text-muted-foreground">{product?.name}</p>
         </div>
       </div>
@@ -260,8 +260,8 @@ export default function TechnicalSheetPage() {
       {/* Add Material Section */}
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Add Material</CardTitle>
-          <CardDescription>Select a material to add to this product&apos;s technical sheet</CardDescription>
+          <CardTitle>Adicionar Material</CardTitle>
+          <CardDescription>Selecione um material para adicionar à ficha técnica deste produto</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex gap-4 items-end">
@@ -273,7 +273,7 @@ export default function TechnicalSheetPage() {
                 disabled={materialsNotInSheet.length === 0}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={materialsNotInSheet.length === 0 ? 'No materials available' : 'Select a material'} />
+                  <SelectValue placeholder={materialsNotInSheet.length === 0 ? 'Nenhum material disponível' : 'Selecione um material'} />
                 </SelectTrigger>
                 <SelectContent>
                   {materialsNotInSheet.map((material) => (
@@ -285,7 +285,7 @@ export default function TechnicalSheetPage() {
               </Select>
             </div>
             <div className="w-32">
-              <label className="text-sm font-medium mb-2 block">Quantity</label>
+              <label className="text-sm font-medium mb-2 block">Quantidade</label>
               <Input
                 type="number"
                 step="0.01"
@@ -303,7 +303,7 @@ export default function TechnicalSheetPage() {
               ) : (
                 <>
                   <Plus className="h-4 w-4 mr-2" />
-                  Add
+                  Adicionar
                 </>
               )}
             </Button>
@@ -314,24 +314,24 @@ export default function TechnicalSheetPage() {
       {/* Materials Table */}
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle>Materials</CardTitle>
-          <CardDescription>Materials required to produce this product</CardDescription>
+          <CardTitle>Materiais</CardTitle>
+          <CardDescription>Materiais necessários para produzir este produto</CardDescription>
         </CardHeader>
         <CardContent>
           {productMaterials.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">
-              No materials added yet. Add materials above to build the technical sheet.
+              Nenhum material adicionado ainda. Adicione materiais acima para construir a ficha técnica.
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Material</TableHead>
-                  <TableHead>Unit</TableHead>
-                  <TableHead>Quantity</TableHead>
-                  <TableHead>Unit Price</TableHead>
+                  <TableHead>Unidade</TableHead>
+                  <TableHead>Quantidade</TableHead>
+                  <TableHead>Preço Unitário</TableHead>
                   <TableHead>Total</TableHead>
-                  <TableHead className="w-[100px]">Actions</TableHead>
+                  <TableHead className="w-[100px]">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -378,14 +378,14 @@ export default function TechnicalSheetPage() {
                         size="icon"
                         onClick={() => handleRemoveMaterial(pm.materialId)}
                         disabled={deletingMaterial === pm.materialId}
-                        title="Remove material"
+                        title="Remover material"
                       >
                         {deletingMaterial === pm.materialId ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
                           <Trash2 className="h-4 w-4" />
                         )}
-                        <span className="sr-only">Remove</span>
+                        <span className="sr-only">Remover</span>
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -394,7 +394,7 @@ export default function TechnicalSheetPage() {
               <TableFooter>
                 <TableRow>
                   <TableCell colSpan={4} className="text-right font-medium">
-                    Material Cost
+                    Custo de Materiais
                   </TableCell>
                   <TableCell className="font-medium">
                     {formatCurrency(cost?.materialCost || 0)}
@@ -410,21 +410,21 @@ export default function TechnicalSheetPage() {
       {/* Cost Summary */}
       <Card>
         <CardHeader>
-          <CardTitle>Cost Summary</CardTitle>
-          <CardDescription>Total production cost breakdown</CardDescription>
+          <CardTitle>Resumo de Custos</CardTitle>
+          <CardDescription>Detalhamento do custo total de produção</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             <div className="flex justify-between py-2 border-b">
-              <span className="text-muted-foreground">Material Cost</span>
+              <span className="text-muted-foreground">Custo de Materiais</span>
               <span className="font-medium">{formatCurrency(cost?.materialCost || 0)}</span>
             </div>
             <div className="flex justify-between py-2 border-b">
-              <span className="text-muted-foreground">Labor Cost</span>
+              <span className="text-muted-foreground">Custo de Mão de Obra</span>
               <span className="font-medium">{formatCurrency(cost?.laborCost || 0)}</span>
             </div>
             <div className="flex justify-between py-2 text-lg">
-              <span className="font-semibold">Total Cost</span>
+              <span className="font-semibold">Custo Total</span>
               <span className="font-bold text-primary">{formatCurrency(cost?.totalCost || 0)}</span>
             </div>
           </div>

@@ -27,10 +27,10 @@ import {
 import { ArrowLeft, Loader2 } from 'lucide-react'
 
 const materialSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1, 'Nome é obrigatório'),
   description: z.string().optional(),
-  unit: z.string().min(1, 'Unit is required'),
-  unitPrice: z.string().min(1, 'Unit price is required'),
+  unit: z.string().min(1, 'Unidade é obrigatória'),
+  unitPrice: z.string().min(1, 'Preço unitário é obrigatório'),
   quantity: z.string().optional(),
   minStock: z.string().optional(),
   supplier: z.string().optional(),
@@ -120,7 +120,7 @@ export default function MaterialFormPage() {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to load material')
+        setError('Falha ao carregar material')
       }
     } finally {
       setLoading(false)
@@ -145,17 +145,17 @@ export default function MaterialFormPage() {
 
       if (isEditing && id) {
         await api.put(`/materials/${id}`, payload)
-        toast.success('Material updated successfully')
+        toast.success('Material atualizado com sucesso')
       } else {
         await api.post('/materials', payload)
-        toast.success('Material created successfully')
+        toast.success('Material criado com sucesso')
       }
       navigate('/materials')
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to save material')
+        setError('Falha ao salvar material')
       }
     } finally {
       setIsSubmitting(false)
@@ -176,17 +176,17 @@ export default function MaterialFormPage() {
         <Button variant="ghost" size="icon" asChild>
           <Link to="/materials">
             <ArrowLeft className="h-4 w-4" />
-            <span className="sr-only">Back to materials</span>
+            <span className="sr-only">Voltar para materiais</span>
           </Link>
         </Button>
         <h1 className="text-3xl font-bold">
-          {isEditing ? 'Edit Material' : 'New Material'}
+          {isEditing ? 'Editar Material' : 'Novo Material'}
         </h1>
       </div>
 
       <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle>Material Information</CardTitle>
+          <CardTitle>Informações do Material</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -202,9 +202,9 @@ export default function MaterialFormPage() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name *</FormLabel>
+                    <FormLabel>Nome *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Material name" {...field} />
+                      <Input placeholder="Nome do material" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -216,10 +216,10 @@ export default function MaterialFormPage() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>Descrição</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Material description"
+                        placeholder="Descrição do material"
                         className="min-h-[80px]"
                         {...field}
                       />
@@ -235,9 +235,9 @@ export default function MaterialFormPage() {
                   name="unit"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Unit *</FormLabel>
+                      <FormLabel>Unidade *</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., meters, kg, units" {...field} />
+                        <Input placeholder="ex: metros, kg, unidades" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -249,7 +249,7 @@ export default function MaterialFormPage() {
                   name="unitPrice"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Unit Price *</FormLabel>
+                      <FormLabel>Preço Unitário *</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -271,7 +271,7 @@ export default function MaterialFormPage() {
                   name="quantity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Quantity</FormLabel>
+                      <FormLabel>Quantidade em Estoque</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -291,7 +291,7 @@ export default function MaterialFormPage() {
                   name="minStock"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Min Stock</FormLabel>
+                      <FormLabel>Estoque Mínimo</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -312,9 +312,9 @@ export default function MaterialFormPage() {
                 name="supplier"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Supplier</FormLabel>
+                    <FormLabel>Fornecedor</FormLabel>
                     <FormControl>
-                      <Input placeholder="Supplier name" {...field} />
+                      <Input placeholder="Nome do fornecedor" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -326,7 +326,7 @@ export default function MaterialFormPage() {
                 name="categoryId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Category</FormLabel>
+                    <FormLabel>Categoria</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value}
@@ -334,7 +334,7 @@ export default function MaterialFormPage() {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
+                          <SelectValue placeholder="Selecione uma categoria" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -355,16 +355,16 @@ export default function MaterialFormPage() {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Saving...
+                      Salvando...
                     </>
                   ) : isEditing ? (
-                    'Update Material'
+                    'Atualizar Material'
                   ) : (
-                    'Create Material'
+                    'Criar Material'
                   )}
                 </Button>
                 <Button type="button" variant="outline" asChild>
-                  <Link to="/materials">Cancel</Link>
+                  <Link to="/materials">Cancelar</Link>
                 </Button>
               </div>
             </form>

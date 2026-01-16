@@ -25,12 +25,12 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { title: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { title: 'Clients', href: '/clients', icon: Users },
-  { title: 'Products', href: '/products', icon: Package },
-  { title: 'Materials', href: '/materials', icon: Boxes },
-  { title: 'Quotes', href: '/quotes', icon: FileText },
-  { title: 'Settings', href: '/settings', icon: Settings },
+  { title: 'Painel', href: '/', icon: LayoutDashboard },
+  { title: 'Clientes', href: '/clients', icon: Users },
+  { title: 'Produtos', href: '/products', icon: Package },
+  { title: 'Materiais', href: '/materials', icon: Boxes },
+  { title: 'Orçamentos', href: '/quotes', icon: FileText },
+  { title: 'Configurações', href: '/settings', icon: Settings },
 ]
 
 interface LayoutProps {
@@ -114,7 +114,7 @@ export function Layout({ children }: LayoutProps) {
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
                 <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle menu</span>
+                <span className="sr-only">Alternar menu</span>
               </Button>
             </SheetTrigger>
           </Sheet>
@@ -128,7 +128,7 @@ export function Layout({ children }: LayoutProps) {
             </span>
             <Button variant="ghost" size="sm" onClick={logout} className="gap-2">
               <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">Logout</span>
+              <span className="hidden sm:inline">Sair</span>
             </Button>
           </div>
         </header>

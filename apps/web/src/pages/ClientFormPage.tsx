@@ -21,9 +21,9 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 
 const clientSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address').optional().or(z.literal('')),
-  phone: z.string().min(1, 'Phone is required'),
+  name: z.string().min(1, 'Nome é obrigatório'),
+  email: z.string().email('Endereço de email inválido').optional().or(z.literal('')),
+  phone: z.string().min(1, 'Telefone é obrigatório'),
   isWhatsapp: z.boolean(),
   address: z.string().optional(),
   notes: z.string().optional(),
@@ -85,7 +85,7 @@ export default function ClientFormPage() {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to load client')
+        setError('Falha ao carregar cliente')
       }
     } finally {
       setLoading(false)
@@ -108,17 +108,17 @@ export default function ClientFormPage() {
 
       if (isEditing && id) {
         await api.put(`/clients/${id}`, payload)
-        toast.success('Client updated successfully')
+        toast.success('Cliente atualizado com sucesso')
       } else {
         await api.post('/clients', payload)
-        toast.success('Client created successfully')
+        toast.success('Cliente criado com sucesso')
       }
       navigate('/clients')
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to save client')
+        setError('Falha ao salvar cliente')
       }
     } finally {
       setIsSubmitting(false)
@@ -139,17 +139,17 @@ export default function ClientFormPage() {
         <Button variant="ghost" size="icon" asChild>
           <Link to="/clients">
             <ArrowLeft className="h-4 w-4" />
-            <span className="sr-only">Back to clients</span>
+            <span className="sr-only">Voltar para clientes</span>
           </Link>
         </Button>
         <h1 className="text-3xl font-bold">
-          {isEditing ? 'Edit Client' : 'New Client'}
+          {isEditing ? 'Editar Cliente' : 'Novo Cliente'}
         </h1>
       </div>
 
       <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle>Client Information</CardTitle>
+          <CardTitle>Informações do Cliente</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -165,9 +165,9 @@ export default function ClientFormPage() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name *</FormLabel>
+                    <FormLabel>Nome *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Client name" {...field} />
+                      <Input placeholder="Nome do cliente" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -197,9 +197,9 @@ export default function ClientFormPage() {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone *</FormLabel>
+                    <FormLabel>Telefone *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Phone number" {...field} />
+                      <Input placeholder="Número de telefone" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -219,7 +219,7 @@ export default function ClientFormPage() {
                     </FormControl>
                     <div className="space-y-1 leading-none">
                       <FormLabel className="cursor-pointer">
-                        This number is WhatsApp
+                        Este número é WhatsApp
                       </FormLabel>
                     </div>
                   </FormItem>
@@ -231,9 +231,9 @@ export default function ClientFormPage() {
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Address</FormLabel>
+                    <FormLabel>Endereço</FormLabel>
                     <FormControl>
-                      <Input placeholder="Street address" {...field} />
+                      <Input placeholder="Endereço completo" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -245,10 +245,10 @@ export default function ClientFormPage() {
                 name="notes"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Notes</FormLabel>
+                    <FormLabel>Observações</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Additional notes about this client"
+                        placeholder="Observações adicionais sobre este cliente"
                         className="min-h-[100px]"
                         {...field}
                       />
@@ -263,16 +263,16 @@ export default function ClientFormPage() {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Saving...
+                      Salvando...
                     </>
                   ) : isEditing ? (
-                    'Update Client'
+                    'Atualizar Cliente'
                   ) : (
-                    'Create Client'
+                    'Criar Cliente'
                   )}
                 </Button>
                 <Button type="button" variant="outline" asChild>
-                  <Link to="/clients">Cancel</Link>
+                  <Link to="/clients">Cancelar</Link>
                 </Button>
               </div>
             </form>

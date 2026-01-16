@@ -495,3 +495,31 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Checkbox component needs checked={field.value} and onCheckedChange={field.onChange}
   - FormItem for checkbox uses flex-row items-start space-x-3 space-y-0 layout
 ---
+
+## 2026-01-16 - US-041
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Localized entire app interface to Portuguese (Brazil)
+- Files changed:
+  - apps/web/src/components/Layout.tsx (nav items: Painel, Clientes, Produtos, Materiais, Orçamentos, Configurações, Sair)
+  - apps/web/src/pages/DashboardPage.tsx (metrics, alerts, actions all translated)
+  - apps/web/src/pages/ClientsPage.tsx (table headers, buttons, messages)
+  - apps/web/src/pages/ClientFormPage.tsx (form labels, validation, toasts)
+  - apps/web/src/pages/ProductsPage.tsx (table headers, buttons, messages)
+  - apps/web/src/pages/ProductFormPage.tsx (form labels, validation, toasts)
+  - apps/web/src/pages/MaterialsPage.tsx (table headers, buttons, messages)
+  - apps/web/src/pages/MaterialFormPage.tsx (form labels, validation, toasts)
+  - apps/web/src/pages/QuotesPage.tsx (status labels, table headers, buttons)
+  - apps/web/src/pages/QuoteFormPage.tsx (form labels, status options, validation, date-fns locale)
+  - apps/web/src/pages/QuotePreviewPage.tsx (page title, buttons)
+  - apps/web/src/pages/TechnicalSheetPage.tsx (cost summary, materials table)
+  - apps/web/src/pages/SettingsPage.tsx (profile form labels)
+  - apps/web/src/pages/LoginPage.tsx (form labels, validation, buttons)
+  - apps/web/src/pages/RegisterPage.tsx (form labels, validation, buttons)
+  - apps/web/src/components/ManufactureDialog.tsx (dialog labels, status, warnings)
+- **Learnings for future iterations:**
+  - Direct string replacement works well for single-language apps (no i18n library needed)
+  - date-fns locale is set via { locale: ptBR } option in format() calls
+  - STATUS_LABELS objects centralize status translations for reuse
+  - Validation messages in zod schemas need translation too
+  - Some words like "Email" are the same in Portuguese (Brazil)
+---

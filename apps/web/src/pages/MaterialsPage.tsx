@@ -67,7 +67,7 @@ export default function MaterialsPage() {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to load materials')
+        setError('Falha ao carregar materiais')
       }
     } finally {
       setLoading(false)
@@ -127,7 +127,7 @@ export default function MaterialsPage() {
       <div className="py-12 text-center">
         <p className="text-destructive">{error}</p>
         <Button variant="outline" className="mt-4" onClick={fetchMaterials}>
-          Try again
+          Tentar novamente
         </Button>
       </div>
     )
@@ -136,11 +136,11 @@ export default function MaterialsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Materials</h1>
+        <h1 className="text-3xl font-bold">Materiais</h1>
         <Button asChild>
           <Link to="/materials/new">
             <Plus className="h-4 w-4 mr-2" />
-            New Material
+            Novo Material
           </Link>
         </Button>
       </div>
@@ -148,34 +148,34 @@ export default function MaterialsPage() {
       {lowStockFilter && (
         <div className="flex items-center gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg mb-4">
           <AlertTriangle className="h-4 w-4 text-amber-600" />
-          <span className="text-sm text-amber-800">Showing only low stock materials</span>
+          <span className="text-sm text-amber-800">Mostrando apenas materiais com estoque baixo</span>
           <Button variant="ghost" size="sm" onClick={clearLowStockFilter} className="ml-auto text-amber-800 hover:text-amber-900">
-            Clear filter
+            Limpar filtro
           </Button>
         </div>
       )}
 
       <Card>
         <CardHeader>
-          <CardTitle>{lowStockFilter ? 'Low Stock Materials' : 'All Materials'}</CardTitle>
+          <CardTitle>{lowStockFilter ? 'Materiais com Estoque Baixo' : 'Todos os Materiais'}</CardTitle>
         </CardHeader>
         <CardContent>
           {materials.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">
               {lowStockFilter
-                ? 'No low stock materials. All materials are above minimum stock levels.'
-                : 'No materials yet. Create your first material to get started.'}
+                ? 'Nenhum material encontrado. Todos os materiais estão acima dos níveis mínimos de estoque.'
+                : 'Nenhum material encontrado. Crie seu primeiro material para começar.'}
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Quantity</TableHead>
-                  <TableHead>Unit</TableHead>
-                  <TableHead>Unit Price</TableHead>
-                  <TableHead className="w-[100px]">Actions</TableHead>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>Categoria</TableHead>
+                  <TableHead>Estoque</TableHead>
+                  <TableHead>Unidade</TableHead>
+                  <TableHead>Preço Unitário</TableHead>
+                  <TableHead className="w-[100px]">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -187,7 +187,7 @@ export default function MaterialsPage() {
                         {isLowStock(material) && (
                           <span className="inline-flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
                             <AlertTriangle className="h-3 w-3" />
-                            Low Stock
+                            Estoque Baixo
                           </span>
                         )}
                       </div>
@@ -205,7 +205,7 @@ export default function MaterialsPage() {
                         <Button variant="ghost" size="icon" asChild>
                           <Link to={`/materials/${material.id}`}>
                             <Pencil className="h-4 w-4" />
-                            <span className="sr-only">Edit</span>
+                            <span className="sr-only">Editar</span>
                           </Link>
                         </Button>
                         <Button
@@ -219,7 +219,7 @@ export default function MaterialsPage() {
                           ) : (
                             <Trash2 className="h-4 w-4" />
                           )}
-                          <span className="sr-only">Delete</span>
+                          <span className="sr-only">Excluir</span>
                         </Button>
                       </div>
                     </TableCell>

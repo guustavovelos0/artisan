@@ -31,7 +31,7 @@ export default function QuotePreviewPage() {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to load quote')
+        setError('Falha ao carregar orçamento')
       }
     } finally {
       setLoading(false)
@@ -87,10 +87,10 @@ export default function QuotePreviewPage() {
           <Button variant="ghost" size="icon" asChild>
             <Link to="/quotes">
               <ArrowLeft className="h-4 w-4" />
-              <span className="sr-only">Back to quotes</span>
+              <span className="sr-only">Voltar para orçamentos</span>
             </Link>
           </Button>
-          <h1 className="text-3xl font-bold">Quote Preview</h1>
+          <h1 className="text-3xl font-bold">Visualização do Orçamento</h1>
         </div>
         <div className="p-4 text-destructive bg-destructive/10 rounded-md">
           {error}
@@ -106,13 +106,13 @@ export default function QuotePreviewPage() {
           <Button variant="ghost" size="icon" asChild>
             <Link to="/quotes">
               <ArrowLeft className="h-4 w-4" />
-              <span className="sr-only">Back to quotes</span>
+              <span className="sr-only">Voltar para orçamentos</span>
             </Link>
           </Button>
-          <h1 className="text-3xl font-bold">Quote Preview</h1>
+          <h1 className="text-3xl font-bold">Visualização do Orçamento</h1>
         </div>
         <div className="p-4 text-muted-foreground">
-          Quote not found.
+          Orçamento não encontrado.
         </div>
       </div>
     )
@@ -125,11 +125,11 @@ export default function QuotePreviewPage() {
           <Button variant="ghost" size="icon" asChild>
             <Link to={`/quotes/${id}`}>
               <ArrowLeft className="h-4 w-4" />
-              <span className="sr-only">Back to quote</span>
+              <span className="sr-only">Voltar para orçamento</span>
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl font-bold">Quote #{quote.number} Preview</h1>
+            <h1 className="text-3xl font-bold">Orçamento #{quote.number} - Visualização</h1>
             <p className="text-muted-foreground">{quote.client.name}</p>
           </div>
         </div>
@@ -137,12 +137,12 @@ export default function QuotePreviewPage() {
           {downloading ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Downloading...
+              Baixando...
             </>
           ) : (
             <>
               <Download className="h-4 w-4 mr-2" />
-              Download PDF
+              Baixar PDF
             </>
           )}
         </Button>

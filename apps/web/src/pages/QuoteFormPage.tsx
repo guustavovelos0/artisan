@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { CalendarIcon, ArrowLeft, Loader2, Plus, Trash2, Package, Calculator, FileText } from 'lucide-react'
 import { api, ApiError } from '@/lib/api'
 import { cn } from '@/lib/utils'
@@ -49,7 +50,7 @@ import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 
 const quoteSchema = z.object({
-  clientId: z.string().min(1, 'Client is required'),
+  clientId: z.string().min(1, 'Cliente é obrigatório'),
   title: z.string().optional(),
   description: z.string().optional(),
   validUntil: z.date().optional().nullable(),
@@ -107,11 +108,11 @@ interface Quote {
 }
 
 const STATUS_OPTIONS: { value: QuoteStatus; label: string }[] = [
-  { value: 'DRAFT', label: 'Draft' },
-  { value: 'SENT', label: 'Sent' },
-  { value: 'APPROVED', label: 'Approved' },
-  { value: 'REJECTED', label: 'Rejected' },
-  { value: 'COMPLETED', label: 'Completed' },
+  { value: 'DRAFT', label: 'Rascunho' },
+  { value: 'SENT', label: 'Enviado' },
+  { value: 'APPROVED', label: 'Aprovado' },
+  { value: 'REJECTED', label: 'Rejeitado' },
+  { value: 'COMPLETED', label: 'Concluído' },
 ]
 
 const STATUS_BADGE_STYLES: Record<QuoteStatus, string> = {
@@ -195,7 +196,7 @@ export default function QuoteFormPage() {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to load clients')
+        setError('Falha ao carregar clientes')
       }
       setLoading(false)
     }
@@ -240,7 +241,7 @@ export default function QuoteFormPage() {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to load quote')
+        setError('Falha ao carregar orçamento')
       }
     } finally {
       setLoading(false)
@@ -323,12 +324,12 @@ export default function QuoteFormPage() {
       setStatusUpdating(true)
       await api.put(`/quotes/${id}/status`, { status: newStatus })
       setQuoteStatus(newStatus)
-      toast.success(`Status updated to ${STATUS_OPTIONS.find(s => s.value === newStatus)?.label}`)
+      toast.success(`Status atualizado para ${STATUS_OPTIONS.find(s => s.value === newStatus)?.label}`)
     } catch (err) {
       if (err instanceof ApiError) {
-        toast.error(`Failed to update status: ${err.message}`)
+        toast.error(`Falha ao atualizar status: ${err.message}`)
       } else {
-        toast.error('Failed to update status')
+        toast.error('Falha ao atualizar status')
       }
     } finally {
       setStatusUpdating(false)
@@ -341,7 +342,7 @@ export default function QuoteFormPage() {
 
     // Validate items
     if (items.length === 0) {
-      setError('At least one item is required')
+      setError('Pelo menos um item é obrigatório')
       setIsSubmitting(false)
       return
     }
@@ -349,12 +350,12 @@ export default function QuoteFormPage() {
     // Validate all items have description and quantity > 0
     for (const item of items) {
       if (!item.description.trim()) {
-        setError('All items must have a description')
+        setError('Todos os itens devem ter uma descrição')
         setIsSubmitting(false)
         return
       }
       if (item.quantity <= 0) {
-        setError('All items must have a quantity greater than 0')
+        setError('Todos os itens devem ter quantidade maior que 0')
         setIsSubmitting(false)
         return
       }
@@ -380,17 +381,17 @@ export default function QuoteFormPage() {
 
       if (isEditing && id) {
         await api.put(`/quotes/${id}`, payload)
-        toast.success('Quote updated successfully')
+        toast.success('Orçamento atualizado com sucesso')
       } else {
         await api.post('/quotes', payload)
-        toast.success('Quote created successfully')
+        toast.success('Orçamento criado com sucesso')
       }
       navigate('/quotes')
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to save quote')
+        setError('Falha ao salvar orçamento')
       }
     } finally {
       setIsSubmitting(false)
@@ -412,12 +413,12 @@ export default function QuoteFormPage() {
           <Button variant="ghost" size="icon" asChild>
             <Link to="/quotes">
               <ArrowLeft className="h-4 w-4" />
-              <span className="sr-only">Back to quotes</span>
+              <span className="sr-only">Voltar para orçamentos</span>
             </Link>
           </Button>
           <div>
             <h1 className="text-3xl font-bold">
-              {isEditing ? `Edit Quote #${quoteNumber}` : 'New Quote'}
+              {isEditing ? `Editar Orçamento #${quoteNumber}` : 'Novo Orçamento'}
             </h1>
           </div>
         </div>
@@ -426,7 +427,7 @@ export default function QuoteFormPage() {
             <Button variant="outline" asChild>
               <Link to={`/quotes/${id}/preview`}>
                 <FileText className="h-4 w-4 mr-2" />
-                PDF Preview
+                Visualizar PDF
               </Link>
             </Button>
             <span className="text-sm text-muted-foreground">Status:</span>
@@ -468,7 +469,7 @@ export default function QuoteFormPage() {
 
           <Card className="max-w-2xl">
             <CardHeader>
-              <CardTitle>Quote Information</CardTitle>
+              <CardTitle>Informações do Orçamento</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <FormField
@@ -476,14 +477,14 @@ export default function QuoteFormPage() {
                 name="clientId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Client *</FormLabel>
+                    <FormLabel>Cliente *</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a client" />
+                          <SelectValue placeholder="Selecione um cliente" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -509,9 +510,9 @@ export default function QuoteFormPage() {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel>Título</FormLabel>
                     <FormControl>
-                      <Input placeholder="Quote title" {...field} />
+                      <Input placeholder="Título do orçamento" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -523,10 +524,10 @@ export default function QuoteFormPage() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>Descrição</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Brief description of this quote"
+                        placeholder="Breve descrição deste orçamento"
                         className="min-h-[80px]"
                         {...field}
                       />
@@ -541,7 +542,7 @@ export default function QuoteFormPage() {
                 name="validUntil"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Valid Until</FormLabel>
+                    <FormLabel>Válido Até</FormLabel>
                     <Dialog>
                       <DialogTrigger asChild>
                         <FormControl>
@@ -554,9 +555,9 @@ export default function QuoteFormPage() {
                             )}
                           >
                             {field.value ? (
-                              format(field.value, 'PPP')
+                              format(field.value, 'PPP', { locale: ptBR })
                             ) : (
-                              <span>Pick a date</span>
+                              <span>Selecione uma data</span>
                             )}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
@@ -564,7 +565,7 @@ export default function QuoteFormPage() {
                       </DialogTrigger>
                       <DialogContent className="w-auto p-0 sm:max-w-[325px]">
                         <DialogHeader className="px-4 pt-4">
-                          <DialogTitle>Select Date</DialogTitle>
+                          <DialogTitle>Selecionar Data</DialogTitle>
                         </DialogHeader>
                         <Calendar
                           mode="single"
@@ -590,23 +591,23 @@ export default function QuoteFormPage() {
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>Items *</CardTitle>
+                <CardTitle>Itens *</CardTitle>
                 <div className="flex gap-2">
                   <Dialog open={productDialogOpen} onOpenChange={setProductDialogOpen}>
                     <DialogTrigger asChild>
                       <Button type="button" variant="outline" size="sm">
                         <Package className="h-4 w-4 mr-2" />
-                        From Product
+                        Do Produto
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-lg">
                       <DialogHeader>
-                        <DialogTitle>Select a Product</DialogTitle>
+                        <DialogTitle>Selecione um produto</DialogTitle>
                       </DialogHeader>
                       <div className="max-h-[400px] overflow-y-auto">
                         {products.length === 0 ? (
                           <p className="text-muted-foreground text-center py-4">
-                            No products available. Create products first.
+                            Nenhum produto disponível. Crie produtos primeiro.
                           </p>
                         ) : (
                           <div className="space-y-2">
@@ -631,7 +632,7 @@ export default function QuoteFormPage() {
                   </Dialog>
                   <Button type="button" variant="outline" size="sm" onClick={addManualItem}>
                     <Plus className="h-4 w-4 mr-2" />
-                    Manual Entry
+                    Entrada Manual
                   </Button>
                 </div>
               </div>
@@ -639,16 +640,16 @@ export default function QuoteFormPage() {
             <CardContent>
               {items.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
-                  <p>No items added yet.</p>
-                  <p className="text-sm">Click "From Product" to add an existing product or "Manual Entry" for custom items.</p>
+                  <p>Nenhum item adicionado ainda.</p>
+                  <p className="text-sm">Clique em "Do Produto" para adicionar um produto existente ou "Entrada Manual" para itens personalizados.</p>
                 </div>
               ) : (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-[40%]">Description</TableHead>
-                      <TableHead className="w-[15%]">Qty</TableHead>
-                      <TableHead className="w-[20%]">Unit Price</TableHead>
+                      <TableHead className="w-[40%]">Descrição</TableHead>
+                      <TableHead className="w-[15%]">Qtd</TableHead>
+                      <TableHead className="w-[20%]">Preço Unitário</TableHead>
                       <TableHead className="w-[15%] text-right">Total</TableHead>
                       <TableHead className="w-[10%]"></TableHead>
                     </TableRow>
@@ -660,7 +661,7 @@ export default function QuoteFormPage() {
                           <Input
                             value={item.description}
                             onChange={(e) => updateItem(index, 'description', e.target.value)}
-                            placeholder="Item description"
+                            placeholder="Descrição do item"
                             className="min-w-[200px]"
                           />
                         </TableCell>
@@ -722,20 +723,20 @@ export default function QuoteFormPage() {
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Calculator className="h-5 w-5" />
-                <CardTitle>Quote Totals</CardTitle>
+                <CardTitle>Totais do Orçamento</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Subtotal (auto-calculated, read-only) */}
               <div className="flex items-center justify-between py-2">
-                <span className="text-muted-foreground">Subtotal (from items)</span>
+                <span className="text-muted-foreground">Subtotal (dos itens)</span>
                 <span className="font-medium">{formatCurrency(subtotal)}</span>
               </div>
 
               {/* Labor Cost */}
               <div className="flex items-center justify-between gap-4">
                 <Label htmlFor="laborCost" className="text-muted-foreground">
-                  Labor Cost
+                  Custo de Mão de Obra
                 </Label>
                 <Input
                   id="laborCost"
@@ -752,7 +753,7 @@ export default function QuoteFormPage() {
               {/* Discount */}
               <div className="flex items-center justify-between gap-4">
                 <Label htmlFor="discount" className="text-muted-foreground">
-                  Discount
+                  Desconto
                 </Label>
                 <Input
                   id="discount"
@@ -770,7 +771,7 @@ export default function QuoteFormPage() {
               <div className="border-t pt-4">
                 {/* Calculated Total */}
                 <div className="flex items-center justify-between py-2">
-                  <span className="font-medium">Calculated Total</span>
+                  <span className="font-medium">Total Calculado</span>
                   <span className={cn(
                     "font-medium",
                     useManualTotal && "text-muted-foreground line-through"
@@ -794,14 +795,14 @@ export default function QuoteFormPage() {
                     }}
                   />
                   <Label htmlFor="useManualTotal" className="text-sm cursor-pointer">
-                    Override with manual total
+                    Substituir por total manual
                   </Label>
                 </div>
 
                 {useManualTotal && (
                   <div className="flex items-center justify-between gap-4 py-2">
                     <Label htmlFor="manualTotal" className="text-muted-foreground">
-                      Manual Total
+                      Total Manual
                     </Label>
                     <Input
                       id="manualTotal"
@@ -818,7 +819,7 @@ export default function QuoteFormPage() {
 
                 {/* Final Total */}
                 <div className="flex items-center justify-between py-4 border-t mt-4">
-                  <span className="text-lg font-bold">Final Total</span>
+                  <span className="text-lg font-bold">Total Final</span>
                   <span className="text-lg font-bold text-primary">
                     {formatCurrency(finalTotal)}
                   </span>
@@ -830,7 +831,7 @@ export default function QuoteFormPage() {
           {/* Notes Section */}
           <Card className="max-w-2xl">
             <CardHeader>
-              <CardTitle>Additional Information</CardTitle>
+              <CardTitle>Informações Adicionais</CardTitle>
             </CardHeader>
             <CardContent>
               <FormField
@@ -838,10 +839,10 @@ export default function QuoteFormPage() {
                 name="notes"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Notes</FormLabel>
+                    <FormLabel>Observações</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Additional notes for this quote"
+                        placeholder="Observações adicionais para este orçamento"
                         className="min-h-[100px]"
                         {...field}
                       />
@@ -858,16 +859,16 @@ export default function QuoteFormPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Saving...
+                  Salvando...
                 </>
               ) : isEditing ? (
-                'Update Quote'
+                'Atualizar Orçamento'
               ) : (
-                'Create Quote'
+                'Criar Orçamento'
               )}
             </Button>
             <Button type="button" variant="outline" asChild>
-              <Link to="/quotes">Cancel</Link>
+              <Link to="/quotes">Cancelar</Link>
             </Button>
           </div>
         </form>

@@ -50,7 +50,7 @@ export default function ClientsPage() {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to load clients')
+        setError('Falha ao carregar clientes')
       }
     } finally {
       setLoading(false)
@@ -94,7 +94,7 @@ export default function ClientsPage() {
       <div className="py-12 text-center">
         <p className="text-destructive">{error}</p>
         <Button variant="outline" className="mt-4" onClick={fetchClients}>
-          Try again
+          Tentar novamente
         </Button>
       </div>
     )
@@ -103,32 +103,32 @@ export default function ClientsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Clients</h1>
+        <h1 className="text-3xl font-bold">Clientes</h1>
         <Button asChild>
           <Link to="/clients/new">
             <Plus className="h-4 w-4 mr-2" />
-            New Client
+            Novo Cliente
           </Link>
         </Button>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>All Clients</CardTitle>
+          <CardTitle>Todos os Clientes</CardTitle>
         </CardHeader>
         <CardContent>
           {clients.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">
-              No clients yet. Create your first client to get started.
+              Nenhum cliente encontrado
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
+                  <TableHead>Nome</TableHead>
                   <TableHead>Email</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead className="w-[100px]">Actions</TableHead>
+                  <TableHead>Telefone</TableHead>
+                  <TableHead className="w-[100px]">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -142,7 +142,7 @@ export default function ClientsPage() {
                         <Button variant="ghost" size="icon" asChild>
                           <Link to={`/clients/${client.id}`}>
                             <Pencil className="h-4 w-4" />
-                            <span className="sr-only">Edit</span>
+                            <span className="sr-only">Editar</span>
                           </Link>
                         </Button>
                         <Button
@@ -156,7 +156,7 @@ export default function ClientsPage() {
                           ) : (
                             <Trash2 className="h-4 w-4" />
                           )}
-                          <span className="sr-only">Delete</span>
+                          <span className="sr-only">Excluir</span>
                         </Button>
                       </div>
                     </TableCell>

@@ -27,9 +27,9 @@ import {
 import { ArrowLeft, Loader2 } from 'lucide-react'
 
 const productSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1, 'Nome é obrigatório'),
   description: z.string().optional(),
-  price: z.string().min(1, 'Price is required'),
+  price: z.string().min(1, 'Preço é obrigatório'),
   laborCost: z.string().optional(),
   quantity: z.string().optional(),
   minStock: z.string().optional(),
@@ -116,7 +116,7 @@ export default function ProductFormPage() {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to load product')
+        setError('Falha ao carregar produto')
       }
     } finally {
       setLoading(false)
@@ -140,17 +140,17 @@ export default function ProductFormPage() {
 
       if (isEditing && id) {
         await api.put(`/products/${id}`, payload)
-        toast.success('Product updated successfully')
+        toast.success('Produto atualizado com sucesso')
       } else {
         await api.post('/products', payload)
-        toast.success('Product created successfully')
+        toast.success('Produto criado com sucesso')
       }
       navigate('/products')
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to save product')
+        setError('Falha ao salvar produto')
       }
     } finally {
       setIsSubmitting(false)
@@ -171,17 +171,17 @@ export default function ProductFormPage() {
         <Button variant="ghost" size="icon" asChild>
           <Link to="/products">
             <ArrowLeft className="h-4 w-4" />
-            <span className="sr-only">Back to products</span>
+            <span className="sr-only">Voltar para produtos</span>
           </Link>
         </Button>
         <h1 className="text-3xl font-bold">
-          {isEditing ? 'Edit Product' : 'New Product'}
+          {isEditing ? 'Editar Produto' : 'Novo Produto'}
         </h1>
       </div>
 
       <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle>Product Information</CardTitle>
+          <CardTitle>Informações do Produto</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -197,9 +197,9 @@ export default function ProductFormPage() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name *</FormLabel>
+                    <FormLabel>Nome *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Product name" {...field} />
+                      <Input placeholder="Nome do produto" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -211,10 +211,10 @@ export default function ProductFormPage() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>Descrição</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Product description"
+                        placeholder="Descrição do produto"
                         className="min-h-[80px]"
                         {...field}
                       />
@@ -230,7 +230,7 @@ export default function ProductFormPage() {
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Price *</FormLabel>
+                      <FormLabel>Preço *</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -250,7 +250,7 @@ export default function ProductFormPage() {
                   name="laborCost"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Labor Cost</FormLabel>
+                      <FormLabel>Custo de Mão de Obra</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -272,7 +272,7 @@ export default function ProductFormPage() {
                   name="quantity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Quantity</FormLabel>
+                      <FormLabel>Quantidade em Estoque</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -292,7 +292,7 @@ export default function ProductFormPage() {
                   name="minStock"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Min Stock</FormLabel>
+                      <FormLabel>Estoque Mínimo</FormLabel>
                       <FormControl>
                         <Input
                           type="number"
@@ -313,7 +313,7 @@ export default function ProductFormPage() {
                 name="categoryId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Category</FormLabel>
+                    <FormLabel>Categoria</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value}
@@ -321,7 +321,7 @@ export default function ProductFormPage() {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
+                          <SelectValue placeholder="Selecione uma categoria" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -342,16 +342,16 @@ export default function ProductFormPage() {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Saving...
+                      Salvando...
                     </>
                   ) : isEditing ? (
-                    'Update Product'
+                    'Atualizar Produto'
                   ) : (
-                    'Create Product'
+                    'Criar Produto'
                   )}
                 </Button>
                 <Button type="button" variant="outline" asChild>
-                  <Link to="/products">Cancel</Link>
+                  <Link to="/products">Cancelar</Link>
                 </Button>
               </div>
             </form>

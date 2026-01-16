@@ -69,11 +69,11 @@ const STATUS_BADGE_STYLES: Record<QuoteStatus, string> = {
 }
 
 const STATUS_LABELS: Record<QuoteStatus, string> = {
-  DRAFT: 'Draft',
-  SENT: 'Sent',
-  APPROVED: 'Approved',
-  REJECTED: 'Rejected',
-  COMPLETED: 'Completed',
+  DRAFT: 'Rascunho',
+  SENT: 'Enviado',
+  APPROVED: 'Aprovado',
+  REJECTED: 'Rejeitado',
+  COMPLETED: 'Concluído',
 }
 
 const currencyFormatter = new Intl.NumberFormat('pt-BR', {
@@ -111,7 +111,7 @@ export default function DashboardPage() {
         if (err instanceof ApiError) {
           setError(err.message)
         } else {
-          setError('Failed to load dashboard data')
+          setError('Falha ao carregar dados do painel')
         }
       } finally {
         setLoading(false)
@@ -134,7 +134,7 @@ export default function DashboardPage() {
       <div className="py-12 text-center">
         <p className="text-destructive">{error}</p>
         <Button variant="outline" className="mt-4" onClick={() => window.location.reload()}>
-          Try again
+          Tentar novamente
         </Button>
       </div>
     )
@@ -142,7 +142,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <h1 className="text-3xl font-bold">Painel</h1>
 
       {/* Low Stock Alerts */}
       {lowStock?.hasLowStock && (
@@ -150,16 +150,16 @@ export default function DashboardPage() {
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-amber-600" />
-              <CardTitle className="text-amber-800">Low Stock Alerts</CardTitle>
+              <CardTitle className="text-amber-800">Alertas de Estoque Baixo</CardTitle>
             </div>
             <CardDescription className="text-amber-700">
-              The following items are below minimum stock levels
+              Os seguintes itens estão abaixo dos níveis mínimos de estoque
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {lowStock.products.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-amber-800 mb-2">Products</h4>
+                <h4 className="text-sm font-medium text-amber-800 mb-2">Produtos</h4>
                 <div className="space-y-2">
                   {lowStock.products.map((product) => (
                     <div key={product.id} className="flex items-center justify-between text-sm">
@@ -170,19 +170,19 @@ export default function DashboardPage() {
                         {product.name}
                       </Link>
                       <span className="text-amber-700">
-                        {product.quantity} / {product.minStock} units
+                        {product.quantity} / {product.minStock} unidades
                       </span>
                     </div>
                   ))}
                 </div>
                 <Button variant="link" className="p-0 h-auto mt-2 text-amber-800" asChild>
-                  <Link to="/products?lowStock=true">View all low stock products →</Link>
+                  <Link to="/products?lowStock=true">Ver todos os produtos com estoque baixo →</Link>
                 </Button>
               </div>
             )}
             {lowStock.materials.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-amber-800 mb-2">Materials</h4>
+                <h4 className="text-sm font-medium text-amber-800 mb-2">Materiais</h4>
                 <div className="space-y-2">
                   {lowStock.materials.map((material) => (
                     <div key={material.id} className="flex items-center justify-between text-sm">
@@ -199,7 +199,7 @@ export default function DashboardPage() {
                   ))}
                 </div>
                 <Button variant="link" className="p-0 h-auto mt-2 text-amber-800" asChild>
-                  <Link to="/materials?lowStock=true">View all low stock materials →</Link>
+                  <Link to="/materials?lowStock=true">Ver todos os materiais com estoque baixo →</Link>
                 </Button>
               </div>
             )}
@@ -211,7 +211,7 @@ export default function DashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Clients</CardTitle>
+            <CardTitle className="text-sm font-medium">Total de Clientes</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -221,7 +221,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Products</CardTitle>
+            <CardTitle className="text-sm font-medium">Total de Produtos</CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -231,7 +231,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Materials</CardTitle>
+            <CardTitle className="text-sm font-medium">Total de Materiais</CardTitle>
             <Boxes className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -241,7 +241,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Quotes</CardTitle>
+            <CardTitle className="text-sm font-medium">Orçamentos Pendentes</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -251,7 +251,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Approved Quotes</CardTitle>
+            <CardTitle className="text-sm font-medium">Orçamentos Aprovados</CardTitle>
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -264,12 +264,12 @@ export default function DashboardPage() {
         {/* Recent Quotes */}
         <Card className="md:col-span-1">
           <CardHeader>
-            <CardTitle>Recent Quotes</CardTitle>
-            <CardDescription>Your latest 5 quotes</CardDescription>
+            <CardTitle>Orçamentos Recentes</CardTitle>
+            <CardDescription>Seus últimos 5 orçamentos</CardDescription>
           </CardHeader>
           <CardContent>
             {recentQuotes.length === 0 ? (
-              <p className="text-muted-foreground text-sm">No quotes yet. Create your first quote to get started.</p>
+              <p className="text-muted-foreground text-sm">Nenhum orçamento ainda. Crie seu primeiro orçamento para começar.</p>
             ) : (
               <div className="space-y-4">
                 {recentQuotes.map((quote) => (
@@ -297,7 +297,7 @@ export default function DashboardPage() {
                 ))}
                 <div className="pt-2">
                   <Button variant="outline" className="w-full" asChild>
-                    <Link to="/quotes">View All Quotes</Link>
+                    <Link to="/quotes">Ver Todos os Orçamentos</Link>
                   </Button>
                 </div>
               </div>
@@ -308,26 +308,26 @@ export default function DashboardPage() {
         {/* Quick Actions */}
         <Card className="md:col-span-1">
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>Common tasks at your fingertips</CardDescription>
+            <CardTitle>Ações Rápidas</CardTitle>
+            <CardDescription>Tarefas comuns ao seu alcance</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <Button className="w-full justify-start" asChild>
               <Link to="/clients/new">
                 <Plus className="h-4 w-4 mr-2" />
-                New Client
+                Novo Cliente
               </Link>
             </Button>
             <Button className="w-full justify-start" variant="outline" asChild>
               <Link to="/products/new">
                 <Plus className="h-4 w-4 mr-2" />
-                New Product
+                Novo Produto
               </Link>
             </Button>
             <Button className="w-full justify-start" variant="outline" asChild>
               <Link to="/quotes/new">
                 <FileText className="h-4 w-4 mr-2" />
-                New Quote
+                Novo Orçamento
               </Link>
             </Button>
           </CardContent>

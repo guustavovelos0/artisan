@@ -55,12 +55,12 @@ interface QuotesResponse {
 }
 
 const STATUS_OPTIONS: { value: QuoteStatus | 'ALL'; label: string }[] = [
-  { value: 'ALL', label: 'All Statuses' },
-  { value: 'DRAFT', label: 'Draft' },
-  { value: 'SENT', label: 'Sent' },
-  { value: 'APPROVED', label: 'Approved' },
-  { value: 'REJECTED', label: 'Rejected' },
-  { value: 'COMPLETED', label: 'Completed' },
+  { value: 'ALL', label: 'Todos os Status' },
+  { value: 'DRAFT', label: 'Rascunho' },
+  { value: 'SENT', label: 'Enviado' },
+  { value: 'APPROVED', label: 'Aprovado' },
+  { value: 'REJECTED', label: 'Rejeitado' },
+  { value: 'COMPLETED', label: 'Concluído' },
 ]
 
 const STATUS_BADGE_STYLES: Record<QuoteStatus, string> = {
@@ -72,11 +72,11 @@ const STATUS_BADGE_STYLES: Record<QuoteStatus, string> = {
 }
 
 const STATUS_LABELS: Record<QuoteStatus, string> = {
-  DRAFT: 'Draft',
-  SENT: 'Sent',
-  APPROVED: 'Approved',
-  REJECTED: 'Rejected',
-  COMPLETED: 'Completed',
+  DRAFT: 'Rascunho',
+  SENT: 'Enviado',
+  APPROVED: 'Aprovado',
+  REJECTED: 'Rejeitado',
+  COMPLETED: 'Concluído',
 }
 
 const currencyFormatter = new Intl.NumberFormat('pt-BR', {
@@ -115,7 +115,7 @@ export default function QuotesPage() {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Failed to load quotes')
+        setError('Falha ao carregar orçamentos')
       }
     } finally {
       setLoading(false)
@@ -168,7 +168,7 @@ export default function QuotesPage() {
       <div className="py-12 text-center">
         <p className="text-destructive">{error}</p>
         <Button variant="outline" className="mt-4" onClick={fetchQuotes}>
-          Try again
+          Tentar novamente
         </Button>
       </div>
     )
@@ -177,11 +177,11 @@ export default function QuotesPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Quotes</h1>
+        <h1 className="text-3xl font-bold">Orçamentos</h1>
         <Button asChild>
           <Link to="/quotes/new">
             <Plus className="h-4 w-4 mr-2" />
-            New Quote
+            Novo Orçamento
           </Link>
         </Button>
       </div>
@@ -189,7 +189,7 @@ export default function QuotesPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>All Quotes</CardTitle>
+            <CardTitle>Todos os Orçamentos</CardTitle>
             <Select value={statusFilter} onValueChange={handleStatusFilterChange}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Filter by status" />
@@ -207,20 +207,18 @@ export default function QuotesPage() {
         <CardContent>
           {quotes.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">
-              {statusFilter !== 'ALL'
-                ? `No quotes with status "${STATUS_LABELS[statusFilter as QuoteStatus]}". Try a different filter or create a new quote.`
-                : 'No quotes yet. Create your first quote to get started.'}
+              Nenhum orçamento encontrado
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Number</TableHead>
-                  <TableHead>Client</TableHead>
-                  <TableHead>Date</TableHead>
+                  <TableHead>Número</TableHead>
+                  <TableHead>Cliente</TableHead>
+                  <TableHead>Data</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Total</TableHead>
-                  <TableHead className="w-[100px]">Actions</TableHead>
+                  <TableHead className="w-[100px]">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -240,7 +238,7 @@ export default function QuotesPage() {
                         <Button variant="ghost" size="icon" asChild>
                           <Link to={`/quotes/${quote.id}`}>
                             <Pencil className="h-4 w-4" />
-                            <span className="sr-only">Edit</span>
+                            <span className="sr-only">Editar</span>
                           </Link>
                         </Button>
                         <Button
@@ -254,7 +252,7 @@ export default function QuotesPage() {
                           ) : (
                             <Trash2 className="h-4 w-4" />
                           )}
-                          <span className="sr-only">Delete</span>
+                          <span className="sr-only">Excluir</span>
                         </Button>
                       </div>
                     </TableCell>

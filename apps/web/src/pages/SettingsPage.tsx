@@ -77,7 +77,7 @@ export default function SettingsPage() {
       }
 
       await api.put<{ user: User }>('/auth/profile', payload)
-      toast.success('Profile updated successfully')
+      toast.success('Perfil atualizado com sucesso')
 
       // Update localStorage with new user data
       const storedUser = localStorage.getItem('user')
@@ -90,7 +90,7 @@ export default function SettingsPage() {
       if (err instanceof ApiError) {
         toast.error(err.message)
       } else {
-        toast.error('Failed to update profile')
+        toast.error('Falha ao atualizar perfil')
       }
     } finally {
       setIsProfileSubmitting(false)
@@ -120,13 +120,13 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Settings</h1>
+      <h1 className="text-3xl font-bold">Configurações</h1>
 
       {/* Profile Section */}
       <Card>
         <CardHeader>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Update your personal and business information</CardDescription>
+          <CardTitle>Perfil</CardTitle>
+          <CardDescription>Gerencie as configurações da sua conta</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...profileForm}>
@@ -136,9 +136,9 @@ export default function SettingsPage() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Nome</FormLabel>
                     <FormControl>
-                      <Input placeholder="Your name" {...field} />
+                      <Input placeholder="Seu nome" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -170,9 +170,9 @@ export default function SettingsPage() {
                 name="businessName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Business Name</FormLabel>
+                    <FormLabel>Nome da Empresa</FormLabel>
                     <FormControl>
-                      <Input placeholder="Your business name (optional)" {...field} />
+                      <Input placeholder="Nome da sua empresa" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -208,8 +208,14 @@ export default function SettingsPage() {
               />
 
               <Button type="submit" disabled={isProfileSubmitting}>
-                {isProfileSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save Changes
+                {isProfileSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Salvando...
+                  </>
+                ) : (
+                  'Salvar Alterações'
+                )}
               </Button>
             </form>
           </Form>

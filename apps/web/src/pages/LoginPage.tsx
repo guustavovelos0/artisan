@@ -24,8 +24,8 @@ import { useAuth } from '@/contexts/AuthContext'
 import { ApiError } from '@/lib/api'
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  email: z.string().min(1, 'Email é obrigatório').email('Endereço de email inválido'),
+  password: z.string().min(1, 'Senha é obrigatória').min(6, 'A senha deve ter pelo menos 6 caracteres'),
 })
 
 type LoginFormValues = z.infer<typeof loginSchema>
@@ -58,7 +58,7 @@ export default function LoginPage() {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Network error. Please try again.')
+        setError('Erro de rede. Por favor, tente novamente.')
       }
     } finally {
       setIsLoading(false)
@@ -69,8 +69,8 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Welcome back</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
+          <CardTitle className="text-2xl">Entrar</CardTitle>
+          <CardDescription>Entre na sua conta</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -90,7 +90,7 @@ export default function LoginPage() {
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="you@example.com"
+                        placeholder="seu@email.com"
                         {...field}
                       />
                     </FormControl>
@@ -104,9 +104,9 @@ export default function LoginPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Senha</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="******" {...field} />
+                      <Input type="password" placeholder="Sua senha" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -114,15 +114,15 @@ export default function LoginPage() {
               />
 
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Signing in...' : 'Sign in'}
+                {isLoading ? 'Entrando...' : 'Entrar'}
               </Button>
             </form>
           </Form>
 
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{' '}
+            Não tem uma conta?{' '}
             <Link to="/register" className="text-primary hover:underline">
-              Create one
+              Cadastre-se
             </Link>
           </p>
         </CardContent>

@@ -24,9 +24,9 @@ import { useAuth } from '@/contexts/AuthContext'
 import { ApiError } from '@/lib/api'
 
 const registerSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  name: z.string().min(1, 'Nome é obrigatório'),
+  email: z.string().email('Endereço de email inválido'),
+  password: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres'),
   businessName: z.string().optional(),
 })
 
@@ -59,7 +59,7 @@ export default function RegisterPage() {
       if (err instanceof ApiError) {
         setError(err.message)
       } else {
-        setError('Network error. Please try again.')
+        setError('Erro de rede. Por favor, tente novamente.')
       }
     } finally {
       setIsLoading(false)
@@ -70,9 +70,9 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Create an account</CardTitle>
+          <CardTitle className="text-2xl">Cadastro</CardTitle>
           <CardDescription>
-            Start managing your artisan business
+            Crie sua conta
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -89,9 +89,9 @@ export default function RegisterPage() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Nome</FormLabel>
                     <FormControl>
-                      <Input placeholder="Your full name" {...field} />
+                      <Input placeholder="Seu nome" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -107,7 +107,7 @@ export default function RegisterPage() {
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="you@example.com"
+                        placeholder="seu@email.com"
                         {...field}
                       />
                     </FormControl>
@@ -121,11 +121,11 @@ export default function RegisterPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Senha</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="At least 6 characters"
+                        placeholder="Sua senha"
                         {...field}
                       />
                     </FormControl>
@@ -139,10 +139,10 @@ export default function RegisterPage() {
                 name="businessName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Business Name (optional)</FormLabel>
+                    <FormLabel>Nome da Empresa (opcional)</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Your business or studio name"
+                        placeholder="Nome da sua empresa"
                         {...field}
                       />
                     </FormControl>
@@ -152,15 +152,15 @@ export default function RegisterPage() {
               />
 
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Creating account...' : 'Create account'}
+                {isLoading ? 'Criando conta...' : 'Criar Conta'}
               </Button>
             </form>
           </Form>
 
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Already have an account?{' '}
+            Já tem uma conta?{' '}
             <Link to="/login" className="text-primary hover:underline">
-              Sign in
+              Entrar
             </Link>
           </p>
         </CardContent>
