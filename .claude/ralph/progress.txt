@@ -18,6 +18,20 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 
 ---
 
+## 2026-01-16 12:45 - US-019
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Material form page for creating and editing materials
+- Files changed:
+  - apps/web/src/pages/MaterialFormPage.tsx (new - form for create/edit materials with category dropdown)
+  - apps/web/src/App.tsx (added routes for /materials/new and /materials/:id)
+- **Learnings for future iterations:**
+  - Use string type for numeric form fields to avoid z.coerce.number() typing issues with react-hook-form
+  - Convert strings to numbers with parseFloat() in onSubmit before sending to API
+  - Fetch categories with type filter: `/categories?type=MATERIAL`
+  - Category dropdown uses Select component with disabled state while loading
+  - Follow same pattern as ClientFormPage for form structure and validation
+---
+
 ## 2026-01-16 12:30 - US-018
 Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
 - Implemented: Materials list page with low stock indicator
