@@ -112,7 +112,58 @@ export default function ClientsPage() {
         </Button>
       </div>
 
-      <Card>
+      {/* Mobile Card Layout */}
+      <div className="md:hidden space-y-4">
+        {clients.length === 0 ? (
+          <Card>
+            <CardContent className="py-8">
+              <p className="text-muted-foreground text-center">
+                Nenhum cliente encontrado
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          clients.map((client) => (
+            <Card key={client.id}>
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h3 className="font-medium">{client.name}</h3>
+                    {client.email && <p className="text-sm text-muted-foreground">{client.email}</p>}
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm mb-4">
+                  <div><span className="text-muted-foreground">Email:</span> {client.email || '-'}</div>
+                  <div><span className="text-muted-foreground">Telefone:</span> {client.phone || '-'}</div>
+                </div>
+                <div className="flex items-center gap-2 border-t pt-3">
+                  <Button variant="outline" size="sm" asChild className="flex-1">
+                    <Link to={`/clients/${client.id}`}>
+                      <Pencil className="h-4 w-4 mr-1" />
+                      Editar
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDelete(client.id)}
+                    disabled={deleting === client.id}
+                  >
+                    {deleting === client.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Trash2 className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Desktop Table Layout */}
+      <Card className="hidden md:block">
         <CardHeader>
           <CardTitle>Todos os Clientes</CardTitle>
         </CardHeader>

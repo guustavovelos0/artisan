@@ -409,7 +409,57 @@ export default function QuoteFormPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      {/* Mobile Header */}
+      <div className="md:hidden mb-6">
+        <div className="flex items-center gap-2 mb-3">
+          <Button variant="ghost" size="icon" asChild>
+            <Link to="/quotes">
+              <ArrowLeft className="h-4 w-4" />
+              <span className="sr-only">Voltar para orçamentos</span>
+            </Link>
+          </Button>
+          <h1 className="text-2xl font-bold truncate">
+            {isEditing ? `Orçamento #${quoteNumber}` : 'Novo Orçamento'}
+          </h1>
+        </div>
+        {isEditing && (
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" asChild className="flex-shrink-0">
+              <Link to={`/quotes/${id}/preview`}>
+                <FileText className="h-4 w-4 mr-2" />
+                PDF
+              </Link>
+            </Button>
+            <Select
+              value={quoteStatus}
+              onValueChange={(value) => handleStatusChange(value as QuoteStatus)}
+              disabled={statusUpdating}
+            >
+              <SelectTrigger className="flex-1">
+                {statusUpdating ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Badge className={STATUS_BADGE_STYLES[quoteStatus]} variant="secondary">
+                    {STATUS_OPTIONS.find(s => s.value === quoteStatus)?.label}
+                  </Badge>
+                )}
+              </SelectTrigger>
+              <SelectContent>
+                {STATUS_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    <Badge className={STATUS_BADGE_STYLES[option.value]} variant="secondary">
+                      {option.label}
+                    </Badge>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop Header */}
+      <div className="hidden md:flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
             <Link to="/quotes">
@@ -469,10 +519,10 @@ export default function QuoteFormPage() {
           )}
 
           <Card className="max-w-2xl">
-            <CardHeader>
+            <CardHeader className="p-4 md:p-6">
               <CardTitle>Informações do Orçamento</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="p-4 md:p-6 space-y-4">
               <FormField
                 control={form.control}
                 name="clientId"
@@ -590,18 +640,18 @@ export default function QuoteFormPage() {
 
           {/* Items Section */}
           <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
+            <CardHeader className="p-4 md:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <CardTitle>Itens *</CardTitle>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Dialog open={productDialogOpen} onOpenChange={setProductDialogOpen}>
                     <DialogTrigger asChild>
-                      <Button type="button" variant="outline" size="sm">
+                      <Button type="button" variant="outline" size="sm" className="w-full sm:w-auto">
                         <Package className="h-4 w-4 mr-2" />
                         Do Produto
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-lg">
+                    <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-lg">
                       <DialogHeader>
                         <DialogTitle>Selecione um produto</DialogTitle>
                       </DialogHeader>
@@ -631,21 +681,85 @@ export default function QuoteFormPage() {
                       </div>
                     </DialogContent>
                   </Dialog>
-                  <Button type="button" variant="outline" size="sm" onClick={addManualItem}>
+                  <Button type="button" variant="outline" size="sm" onClick={addManualItem} className="w-full sm:w-auto">
                     <Plus className="h-4 w-4 mr-2" />
                     Entrada Manual
                   </Button>
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 md:p-6">
               {items.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   <p>Nenhum item adicionado ainda.</p>
                   <p className="text-sm">Clique em "Do Produto" para adicionar um produto existente ou "Entrada Manual" para itens personalizados.</p>
                 </div>
               ) : (
-                <Table>
+                <>
+                  {/* Mobile Items Cards */}
+                  <div className="md:hidden space-y-3">
+                    {items.map((item, index) => (
+                      <Card key={index} className="border">
+                        <CardContent className="p-4 space-y-3">
+                          <div className="flex items-start justify-between">
+                            <span className="text-sm text-muted-foreground">Item {index + 1}</span>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeItem(index)}
+                              className="text-destructive hover:text-destructive h-8 w-8"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div>
+                            <Label className="text-xs text-muted-foreground">Descrição</Label>
+                            <Input
+                              value={item.description}
+                              onChange={(e) => updateItem(index, 'description', e.target.value)}
+                              placeholder="Descrição do item"
+                              className="mt-1"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <Label className="text-xs text-muted-foreground">Qtd</Label>
+                              <Input
+                                type="number"
+                                min="0.01"
+                                step="0.01"
+                                value={item.quantity}
+                                onChange={(e) => updateItem(index, 'quantity', e.target.value)}
+                                className="mt-1"
+                              />
+                            </div>
+                            <div>
+                              <Label className="text-xs text-muted-foreground">Preço Unit.</Label>
+                              <CurrencyInput
+                                value={item.unitPrice}
+                                onChange={(e) => updateItem(index, 'unitPrice', e.target.value)}
+                                className="mt-1"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between pt-2 border-t">
+                            <span className="text-sm text-muted-foreground">Total</span>
+                            <span className="font-medium">{formatCurrency(item.total)}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                    {/* Mobile Subtotal */}
+                    <div className="flex items-center justify-between py-3 px-4 bg-muted rounded-lg">
+                      <span className="font-medium">Subtotal:</span>
+                      <span className="font-bold">{formatCurrency(subtotal)}</span>
+                    </div>
+                  </div>
+
+                  {/* Desktop Table */}
+                  <div className="hidden md:block">
+                    <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead className="w-[40%]">Descrição</TableHead>
@@ -710,29 +824,31 @@ export default function QuoteFormPage() {
                       </TableCell>
                       <TableCell></TableCell>
                     </TableRow>
-                  </TableFooter>
-                </Table>
+                      </TableFooter>
+                    </Table>
+                  </div>
+                </>
               )}
             </CardContent>
           </Card>
 
           {/* Totals Section */}
           <Card className="max-w-2xl">
-            <CardHeader>
+            <CardHeader className="p-4 md:p-6">
               <div className="flex items-center gap-2">
                 <Calculator className="h-5 w-5" />
                 <CardTitle>Totais do Orçamento</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="p-4 md:p-6 space-y-4">
               {/* Subtotal (auto-calculated, read-only) */}
-              <div className="flex items-center justify-between py-2">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 py-2">
                 <span className="text-muted-foreground">Subtotal (dos itens)</span>
                 <span className="font-medium">{formatCurrency(subtotal)}</span>
               </div>
 
               {/* Labor Cost */}
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4">
                 <Label htmlFor="laborCost" className="text-muted-foreground">
                   Custo de Mão de Obra
                 </Label>
@@ -740,13 +856,13 @@ export default function QuoteFormPage() {
                   id="laborCost"
                   value={laborCost}
                   onChange={(e) => setLaborCost(parseFloat(e.target.value) || 0)}
-                  className="w-36 text-right"
+                  className="w-full sm:w-36 text-right"
                   placeholder="0,00"
                 />
               </div>
 
               {/* Discount */}
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4">
                 <Label htmlFor="discount" className="text-muted-foreground">
                   Desconto
                 </Label>
@@ -754,7 +870,7 @@ export default function QuoteFormPage() {
                   id="discount"
                   value={discount}
                   onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
-                  className="w-36 text-right"
+                  className="w-full sm:w-36 text-right"
                   placeholder="0,00"
                 />
               </div>
@@ -762,7 +878,7 @@ export default function QuoteFormPage() {
               {/* Divider */}
               <div className="border-t pt-4">
                 {/* Calculated Total */}
-                <div className="flex items-center justify-between py-2">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 py-2">
                   <span className="font-medium">Total Calculado</span>
                   <span className={cn(
                     "font-medium",
@@ -792,7 +908,7 @@ export default function QuoteFormPage() {
                 </div>
 
                 {useManualTotal && (
-                  <div className="flex items-center justify-between gap-4 py-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 py-2">
                     <Label htmlFor="manualTotal" className="text-muted-foreground">
                       Total Manual
                     </Label>
@@ -800,14 +916,14 @@ export default function QuoteFormPage() {
                       id="manualTotal"
                       value={manualTotal ?? 0}
                       onChange={(e) => setManualTotal(parseFloat(e.target.value) || 0)}
-                      className="w-36 text-right"
+                      className="w-full sm:w-36 text-right"
                       placeholder="0,00"
                     />
                   </div>
                 )}
 
                 {/* Final Total */}
-                <div className="flex items-center justify-between py-4 border-t mt-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 py-4 border-t mt-4">
                   <span className="text-lg font-bold">Total Final</span>
                   <span className="text-lg font-bold text-primary">
                     {formatCurrency(finalTotal)}
@@ -819,10 +935,10 @@ export default function QuoteFormPage() {
 
           {/* Notes Section */}
           <Card className="max-w-2xl">
-            <CardHeader>
+            <CardHeader className="p-4 md:p-6">
               <CardTitle>Informações Adicionais</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 md:p-6">
               <FormField
                 control={form.control}
                 name="notes"
@@ -843,8 +959,11 @@ export default function QuoteFormPage() {
             </CardContent>
           </Card>
 
-          <div className="flex gap-4">
-            <Button type="submit" disabled={isSubmitting}>
+          <div className="flex flex-col-reverse sm:flex-row gap-3">
+            <Button type="button" variant="outline" asChild className="w-full sm:w-auto">
+              <Link to="/quotes">Cancelar</Link>
+            </Button>
+            <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -855,9 +974,6 @@ export default function QuoteFormPage() {
               ) : (
                 'Criar Orçamento'
               )}
-            </Button>
-            <Button type="button" variant="outline" asChild>
-              <Link to="/quotes">Cancelar</Link>
             </Button>
           </div>
         </form>

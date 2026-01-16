@@ -186,23 +186,79 @@ export default function QuotesPage() {
         </Button>
       </div>
 
-      <Card>
+      {/* Status Filter */}
+      <div className="mb-4">
+        <Select value={statusFilter} onValueChange={handleStatusFilterChange}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by status" />
+          </SelectTrigger>
+          <SelectContent>
+            {STATUS_OPTIONS.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Mobile Card Layout */}
+      <div className="md:hidden space-y-4">
+        {quotes.length === 0 ? (
+          <Card>
+            <CardContent className="py-8">
+              <p className="text-muted-foreground text-center">
+                Nenhum orçamento encontrado
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          quotes.map((quote) => (
+            <Card key={quote.id}>
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h3 className="font-medium">#{quote.number}</h3>
+                    <p className="text-sm text-muted-foreground">{quote.client.name}</p>
+                  </div>
+                  <Badge className={STATUS_BADGE_STYLES[quote.status]} variant="secondary">
+                    {STATUS_LABELS[quote.status]}
+                  </Badge>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm mb-4">
+                  <div><span className="text-muted-foreground">Data:</span> {dateFormatter.format(new Date(quote.createdAt))}</div>
+                  <div><span className="text-muted-foreground">Total:</span> {currencyFormatter.format(quote.total)}</div>
+                </div>
+                <div className="flex items-center gap-2 border-t pt-3">
+                  <Button variant="outline" size="sm" asChild className="flex-1">
+                    <Link to={`/quotes/${quote.id}`}>
+                      <Pencil className="h-4 w-4 mr-1" />
+                      Editar
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDelete(quote.id)}
+                    disabled={deleting === quote.id}
+                  >
+                    {deleting === quote.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Trash2 className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Desktop Table Layout */}
+      <Card className="hidden md:block">
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Todos os Orçamentos</CardTitle>
-            <Select value={statusFilter} onValueChange={handleStatusFilterChange}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by status" />
-              </SelectTrigger>
-              <SelectContent>
-                {STATUS_OPTIONS.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <CardTitle>Todos os Orçamentos</CardTitle>
         </CardHeader>
         <CardContent>
           {quotes.length === 0 ? (

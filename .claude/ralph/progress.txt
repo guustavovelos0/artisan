@@ -578,3 +578,16 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - FileText icon from lucide-react is appropriate for technical sheet/document references
   - Button with `asChild` prop wrapping Link creates a styled navigation button
 ---
+
+## 2026-01-16 - US-048
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Mobile responsive card layout for technical sheet page
+- Files changed:
+  - apps/web/src/pages/TechnicalSheetPage.tsx (added mobile card layout with md:hidden, desktop table with hidden md:block)
+- **Learnings for future iterations:**
+  - Same mobile responsive pattern as US-044, US-046: md:hidden for mobile cards, hidden md:block for desktop table
+  - Mobile card structure: header (name + unit), 2-column grid for editable quantity and unit price, footer with total
+  - Materials cost footer section with bg-muted/50 styling for visual distinction
+  - Empty state content only needs to appear once (shared between layouts since whole block is conditional)
+  - Wrap both mobile and desktop layouts in React fragment `<>...</>` when conditional rendering
+---
