@@ -397,3 +397,23 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - toast.success() for successful status updates, toast.error() for failures
   - Quote number shown in header when editing: "Edit Quote #N"
 ---
+
+## 2026-01-16 14:30 - US-033
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: PDF template component for quotes using @react-pdf/renderer
+- Files changed:
+  - apps/web/package.json (added @react-pdf/renderer dependency)
+  - apps/web/src/pdf/QuotePdf.tsx (new - PDF template component)
+- **Learnings for future iterations:**
+  - @react-pdf/renderer uses React component syntax but with specific PDF components (Document, Page, Text, View)
+  - StyleSheet.create() is similar to React Native's StyleSheet API
+  - Font family defaults: 'Helvetica' works without registration for basic PDFs
+  - Use flexDirection: 'row' for horizontal layouts (columns)
+  - Percentages like width: '45%' work for column widths
+  - textAlign: 'right' for aligning numbers/currency
+  - Export types (Quote, QuoteItem, Client) for use in preview page (US-034)
+  - Use Intl.NumberFormat for currency: style: 'currency', currency: 'BRL'
+  - Use Intl.DateTimeFormat for date formatting with pt-BR locale
+  - manualTotal takes precedence over calculated total when set
+  - position: 'absolute' with bottom/left/right for footer positioning
+---
