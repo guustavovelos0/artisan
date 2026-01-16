@@ -280,3 +280,19 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Check both sufficient stock (error case) and low stock threshold (warning case)
   - Response includes: message, updated product, manufactured quantity, and optional warnings
 ---
+
+## 2026-01-16 13:20 - US-026
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Manufacture dialog for products page
+- Files changed:
+  - apps/web/src/components/ManufactureDialog.tsx (new - dialog with stock validation, warnings, errors)
+  - apps/web/src/pages/ProductsPage.tsx (integrated dialog, enabled manufacture button)
+- **Learnings for future iterations:**
+  - Use Dialog component from Shadcn for modal dialogs
+  - Manage dialog state (open, productId) in parent component for better control
+  - Client-side stock validation mirrors server-side for immediate UI feedback
+  - Use useEffect with dependencies to trigger stock recalculation when quantity changes
+  - Toast notifications with sonner: toast.success() for success, toast.warning() for warnings
+  - Disabled state on button: `disabled={!canManufacture || loading}`
+  - Color coding: red (bg-red-50/text-red-800) for errors, amber for warnings, green for OK
+---
