@@ -66,7 +66,7 @@
       ],
       "priority": 4,
       "passes": true,
-      "notes": "prisma generate works. Migration requires Docker+PostgreSQL. Run 'docker compose up -d' then 'npm run db:migrate -w @artisan/api' to create tables."
+      "notes": ""
     },
     {
       "id": "US-005",
@@ -374,7 +374,7 @@
       ],
       "priority": 23,
       "passes": true,
-      "notes": "All endpoints implemented and tested. Cost calculation correctly sums materialCost (quantity * unitPrice for each material) + laborCost."
+      "notes": ""
     },
     {
       "id": "US-024",
@@ -392,7 +392,7 @@
       ],
       "priority": 24,
       "passes": true,
-      "notes": "Technical sheet page created with full CRUD for product materials. Shows material table with editable quantities, costs summary with material cost + labor cost = total cost."
+      "notes": ""
     },
     {
       "id": "US-025",
@@ -408,7 +408,7 @@
       ],
       "priority": 25,
       "passes": true,
-      "notes": "Implemented manufacture endpoint with transaction-based material deduction. Returns insufficient materials list on error, low stock warnings when materials go below minStock."
+      "notes": "Verified - endpoint works correctly with stock validation, deduction, and low stock warnings"
     },
     {
       "id": "US-026",
@@ -426,7 +426,7 @@
       ],
       "priority": 26,
       "passes": true,
-      "notes": "ManufactureDialog component created with full stock validation, warnings, and errors. Dialog integrates with ProductsPage via state management."
+      "notes": "Verified in browser - dialog opens, shows materials, warnings for low stock, errors for insufficient stock with disabled button, successful manufacture updates list"
     },
     {
       "id": "US-027",
@@ -444,7 +444,7 @@
       ],
       "priority": 27,
       "passes": true,
-      "notes": "All CRUD endpoints implemented with pagination, status filter, auto-increment quote number, and manual total override support."
+      "notes": "All endpoints tested via API calls - working correctly with pagination, status filter, totals calculation, and auto-incrementing quote numbers"
     },
     {
       "id": "US-028",
@@ -461,7 +461,7 @@
       ],
       "priority": 28,
       "passes": true,
-      "notes": "Quotes list page with table, status badges with colors (Draft=slate, Sent=blue, Approved=green, Rejected=red, Completed=purple), status filter dropdown that updates URL params, and action buttons for edit/delete."
+      "notes": "Browser verified - table with all columns, colored status badges, status filter dropdown with all options, New Quote button"
     },
     {
       "id": "US-029",
@@ -479,7 +479,7 @@
       ],
       "priority": 29,
       "passes": true,
-      "notes": "Quote form page with client dropdown, title, description, valid until date picker (disables past dates), and notes textarea. Supports both create and edit modes."
+      "notes": "Browser verified - all form fields working correctly with validation"
     },
     {
       "id": "US-030",
@@ -496,7 +496,7 @@
       ],
       "priority": 30,
       "passes": true,
-      "notes": "Items section added to QuoteFormPage with product selector dialog and manual entry. Includes editable fields, total calculations, and remove functionality."
+      "notes": "Browser verified - items section with From Product dialog and Manual Entry, all fields editable"
     },
     {
       "id": "US-031",
@@ -514,7 +514,7 @@
       ],
       "priority": 31,
       "passes": true,
-      "notes": "Quote Totals section added to QuoteFormPage with subtotal auto-calculation, labor cost/discount inputs, calculated total (subtotal + laborCost - discount), and manual total override with checkbox."
+      "notes": "Browser verified - Quote Totals section with auto-calculated subtotal, labor cost, discount, manual total override checkbox"
     },
     {
       "id": "US-032",
@@ -530,7 +530,7 @@
       ],
       "priority": 32,
       "passes": true,
-      "notes": "Status dropdown in header of quote edit page. Immediate API status updates with loading state. Colored badges match quotes list."
+      "notes": "Browser verified - status dropdown with all options, immediate API update on change"
     },
     {
       "id": "US-033",
@@ -549,7 +549,7 @@
       ],
       "priority": 33,
       "passes": true,
-      "notes": "QuotePdf component created with @react-pdf/renderer. Component has header with user profile, client info, quote details, items table, totals section with labor/discount, and notes."
+      "notes": "QuotePdf component created with all required sections and BRL currency formatting"
     },
     {
       "id": "US-034",
@@ -565,7 +565,7 @@
       ],
       "priority": 34,
       "passes": true,
-      "notes": "QuotePreviewPage with PDF viewer using PDFViewer from @react-pdf/renderer. Download button with correct filename format."
+      "notes": "Browser verified - PDF Preview button on quote form, QuotePreviewPage with PDFViewer, Download button with correct filename"
     },
     {
       "id": "US-035",
@@ -581,7 +581,7 @@
       ],
       "priority": 35,
       "passes": true,
-      "notes": "Dashboard with metric cards, recent quotes list, and quick action buttons. API endpoints for metrics and recent quotes."
+      "notes": "Browser verified - Dashboard with 5 metric cards, Recent Quotes section, and Quick Actions (New Client, New Product, New Quote)"
     },
     {
       "id": "US-036",
@@ -598,7 +598,7 @@
       ],
       "priority": 36,
       "passes": true,
-      "notes": "Low stock alerts section on dashboard, LowStockContext for shared state, alert icons in sidebar, filtered list views with ?lowStock=true parameter."
+      "notes": "Browser verified - Low Stock Alerts section on dashboard with amber styling, alert icons on sidebar, filtered list pages with lowStock query param"
     },
     {
       "id": "US-037",
@@ -614,7 +614,184 @@
       ],
       "priority": 37,
       "passes": true,
-      "notes": "Settings page with profile form (name, email disabled, businessName, phone, address) and change password section. PUT /api/auth/password endpoint added."
+      "notes": "Browser verified - Settings page with profile form and password change section"
+    },
+    {
+      "id": "US-038",
+      "title": "Fix date picker in QuoteFormPage",
+      "description": "As a user, I want the date picker in the quote form to open properly so I can select dates.",
+      "acceptanceCriteria": [
+        "Debug why date picker doesn't open (likely z-index or focus issue)",
+        "Ensure PopoverContent has proper z-index",
+        "Test click handler and popover state",
+        "Valid until date picker opens and allows date selection",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 38,
+      "passes": true,
+      "notes": "Fixed by replacing Popover with Dialog component. Radix Popover had positioning bug where transform was stuck at -200%. Dialog provides centered modal calendar that works reliably."
+    },
+    {
+      "id": "US-039",
+      "title": "Expand PDF viewer height",
+      "description": "As a user, I want the PDF preview to use more vertical space for better readability.",
+      "acceptanceCriteria": [
+        "Fix container height using h-[calc(100vh-12rem)] or similar",
+        "Add minimum height fallback min-h-[600px]",
+        "PDF viewer fills available vertical space",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 39,
+      "passes": true,
+      "notes": "Changed container from flex-1 min-h-0 to h-[calc(100vh-12rem)] min-h-[600px] for explicit height control."
+    },
+    {
+      "id": "US-040",
+      "title": "Phone required + isWhatsapp flag for clients",
+      "description": "As a user, I want phone to be required for clients and want to mark if the number is WhatsApp.",
+      "acceptanceCriteria": [
+        "Add isWhatsapp Boolean field to Client model in Prisma schema with default false",
+        "Run Prisma migration",
+        "Update clients API routes to handle new field",
+        "Make phone field required in ClientFormPage",
+        "Add WhatsApp checkbox in ClientFormPage",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 40,
+      "passes": true,
+      "notes": "Added isWhatsapp Boolean field to Client model, made phone required in form validation, added WhatsApp checkbox to ClientFormPage."
+    },
+    {
+      "id": "US-041",
+      "title": "Localize app to pt-BR",
+      "description": "As a user, I want the app interface in Portuguese (Brazil) since I'm a Brazilian artisan.",
+      "acceptanceCriteria": [
+        "Replace all English UI text with Portuguese in all pages (~14 page files)",
+        "Update Layout.tsx navigation items to Portuguese",
+        "Update button labels, form labels, messages",
+        "Update date-fns locale for Portuguese date formatting",
+        "No i18n library needed - direct string replacement",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 41,
+      "passes": true,
+      "notes": "Localized all 14+ page files to Portuguese (Brazil). Updated Layout.tsx nav items, DashboardPage, ClientsPage, ClientFormPage, ProductsPage, ProductFormPage, MaterialsPage, MaterialFormPage, QuotesPage, QuoteFormPage, QuotePreviewPage, TechnicalSheetPage, SettingsPage, LoginPage, RegisterPage, ManufactureDialog. Added pt-BR locale to date-fns formatting."
+    },
+    {
+      "id": "US-042",
+      "title": "Add R$ prefix to currency inputs",
+      "description": "As a user, I want to see R$ prefix on currency input fields for clarity.",
+      "acceptanceCriteria": [
+        "Create reusable CurrencyInput component in apps/web/src/components/ui/currency-input.tsx",
+        "Component shows R$ prefix inside the input field",
+        "Update ProductFormPage to use CurrencyInput for price and laborCost",
+        "Update MaterialFormPage to use CurrencyInput for unitPrice",
+        "Update QuoteFormPage to use CurrencyInput for price fields",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 42,
+      "passes": true,
+      "notes": "Created CurrencyInput component with R$ prefix. Updated ProductFormPage (price, laborCost), MaterialFormPage (unitPrice), and QuoteFormPage (unitPrice in items, laborCost, discount, manualTotal)."
+    },
+    {
+      "id": "US-043",
+      "title": "Fix category selector and add CRUD modal",
+      "description": "As a user, I want the category selector to work and be able to manage categories without a separate page.",
+      "acceptanceCriteria": [
+        "Debug why category selector doesn't open (possibly empty categories issue)",
+        "Create CategoryManager component with modal for create/edit/delete",
+        "Add CategoryManager button next to category selector in ProductFormPage",
+        "Add CategoryManager button next to category selector in MaterialFormPage",
+        "No new sidebar tab needed - manage categories inline",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 43,
+      "passes": true,
+      "notes": "Fixed API categories endpoint to filter by type query param. Created CategoryManager component with inline CRUD modal. Added button next to category selectors in ProductFormPage and MaterialFormPage."
+    },
+    {
+      "id": "US-044",
+      "title": "Products table mobile responsiveness",
+      "description": "As a user, I want to view products on mobile devices with a card layout.",
+      "acceptanceCriteria": [
+        "Add card layout for mobile using md:hidden class",
+        "Keep table layout for desktop using hidden md:block class",
+        "Cards show product name, category, quantity, price, and action buttons",
+        "Typecheck passes",
+        "Verify in browser at 375px width using dev-browser skill"
+      ],
+      "priority": 44,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-045",
+      "title": "Unit input as selector in MaterialFormPage",
+      "description": "As a user, I want to select units from a predefined list instead of free text.",
+      "acceptanceCriteria": [
+        "Convert unit free-text Input to Select dropdown",
+        "Options: m (metros), cm (centímetros), kg (quilogramas), g (gramas), ml (mililitros), L (litros), un (unidades)",
+        "Existing materials with other units still display correctly",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 45,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-046",
+      "title": "Materials table mobile responsiveness",
+      "description": "As a user, I want to view materials on mobile devices with a card layout.",
+      "acceptanceCriteria": [
+        "Add card layout for mobile using md:hidden class",
+        "Keep table layout for desktop using hidden md:block class",
+        "Cards show material name, category, quantity, unit, price, and action buttons",
+        "Same pattern as US-044 for consistency",
+        "Typecheck passes",
+        "Verify in browser at 375px width using dev-browser skill"
+      ],
+      "priority": 46,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-047",
+      "title": "Technical sheet prominence in product form",
+      "description": "As a user, I want a clear indication that I can add a technical sheet when editing a product.",
+      "acceptanceCriteria": [
+        "Add prominent card/section when editing an existing product",
+        "Clear indication that technical sheet is optional",
+        "Link/button to navigate to technical sheet page",
+        "Only show for existing products (not on create)",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 47,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-048",
+      "title": "Technical sheet page mobile responsiveness",
+      "description": "As a user, I want to view and manage technical sheets on mobile devices.",
+      "acceptanceCriteria": [
+        "Add card layout for mobile using md:hidden class",
+        "Keep table layout for desktop using hidden md:block class",
+        "Cards show material name, quantity, unit price, and total",
+        "Same pattern as US-044 and US-046 for consistency",
+        "Typecheck passes",
+        "Verify in browser at 375px width using dev-browser skill"
+      ],
+      "priority": 48,
+      "passes": false,
+      "notes": ""
     }
   ]
 }
