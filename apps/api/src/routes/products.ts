@@ -593,4 +593,171 @@ router.get('/:id/cost', async (req: AuthenticatedRequest, res: Response) => {
   }
 });
 
+// ==================== Manufacture Endpoint ====================
+
+interface ManufactureBody {
+  quantity: number;
+}
+
+interface InsufficientMaterial {
+  materialId: string;
+  materialName: string;
+  required: number;
+  available: number;
+  shortage: number;
+  unit: string;
+}
+
+interface LowStockWarning {
+  materialId: string;
+  materialName: string;
+  currentStock: number;
+  minStock: number;
+  unit: string;
+}
+
+// POST /api/products/:id/manufacture - Manufacture products and consume materials
+router.post('/:id/manufacture', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const id = req.params.id as string;
+
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized' });
+      return;
+    }
+
+    const { quantity } = req.body as ManufactureBody;
+
+    // Validate quantity
+    if (quantity === undefined || quantity <= 0) {
+      res.status(400).json({ error: 'Quantity must be a positive number' });
+      return;
+    }
+
+    // Get product with materials
+    const product = await prisma.product.findFirst({
+      where: { id, userId },
+      include: {
+        materials: {
+          include: {
+            material: true,
+          },
+        },
+      },
+    });
+
+    if (!product) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    // Check if product has any materials defined
+    if (product.materials.length === 0) {
+      res.status(400).json({ error: 'Product has no materials defined in technical sheet' });
+      return;
+    }
+
+    // Check for insufficient materials
+    const insufficientMaterials: InsufficientMaterial[] = [];
+    const materialsToConsume: { materialId: string; requiredQuantity: number; material: typeof product.materials[0]['material'] }[] = [];
+
+    for (const pm of product.materials) {
+      const requiredQuantity = pm.quantity * quantity;
+
+      if (pm.material.quantity < requiredQuantity) {
+        insufficientMaterials.push({
+          materialId: pm.materialId,
+          materialName: pm.material.name,
+          required: requiredQuantity,
+          available: pm.material.quantity,
+          shortage: requiredQuantity - pm.material.quantity,
+          unit: pm.material.unit,
+        });
+      }
+
+      materialsToConsume.push({
+        materialId: pm.materialId,
+        requiredQuantity,
+        material: pm.material,
+      });
+    }
+
+    // Return error if any materials are insufficient
+    if (insufficientMaterials.length > 0) {
+      res.status(400).json({
+        error: 'Insufficient materials',
+        insufficientMaterials,
+      });
+      return;
+    }
+
+    // Check for low stock warnings (after deduction)
+    const lowStockWarnings: LowStockWarning[] = [];
+    for (const item of materialsToConsume) {
+      const newQuantity = item.material.quantity - item.requiredQuantity;
+      if (newQuantity < item.material.minStock) {
+        lowStockWarnings.push({
+          materialId: item.materialId,
+          materialName: item.material.name,
+          currentStock: newQuantity,
+          minStock: item.material.minStock,
+          unit: item.material.unit,
+        });
+      }
+    }
+
+    // Perform the manufacture operation in a transaction
+    const result = await prisma.$transaction(async (tx) => {
+      // Deduct materials from stock
+      for (const item of materialsToConsume) {
+        await tx.material.update({
+          where: { id: item.materialId },
+          data: {
+            quantity: {
+              decrement: item.requiredQuantity,
+            },
+          },
+        });
+      }
+
+      // Increment product quantity
+      const updatedProduct = await tx.product.update({
+        where: { id },
+        data: {
+          quantity: {
+            increment: quantity,
+          },
+        },
+        include: {
+          category: true,
+        },
+      });
+
+      return updatedProduct;
+    });
+
+    // Build response
+    const response: {
+      message: string;
+      product: typeof result;
+      manufactured: number;
+      warnings?: LowStockWarning[];
+    } = {
+      message: `Successfully manufactured ${quantity} unit(s) of ${product.name}`,
+      product: result,
+      manufactured: quantity,
+    };
+
+    if (lowStockWarnings.length > 0) {
+      response.warnings = lowStockWarnings;
+    }
+
+    res.json(response);
+  } catch (error) {
+    console.error('Manufacture product error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;
