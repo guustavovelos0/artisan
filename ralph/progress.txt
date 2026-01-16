@@ -1,5 +1,52 @@
 # Ralph Progress Log - Artisan App
 # Branch: ralph/artisan-management-app
-# Started:
+# Started: 2026-01-16
 # =========================================
+
+## Codebase Patterns
+- Package naming: @artisan/api, @artisan/web, @artisan/shared
+- Root dev script uses concurrently to run api and web together
+- TypeScript is used across all packages
+- API runs on port 3001, Web runs on port 5173
+---
+
+## 2026-01-16 - US-001
+- What was implemented: Monorepo structure with npm workspaces
+- Files changed:
+  - package.json (root with workspaces config)
+  - apps/api/package.json, tsconfig.json, src/index.ts
+  - apps/web/package.json, tsconfig.json, src/index.ts
+  - packages/shared/package.json, tsconfig.json, src/index.ts
+  - .gitignore
+- **Learnings for future iterations:**
+  - Workspace packages reference each other via "*" in dependencies (e.g., "@artisan/shared": "*")
+  - API package needs @types/node for console.log to typecheck
+  - Root typecheck runs all workspace typechecks with `npm run typecheck --workspaces --if-present`
+---
+
+## 2026-01-16 - US-002
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Docker Compose configuration for PostgreSQL 15
+- Files changed:
+  - docker-compose.yml (new file at root)
+- **Learnings for future iterations:**
+  - Docker Compose uses named volume `postgres_data` for data persistence
+  - Database credentials: artisan_db / artisan / artisan123
+  - Includes healthcheck for reliable startup detection
+  - Container name: artisan_postgres
+---
+
+## 2026-01-16 - US-003
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Express server with TypeScript and hot reload
+- Files changed:
+  - apps/api/package.json (added express, cors, ts-node-dev dependencies)
+  - apps/api/src/index.ts (Express server with CORS and health endpoint)
+- **Learnings for future iterations:**
+  - Express 5.x is the current version (installed 5.2.1)
+  - ts-node-dev with --respawn --transpile-only provides fast hot reload
+  - CORS configured to allow requests from localhost:5173 (frontend)
+  - Health check endpoint at GET /api/health returns { status: 'ok' }
+  - Use underscore prefix for unused params (_req) to avoid TypeScript errors
+---
 
