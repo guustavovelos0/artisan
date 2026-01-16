@@ -14,7 +14,22 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 - AuthContext provides isLoading state for showing loading spinners during auth check
 - Layout component wraps protected routes for consistent sidebar/header navigation
 - Use cn() utility from lib/utils to merge Tailwind classes conditionally
+- API routes: use `router.use(authMiddleware)` for protected routes, cast params with `as string`
 
+---
+
+## 2026-01-16 11:57 - US-013
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Categories CRUD backend endpoints
+- Files changed:
+  - apps/api/src/routes/categories.ts (new - full CRUD for categories with auth)
+  - apps/api/src/index.ts (registered categories routes)
+- **Learnings for future iterations:**
+  - Route files apply authMiddleware to all routes via `router.use(authMiddleware)`
+  - Use `req.params.id as string` to cast params to correct type for Prisma
+  - Import CategoryType enum from @prisma/client for type validation
+  - Categories have a `type` field with values PRODUCT or MATERIAL
+  - findFirst with { id, userId } pattern checks both existence and ownership
 ---
 
 ## 2026-01-16 - US-012
