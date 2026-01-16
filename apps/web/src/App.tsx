@@ -11,6 +11,7 @@ import ClientFormPage from '@/pages/ClientFormPage'
 import MaterialsPage from '@/pages/MaterialsPage'
 import MaterialFormPage from '@/pages/MaterialFormPage'
 import ProductsPage from '@/pages/ProductsPage'
+import ProductFormPage from '@/pages/ProductFormPage'
 
 function Dashboard() {
   return (
@@ -101,6 +102,26 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <ProductsPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products/new"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ProductFormPage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products/:id"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ProductFormPage />
                 </Layout>
               </ProtectedRoute>
             }
