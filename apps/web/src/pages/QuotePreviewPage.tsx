@@ -148,7 +148,7 @@ export default function QuotePreviewPage() {
         </Button>
       </div>
 
-      <div className="flex-1 min-h-0 border rounded-lg overflow-hidden bg-gray-100">
+      <div className="h-[calc(100vh-12rem)] min-h-[600px] border rounded-lg overflow-hidden bg-gray-100">
         <PDFViewer width="100%" height="100%" showToolbar={false}>
           <QuotePdf quote={quote} user={user} />
         </PDFViewer>

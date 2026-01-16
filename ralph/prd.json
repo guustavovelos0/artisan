@@ -644,8 +644,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 39,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Changed container from flex-1 min-h-0 to h-[calc(100vh-12rem)] min-h-[600px] for explicit height control."
     },
     {
       "id": "US-040",

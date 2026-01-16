@@ -436,3 +436,47 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - useSearchParams hook for URL query param state management
   - Alert icons added with ml-auto class to push them to the right side of nav items
 ---
+
+## 2026-01-16 - US-037
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Settings page with user profile editing
+- Files changed:
+  - apps/web/src/pages/SettingsPage.tsx (new - complete settings page)
+  - apps/web/src/App.tsx (route already existed at /settings)
+- Features implemented:
+  - Profile section with Name and Business Name fields
+  - Form pre-filled with current user data from AuthContext
+  - Save button updates profile via PUT /api/auth/profile
+  - Success toast on save
+- **Learnings for future iterations:**
+  - SettingsPage uses react-hook-form with defaultValues from auth context user
+  - useEffect resets form when user data changes/loads
+  - API client already had updateProfile method for PUT /api/auth/profile
+  - Use Card components for visual grouping of settings sections
+---
+
+## 2026-01-16 - US-038
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Fixed date picker in QuoteFormPage by replacing Popover with Dialog
+- Files changed:
+  - apps/web/src/pages/QuoteFormPage.tsx (changed date picker from Popover to Dialog)
+  - apps/api/src/index.ts (added CORS origins for ports 5178 and 5179)
+- Root cause: Radix UI Popover positioning bug where `data-radix-popper-content-wrapper` had `transform: translate(0px, -200%)` causing calendar to render off-screen
+- Solution: Replaced Popover with Dialog component which uses centered modal positioning instead of the buggy Popover positioning system
+- **Learnings for future iterations:**
+  - Radix Popover positioning can fail with -200% transform that doesn't get updated
+  - Dialog component provides reliable centered modal that bypasses positioning issues
+  - When Popover positioning fails, Dialog is a valid alternative for date pickers
+  - Always add `type="button"` to buttons inside forms to prevent unintended submit
+---
+
+## 2026-01-16 - US-039
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Expanded PDF viewer height for better readability
+- Files changed:
+  - apps/web/src/pages/QuotePreviewPage.tsx (changed container from flex-1 min-h-0 to h-[calc(100vh-12rem)] min-h-[600px])
+- **Learnings for future iterations:**
+  - flex-1 min-h-0 pattern doesn't work well when parent has no explicit height
+  - h-[calc(100vh-Xrem)] with min-h-[Ypx] provides predictable vertical sizing
+  - min-h-[600px] ensures usable size even on smaller viewports
+---
