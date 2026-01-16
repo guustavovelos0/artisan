@@ -538,3 +538,16 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Empty state should be handled in both layouts separately
   - Same isLowStock helper function and amber styling works for both layouts
 ---
+
+## 2026-01-16 23:45 - US-045
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Unit input converted from free-text Input to Select dropdown
+- Files changed:
+  - apps/web/src/pages/MaterialFormPage.tsx (updated - unit field now uses Select with predefined options)
+- **Learnings for future iterations:**
+  - UNIT_OPTIONS constant array pattern for dropdown options: `{ value: 'kg', label: 'kg (quilogramas)' }`
+  - Radix UI Select components can be tricky to interact with in Playwright automated tests (click doesn't always trigger open)
+  - Use `page.evaluate(() => trigger.click())` via JavaScript if direct click doesn't work
+  - Select component already imported from Shadcn, no new dependencies needed
+  - Existing materials with units outside the predefined list will still work - the Select just won't show a selected value initially
+---

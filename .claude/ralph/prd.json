@@ -742,8 +742,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 45,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Converted unit input to Select dropdown with 7 predefined options (m, cm, kg, g, ml, L, un). Browser verified - dropdown opens and shows all options correctly."
     },
     {
       "id": "US-046",
