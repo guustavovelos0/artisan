@@ -18,6 +18,20 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 
 ---
 
+## 2026-01-16 13:05 - US-021
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Products list page with table and low stock indicator
+- Files changed:
+  - apps/web/src/pages/ProductsPage.tsx (new - products list with table, low stock badges, action buttons)
+  - apps/web/src/App.tsx (updated route to use ProductsPage)
+- **Learnings for future iterations:**
+  - Same pattern as MaterialsPage for list pages
+  - Action buttons include: Edit, Technical Sheet (link), Manufacture (disabled for now), Delete
+  - Use lucide-react icons: FileText for technical sheet, Factory for manufacture
+  - Manufacture button disabled until US-026 implements the dialog
+  - Technical Sheet links to /products/:id/technical-sheet (placeholder for US-024)
+---
+
 ## 2026-01-16 12:55 - US-020
 Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
 - Implemented: Products CRUD backend endpoints with pagination and stock adjustment
