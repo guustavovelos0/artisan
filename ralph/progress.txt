@@ -322,3 +322,25 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - onSuccess callback triggers fetchProducts() in parent to refresh the list
 ---
 
+
+## 2026-01-16 - US-027
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Verified quotes CRUD endpoints (already implemented in prior iteration)
+- Files verified:
+  - apps/api/src/routes/quotes.ts (complete quotes CRUD with all endpoints)
+  - apps/api/src/index.ts (quotes routes already registered)
+- API testing confirmed:
+  - GET /api/quotes - returns paginated quotes with client info and status filter
+  - GET /api/quotes/:id - returns single quote with all items
+  - POST /api/quotes - creates quote with items, auto-increments number per user
+  - PUT /api/quotes/:id - updates quote and recalculates totals
+  - PUT /api/quotes/:id/status - updates quote status (DRAFT, SENT, APPROVED, REJECTED, COMPLETED)
+  - DELETE /api/quotes/:id - deletes quote and cascades items
+- **Learnings for future iterations:**
+  - Quote number auto-increment uses findFirst with orderBy desc to get last number
+  - calculateTotals helper: subtotal from items, total = subtotal + laborCost - discount (or manualTotal if set)
+  - Status filter: GET /api/quotes?status=SENT filters by QuoteStatus enum
+  - All endpoints validate ownership via userId from auth middleware
+  - Items can reference productId for traceability, or be manual entries (productId null)
+  - Prisma $transaction used for PUT /:id to delete old items before creating new ones
+---
