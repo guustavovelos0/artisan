@@ -13,6 +13,7 @@ import MaterialFormPage from '@/pages/MaterialFormPage'
 import ProductsPage from '@/pages/ProductsPage'
 import ProductFormPage from '@/pages/ProductFormPage'
 import TechnicalSheetPage from '@/pages/TechnicalSheetPage'
+import QuotesPage from '@/pages/QuotesPage'
 
 function Dashboard() {
   return (
@@ -168,11 +169,11 @@ function App() {
             }
           />
           <Route
-            path="/quotes/*"
+            path="/quotes"
             element={
               <ProtectedRoute>
                 <Layout>
-                  <PlaceholderPage title="Quotes" />
+                  <QuotesPage />
                 </Layout>
               </ProtectedRoute>
             }
