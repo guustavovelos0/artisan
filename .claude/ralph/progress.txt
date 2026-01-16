@@ -565,3 +565,16 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Delete button is icon-only on mobile to save horizontal space
   - Empty state handled separately in both mobile and desktop layouts
 ---
+
+## 2026-01-16 - US-047
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Technical sheet prominence in product form when editing
+- Files changed:
+  - apps/web/src/pages/ProductFormPage.tsx (added prominent Ficha Técnica card)
+- **Learnings for future iterations:**
+  - Use conditional rendering with `{isEditing && id && (...)}` to show content only when editing existing records
+  - Styling for prominent cards: use `border-primary/20 bg-primary/5` for subtle but noticeable highlight
+  - Use `<strong>` tag for emphasis within text content (e.g., "A ficha técnica é **opcional**")
+  - FileText icon from lucide-react is appropriate for technical sheet/document references
+  - Button with `asChild` prop wrapping Link creates a styled navigation button
+---

@@ -774,8 +774,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 47,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Added prominent card with 'Ficha Técnica' title, explanation text with **opcional** emphasis, and 'Gerenciar Ficha Técnica' button. Card only appears when editing existing products."
     },
     {
       "id": "US-048",
