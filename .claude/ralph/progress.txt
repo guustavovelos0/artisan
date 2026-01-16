@@ -364,3 +364,21 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Items validation happens in onSubmit before API call
   - When loading existing quote in edit mode, populate items state from API response
 ---
+
+## 2026-01-16 14:05 - US-031
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Quote totals calculation with auto and manual modes
+- Files changed:
+  - apps/web/src/pages/QuoteFormPage.tsx (added Quote Totals section with calculations)
+  - apps/web/src/components/ui/checkbox.tsx (new - Shadcn checkbox component)
+  - apps/web/package.json (added @radix-ui/react-checkbox dependency)
+- **Learnings for future iterations:**
+  - Use useState for totals state (laborCost, discount, manualTotal, useManualTotal)
+  - Calculate subtotal from items: `items.reduce((sum, item) => sum + item.total, 0)`
+  - Calculated total formula: `subtotal + laborCost - discount`
+  - Final total: use manualTotal if useManualTotal is checked, otherwise calculatedTotal
+  - Show calculated total with line-through when manual override is active: `cn("font-medium", useManualTotal && "text-muted-foreground line-through")`
+  - Checkbox from Shadcn uses onCheckedChange instead of onChange
+  - Initialize manualTotal with calculatedTotal when checkbox is first enabled
+  - Load totals fields from API response in edit mode
+---
