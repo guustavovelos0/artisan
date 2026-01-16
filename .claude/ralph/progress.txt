@@ -265,3 +265,18 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Cost summary pattern: Material Cost + Labor Cost = Total Cost
   - Radix UI Select dropdowns may need special handling in automated browser tests
 ---
+
+## 2026-01-16 13:10 - US-025
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Manufacture endpoint for producing products and consuming materials
+- Files changed:
+  - apps/api/src/routes/products.ts (added POST /:id/manufacture endpoint)
+- **Learnings for future iterations:**
+  - Use Prisma transaction ($transaction) for atomic operations that modify multiple tables
+  - Use increment/decrement in Prisma update for atomic quantity changes
+  - Structure error responses with detailed arrays (insufficientMaterials) for UI display
+  - Structure warning responses similarly (lowStockWarnings) for alerts
+  - Validate product has materials defined before allowing manufacture
+  - Check both sufficient stock (error case) and low stock threshold (warning case)
+  - Response includes: message, updated product, manufactured quantity, and optional warnings
+---

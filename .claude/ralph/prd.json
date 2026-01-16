@@ -407,8 +407,8 @@
         "Typecheck passes"
       ],
       "priority": 25,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Implemented manufacture endpoint with transaction-based material deduction. Returns insufficient materials list on error, low stock warnings when materials go below minStock."
     },
     {
       "id": "US-026",
