@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -20,6 +20,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { useAuth } from '@/contexts/AuthContext'
+import { ApiError } from '@/lib/api'
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -28,12 +30,14 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>
 
-const API_URL = 'http://localhost:3001/api'
-
 export default function LoginPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const { login } = useAuth()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/'
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -48,26 +52,14 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        setError(result.error || 'Login failed')
-        return
+      await login(data)
+      navigate(from, { replace: true })
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError(err.message)
+      } else {
+        setError('Network error. Please try again.')
       }
-
-      localStorage.setItem('token', result.token)
-      localStorage.setItem('user', JSON.stringify(result.user))
-      navigate('/')
-    } catch {
-      setError('Network error. Please try again.')
     } finally {
       setIsLoading(false)
     }

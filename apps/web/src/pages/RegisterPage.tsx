@@ -20,6 +20,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { useAuth } from '@/contexts/AuthContext'
+import { ApiError } from '@/lib/api'
 
 const registerSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -30,10 +32,9 @@ const registerSchema = z.object({
 
 type RegisterFormValues = z.infer<typeof registerSchema>
 
-const API_URL = 'http://localhost:3001/api'
-
 export default function RegisterPage() {
   const navigate = useNavigate()
+  const { register } = useAuth()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -52,26 +53,14 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        setError(result.error || 'Registration failed')
-        return
-      }
-
-      localStorage.setItem('token', result.token)
-      localStorage.setItem('user', JSON.stringify(result.user))
+      await register(data)
       navigate('/')
-    } catch {
-      setError('Network error. Please try again.')
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError(err.message)
+      } else {
+        setError('Network error. Please try again.')
+      }
     } finally {
       setIsLoading(false)
     }
