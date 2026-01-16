@@ -523,3 +523,22 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Validation messages in zod schemas need translation too
   - Some words like "Email" are the same in Portuguese (Brazil)
 ---
+
+## 2026-01-16 - US-042
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Verified R$ prefix on currency inputs (already implemented in prior iteration)
+- Files verified:
+  - apps/web/src/components/ui/currency-input.tsx (CurrencyInput component with R$ prefix)
+  - apps/web/src/pages/ProductFormPage.tsx (uses CurrencyInput for price and laborCost)
+  - apps/web/src/pages/MaterialFormPage.tsx (uses CurrencyInput for unitPrice)
+  - apps/web/src/pages/QuoteFormPage.tsx (uses CurrencyInput for laborCost, discount, manualTotal, item unitPrice)
+- Browser verification confirmed:
+  - Product form: R$ prefix on "Preço" and "Custo de Mão de Obra" fields
+  - Material form: R$ prefix on "Preço Unitário" field
+  - Quote form: R$ prefix on "Custo de Mão de Obra", "Desconto", and "Total Manual" fields
+- **Learnings for future iterations:**
+  - CurrencyInput component wraps input in div with absolute-positioned R$ span
+  - Uses pl-10 padding to make room for the currency symbol
+  - Component extends input props with currencySymbol prop (defaults to "R$")
+  - type="number" with step="0.01" min="0" for decimal currency values
+---
