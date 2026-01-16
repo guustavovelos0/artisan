@@ -18,6 +18,20 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 
 ---
 
+## 2026-01-16 12:01 - US-014
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Clients CRUD backend endpoints with pagination
+- Files changed:
+  - apps/api/src/routes/clients.ts (new - full CRUD for clients with auth and pagination)
+  - apps/api/src/index.ts (registered clients routes)
+- **Learnings for future iterations:**
+  - Pagination: use skip/take with page/limit query params, return total and totalPages
+  - Client model fields: name (required), email, phone, address, notes (all optional)
+  - All endpoints tested: GET list, GET/:id, POST, PUT/:id, DELETE/:id
+  - Response format: { client } for single, { clients, pagination } for list
+  - Use conditional spread operator for partial updates: ...(field !== undefined && { field })
+---
+
 ## 2026-01-16 11:57 - US-013
 Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
 - Implemented: Categories CRUD backend endpoints
