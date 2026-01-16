@@ -189,3 +189,17 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Token and user data stored in localStorage, validated on app init via /auth/me endpoint
 ---
 
+## 2026-01-16 - US-011
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Auth context, protected routes, and API client (already existed from previous iteration)
+- Files verified:
+  - apps/web/src/contexts/AuthContext.tsx (AuthContext with user state, login, logout, register functions)
+  - apps/web/src/components/ProtectedRoute.tsx (redirects to /login if not authenticated)
+  - apps/web/src/lib/api.ts (API client with automatic token injection)
+- **Learnings for future iterations:**
+  - AuthContext uses useEffect to check token validity on init via /auth/me endpoint
+  - isLoading state prevents flash of login page while checking auth status
+  - ProtectedRoute shows spinner while isLoading is true
+  - API client uses class pattern with private getToken() method for automatic token injection
+---
+
