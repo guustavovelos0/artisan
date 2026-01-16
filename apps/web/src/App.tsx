@@ -8,6 +8,7 @@ import LoginPage from '@/pages/LoginPage'
 import RegisterPage from '@/pages/RegisterPage'
 import ClientsPage from '@/pages/ClientsPage'
 import ClientFormPage from '@/pages/ClientFormPage'
+import MaterialsPage from '@/pages/MaterialsPage'
 
 function Dashboard() {
   return (
@@ -103,11 +104,11 @@ function App() {
             }
           />
           <Route
-            path="/materials/*"
+            path="/materials"
             element={
               <ProtectedRoute>
                 <Layout>
-                  <PlaceholderPage title="Materials" />
+                  <MaterialsPage />
                 </Layout>
               </ProtectedRoute>
             }
