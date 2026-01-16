@@ -10,7 +10,27 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 - Use react-hook-form + zod for form validation with Shadcn form components
 - API URL is http://localhost:3001/api
 - Token and user stored in localStorage after auth
+- Use ApiError class for typed error handling in catch blocks
+- AuthContext provides isLoading state for showing loading spinners during auth check
 
+---
+
+## 2026-01-16 09:15 - US-011
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Auth context, API client, and protected routes
+- Files changed:
+  - apps/web/src/lib/api.ts (new - API client with automatic token injection)
+  - apps/web/src/contexts/AuthContext.tsx (new - auth state management with user, login, logout, register)
+  - apps/web/src/components/ProtectedRoute.tsx (new - redirects to /login if not authenticated)
+  - apps/web/src/App.tsx (integrated AuthProvider and ProtectedRoute)
+  - apps/web/src/pages/LoginPage.tsx (updated to use AuthContext)
+  - apps/web/src/pages/RegisterPage.tsx (updated to use AuthContext)
+- **Learnings for future iterations:**
+  - API client auto-injects Bearer token from localStorage for all requests
+  - AuthContext checks token validity on mount by calling /auth/me endpoint
+  - ProtectedRoute shows loading spinner while auth state is being determined
+  - LoginPage preserves original URL via location.state.from for redirect after login
+  - Use ApiError class for typed error handling in catch blocks
 ---
 
 ## 2026-01-16 08:45 - US-010
