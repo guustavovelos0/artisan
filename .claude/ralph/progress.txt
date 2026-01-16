@@ -18,6 +18,19 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 
 ---
 
+## 2026-01-16 12:55 - US-020
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Products CRUD backend endpoints with pagination and stock adjustment
+- Files changed:
+  - apps/api/src/routes/products.ts (new - full CRUD for products with stock endpoint)
+  - apps/api/src/index.ts (registered products routes)
+- **Learnings for future iterations:**
+  - Product model fields: name, price (required); description, laborCost, quantity, minStock, categoryId (optional)
+  - GET /:id includes materials relation for technical sheet: `include: { materials: { include: { material: true } } }`
+  - Stock uses Int type (not Float like materials) for whole unit quantities
+  - Same pattern as materials routes: authMiddleware, pagination, ownership validation
+---
+
 ## 2026-01-16 12:45 - US-019
 Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
 - Implemented: Material form page for creating and editing materials
