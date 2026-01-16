@@ -15,7 +15,25 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 - Layout component wraps protected routes for consistent sidebar/header navigation
 - Use cn() utility from lib/utils to merge Tailwind classes conditionally
 - API routes: use `router.use(authMiddleware)` for protected routes, cast params with `as string`
+- ProductMaterial composite key pattern: use `productId_materialId: { productId, materialId }` for findUnique/update/delete
 
+---
+
+## 2026-01-16 12:50 - US-023
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Verified: Technical sheet endpoints already implemented in apps/api/src/routes/products.ts
+- All endpoints tested via curl and working correctly:
+  - GET /api/products/:id/materials - returns product's materials with quantities
+  - POST /api/products/:id/materials - adds material to product
+  - PUT /api/products/:id/materials/:materialId - updates material quantity
+  - DELETE /api/products/:id/materials/:materialId - removes material from product
+  - GET /api/products/:id/cost - calculates total cost (materialCost + laborCost)
+- **Learnings for future iterations:**
+  - ProductMaterial has composite unique key: `@@unique([productId, materialId])`
+  - Use `productId_materialId` object for Prisma composite key queries
+  - Cost calculation: sum of (quantity × unitPrice) for each material + laborCost
+  - Material cost breakdown returned with individual material costs for UI display
+  - Always validate both product ownership and material ownership before adding to technical sheet
 ---
 
 ## 2026-01-16 13:20 - US-022
