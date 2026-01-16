@@ -261,3 +261,24 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Material validation ensures materialId belongs to the same user
 ---
 
+## 2026-01-16 - US-024
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- What was implemented: Verified technical sheet page functionality (already implemented in prior iteration)
+- Files verified:
+  - apps/web/src/pages/TechnicalSheetPage.tsx (complete technical sheet UI)
+  - apps/web/src/App.tsx (route already configured at /products/:id/technical-sheet)
+  - apps/web/src/pages/ProductsPage.tsx (Technical Sheet button already links to page)
+- Features verified in browser:
+  - Add material dropdown with available materials (filters out already added)
+  - Materials table with columns: Material, Unit, Quantity, Unit Price, Total
+  - Editable quantity field (updates on blur or Enter key)
+  - Remove button per material with confirmation dialog
+  - Cost Summary showing: Material Cost, Labor Cost, Total Cost
+  - Toast notifications for success/error states
+- **Learnings for future iterations:**
+  - TechnicalSheetPage uses Promise.all for parallel fetching of product, materials, and cost
+  - editingQuantity state tracks in-progress quantity edits before committing
+  - materialsNotInSheet filters available materials to exclude already added ones
+  - Cost endpoint returns materialBreakdown which frontend uses for display
+---
+
