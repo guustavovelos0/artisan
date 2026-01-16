@@ -14,11 +14,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar } from '@/components/ui/calendar'
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -547,10 +542,11 @@ export default function QuoteFormPage() {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Valid Until</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
+                    <Dialog>
+                      <DialogTrigger asChild>
                         <FormControl>
                           <Button
+                            type="button"
                             variant="outline"
                             className={cn(
                               'w-full pl-3 text-left font-normal',
@@ -565,19 +561,24 @@ export default function QuoteFormPage() {
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
                         </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
+                      </DialogTrigger>
+                      <DialogContent className="w-auto p-0 sm:max-w-[325px]">
+                        <DialogHeader className="px-4 pt-4">
+                          <DialogTitle>Select Date</DialogTitle>
+                        </DialogHeader>
                         <Calendar
                           mode="single"
                           selected={field.value ?? undefined}
-                          onSelect={field.onChange}
+                          onSelect={(date) => {
+                            field.onChange(date)
+                          }}
                           disabled={(date) =>
                             date < new Date(new Date().setHours(0, 0, 0, 0))
                           }
-                          initialFocus
+                          className="p-3"
                         />
-                      </PopoverContent>
-                    </Popover>
+                      </DialogContent>
+                    </Dialog>
                     <FormMessage />
                   </FormItem>
                 )}

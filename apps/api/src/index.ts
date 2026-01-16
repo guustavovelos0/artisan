@@ -19,6 +19,8 @@ app.use(cors({
     'http://localhost:5175',
     'http://localhost:5176',
     'http://localhost:5177',
+    'http://localhost:5178',
+    'http://localhost:5179',
   ],
   credentials: true,
 }));

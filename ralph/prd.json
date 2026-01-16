@@ -613,6 +613,183 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 37,
+      "passes": true,
+      "notes": "Browser verified - Settings page with profile form and password change section"
+    },
+    {
+      "id": "US-038",
+      "title": "Fix date picker in QuoteFormPage",
+      "description": "As a user, I want the date picker in the quote form to open properly so I can select dates.",
+      "acceptanceCriteria": [
+        "Debug why date picker doesn't open (likely z-index or focus issue)",
+        "Ensure PopoverContent has proper z-index",
+        "Test click handler and popover state",
+        "Valid until date picker opens and allows date selection",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 38,
+      "passes": true,
+      "notes": "Fixed by replacing Popover with Dialog component. Radix Popover had positioning bug where transform was stuck at -200%. Dialog provides centered modal calendar that works reliably."
+    },
+    {
+      "id": "US-039",
+      "title": "Expand PDF viewer height",
+      "description": "As a user, I want the PDF preview to use more vertical space for better readability.",
+      "acceptanceCriteria": [
+        "Fix container height using h-[calc(100vh-12rem)] or similar",
+        "Add minimum height fallback min-h-[600px]",
+        "PDF viewer fills available vertical space",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 39,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-040",
+      "title": "Phone required + isWhatsapp flag for clients",
+      "description": "As a user, I want phone to be required for clients and want to mark if the number is WhatsApp.",
+      "acceptanceCriteria": [
+        "Add isWhatsapp Boolean field to Client model in Prisma schema with default false",
+        "Run Prisma migration",
+        "Update clients API routes to handle new field",
+        "Make phone field required in ClientFormPage",
+        "Add WhatsApp checkbox in ClientFormPage",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 40,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-041",
+      "title": "Localize app to pt-BR",
+      "description": "As a user, I want the app interface in Portuguese (Brazil) since I'm a Brazilian artisan.",
+      "acceptanceCriteria": [
+        "Replace all English UI text with Portuguese in all pages (~14 page files)",
+        "Update Layout.tsx navigation items to Portuguese",
+        "Update button labels, form labels, messages",
+        "Update date-fns locale for Portuguese date formatting",
+        "No i18n library needed - direct string replacement",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 41,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-042",
+      "title": "Add R$ prefix to currency inputs",
+      "description": "As a user, I want to see R$ prefix on currency input fields for clarity.",
+      "acceptanceCriteria": [
+        "Create reusable CurrencyInput component in apps/web/src/components/ui/currency-input.tsx",
+        "Component shows R$ prefix inside the input field",
+        "Update ProductFormPage to use CurrencyInput for price and laborCost",
+        "Update MaterialFormPage to use CurrencyInput for unitPrice",
+        "Update QuoteFormPage to use CurrencyInput for price fields",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 42,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-043",
+      "title": "Fix category selector and add CRUD modal",
+      "description": "As a user, I want the category selector to work and be able to manage categories without a separate page.",
+      "acceptanceCriteria": [
+        "Debug why category selector doesn't open (possibly empty categories issue)",
+        "Create CategoryManager component with modal for create/edit/delete",
+        "Add CategoryManager button next to category selector in ProductFormPage",
+        "Add CategoryManager button next to category selector in MaterialFormPage",
+        "No new sidebar tab needed - manage categories inline",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 43,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-044",
+      "title": "Products table mobile responsiveness",
+      "description": "As a user, I want to view products on mobile devices with a card layout.",
+      "acceptanceCriteria": [
+        "Add card layout for mobile using md:hidden class",
+        "Keep table layout for desktop using hidden md:block class",
+        "Cards show product name, category, quantity, price, and action buttons",
+        "Typecheck passes",
+        "Verify in browser at 375px width using dev-browser skill"
+      ],
+      "priority": 44,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-045",
+      "title": "Unit input as selector in MaterialFormPage",
+      "description": "As a user, I want to select units from a predefined list instead of free text.",
+      "acceptanceCriteria": [
+        "Convert unit free-text Input to Select dropdown",
+        "Options: m (metros), cm (centímetros), kg (quilogramas), g (gramas), ml (mililitros), L (litros), un (unidades)",
+        "Existing materials with other units still display correctly",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 45,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-046",
+      "title": "Materials table mobile responsiveness",
+      "description": "As a user, I want to view materials on mobile devices with a card layout.",
+      "acceptanceCriteria": [
+        "Add card layout for mobile using md:hidden class",
+        "Keep table layout for desktop using hidden md:block class",
+        "Cards show material name, category, quantity, unit, price, and action buttons",
+        "Same pattern as US-044 for consistency",
+        "Typecheck passes",
+        "Verify in browser at 375px width using dev-browser skill"
+      ],
+      "priority": 46,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-047",
+      "title": "Technical sheet prominence in product form",
+      "description": "As a user, I want a clear indication that I can add a technical sheet when editing a product.",
+      "acceptanceCriteria": [
+        "Add prominent card/section when editing an existing product",
+        "Clear indication that technical sheet is optional",
+        "Link/button to navigate to technical sheet page",
+        "Only show for existing products (not on create)",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 47,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-048",
+      "title": "Technical sheet page mobile responsiveness",
+      "description": "As a user, I want to view and manage technical sheets on mobile devices.",
+      "acceptanceCriteria": [
+        "Add card layout for mobile using md:hidden class",
+        "Keep table layout for desktop using hidden md:block class",
+        "Cards show material name, quantity, unit price, and total",
+        "Same pattern as US-044 and US-046 for consistency",
+        "Typecheck passes",
+        "Verify in browser at 375px width using dev-browser skill"
+      ],
+      "priority": 48,
       "passes": false,
       "notes": ""
     }
