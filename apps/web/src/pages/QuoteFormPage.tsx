@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { format } from 'date-fns'
-import { CalendarIcon, ArrowLeft, Loader2, Plus, Trash2, Package } from 'lucide-react'
+import { CalendarIcon, ArrowLeft, Loader2, Plus, Trash2, Package, Calculator } from 'lucide-react'
 import { api, ApiError } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -49,6 +49,8 @@ import {
   TableRow,
   TableFooter,
 } from '@/components/ui/table'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 
 const quoteSchema = z.object({
   clientId: z.string().min(1, 'Client is required'),
@@ -98,6 +100,11 @@ interface Quote {
   clientId: string
   client: Client
   items: QuoteItem[]
+  subtotal: number
+  laborCost: number
+  discount: number
+  total: number
+  manualTotal: number | null
 }
 
 interface ProductsResponse {
@@ -132,6 +139,10 @@ export default function QuoteFormPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [items, setItems] = useState<QuoteItem[]>([])
   const [productDialogOpen, setProductDialogOpen] = useState(false)
+  const [laborCost, setLaborCost] = useState<number>(0)
+  const [discount, setDiscount] = useState<number>(0)
+  const [manualTotal, setManualTotal] = useState<number | null>(null)
+  const [useManualTotal, setUseManualTotal] = useState(false)
 
   const form = useForm<QuoteFormValues>({
     resolver: zodResolver(quoteSchema),
@@ -195,6 +206,13 @@ export default function QuoteFormPage() {
       // Load existing items
       if (data.quote.items && data.quote.items.length > 0) {
         setItems(data.quote.items)
+      }
+      // Load totals fields
+      setLaborCost(data.quote.laborCost || 0)
+      setDiscount(data.quote.discount || 0)
+      if (data.quote.manualTotal !== null) {
+        setManualTotal(data.quote.manualTotal)
+        setUseManualTotal(true)
       }
       setError(null)
     } catch (err) {
@@ -271,8 +289,10 @@ export default function QuoteFormPage() {
     setItems(updatedItems)
   }
 
-  // Calculate subtotal
+  // Calculate subtotal and total
   const subtotal = items.reduce((sum, item) => sum + item.total, 0)
+  const calculatedTotal = subtotal + laborCost - discount
+  const finalTotal = useManualTotal && manualTotal !== null ? manualTotal : calculatedTotal
 
   async function onSubmit(data: QuoteFormValues) {
     setError(null)
@@ -306,6 +326,9 @@ export default function QuoteFormPage() {
         description: data.description || null,
         validUntil: data.validUntil ? data.validUntil.toISOString() : null,
         notes: data.notes || null,
+        laborCost,
+        discount,
+        manualTotal: useManualTotal ? manualTotal : null,
         items: items.map((item) => ({
           description: item.description,
           quantity: item.quantity,
@@ -605,6 +628,116 @@ export default function QuoteFormPage() {
                   </TableFooter>
                 </Table>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Totals Section */}
+          <Card className="max-w-2xl">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Calculator className="h-5 w-5" />
+                <CardTitle>Quote Totals</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Subtotal (auto-calculated, read-only) */}
+              <div className="flex items-center justify-between py-2">
+                <span className="text-muted-foreground">Subtotal (from items)</span>
+                <span className="font-medium">{formatCurrency(subtotal)}</span>
+              </div>
+
+              {/* Labor Cost */}
+              <div className="flex items-center justify-between gap-4">
+                <Label htmlFor="laborCost" className="text-muted-foreground">
+                  Labor Cost
+                </Label>
+                <Input
+                  id="laborCost"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={laborCost}
+                  onChange={(e) => setLaborCost(parseFloat(e.target.value) || 0)}
+                  className="w-32 text-right"
+                  placeholder="0.00"
+                />
+              </div>
+
+              {/* Discount */}
+              <div className="flex items-center justify-between gap-4">
+                <Label htmlFor="discount" className="text-muted-foreground">
+                  Discount
+                </Label>
+                <Input
+                  id="discount"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={discount}
+                  onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
+                  className="w-32 text-right"
+                  placeholder="0.00"
+                />
+              </div>
+
+              {/* Divider */}
+              <div className="border-t pt-4">
+                {/* Calculated Total */}
+                <div className="flex items-center justify-between py-2">
+                  <span className="font-medium">Calculated Total</span>
+                  <span className={cn(
+                    "font-medium",
+                    useManualTotal && "text-muted-foreground line-through"
+                  )}>
+                    {formatCurrency(calculatedTotal)}
+                  </span>
+                </div>
+
+                {/* Manual Total Override */}
+                <div className="flex items-center gap-2 py-2">
+                  <Checkbox
+                    id="useManualTotal"
+                    checked={useManualTotal}
+                    onCheckedChange={(checked) => {
+                      setUseManualTotal(checked === true)
+                      if (!checked) {
+                        setManualTotal(null)
+                      } else if (manualTotal === null) {
+                        setManualTotal(calculatedTotal)
+                      }
+                    }}
+                  />
+                  <Label htmlFor="useManualTotal" className="text-sm cursor-pointer">
+                    Override with manual total
+                  </Label>
+                </div>
+
+                {useManualTotal && (
+                  <div className="flex items-center justify-between gap-4 py-2">
+                    <Label htmlFor="manualTotal" className="text-muted-foreground">
+                      Manual Total
+                    </Label>
+                    <Input
+                      id="manualTotal"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={manualTotal ?? 0}
+                      onChange={(e) => setManualTotal(parseFloat(e.target.value) || 0)}
+                      className="w-32 text-right"
+                      placeholder="0.00"
+                    />
+                  </div>
+                )}
+
+                {/* Final Total */}
+                <div className="flex items-center justify-between py-4 border-t mt-4">
+                  <span className="text-lg font-bold">Final Total</span>
+                  <span className="text-lg font-bold text-primary">
+                    {formatCurrency(finalTotal)}
+                  </span>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
