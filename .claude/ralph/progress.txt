@@ -18,6 +18,21 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 
 ---
 
+## 2026-01-16 12:10 - US-015
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Clients list page with table, loading state, and actions
+- Files changed:
+  - apps/web/src/pages/ClientsPage.tsx (new - clients list with table)
+  - apps/web/src/App.tsx (updated route to use ClientsPage)
+- **Learnings for future iterations:**
+  - Use Shadcn Table components: Table, TableHeader, TableBody, TableRow, TableHead, TableCell
+  - Use lucide-react icons: Plus, Pencil, Trash2, Loader2 for action buttons
+  - Loading state: return early with Loader2 spinner while fetching
+  - Delete with confirm() dialog and deleting state per row
+  - Link "asChild" prop on Button to create button-styled links
+  - Use api.get/delete from lib/api for API calls with automatic token injection
+---
+
 ## 2026-01-16 12:01 - US-014
 Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
 - Implemented: Clients CRUD backend endpoints with pagination
