@@ -18,6 +18,19 @@ Started: Sex 16 Jan 2026 00:29:35 -03
 
 ---
 
+## 2026-01-16 12:25 - US-017
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Materials CRUD backend endpoints with pagination and stock adjustment
+- Files changed:
+  - apps/api/src/routes/materials.ts (new - full CRUD for materials with stock endpoint)
+  - apps/api/src/index.ts (registered materials routes)
+- **Learnings for future iterations:**
+  - Material model fields: name, unit, unitPrice (required); description, quantity, minStock, supplier, categoryId (optional)
+  - Include category relation in queries: `include: { category: true }`
+  - Separate stock adjustment endpoint: PUT /api/materials/:id/stock
+  - Validate categoryId belongs to user before creating/updating material
+---
+
 ## 2026-01-16 12:20 - US-016
 Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
 - Implemented: Client form page for creating and editing clients
