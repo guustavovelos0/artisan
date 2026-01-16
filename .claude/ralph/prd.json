@@ -478,8 +478,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 29,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Quote form page with client dropdown, title, description, valid until date picker (disables past dates), and notes textarea. Supports both create and edit modes."
     },
     {
       "id": "US-030",

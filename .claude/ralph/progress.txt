@@ -329,3 +329,22 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - API quote list response includes `_count: { items: number }` for item count
   - Same list page pattern as ClientsPage with added filter functionality
 ---
+
+## 2026-01-16 - US-029
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Quote form page with basic info fields
+- Files changed:
+  - apps/web/src/pages/QuoteFormPage.tsx (new - quote form with client, title, description, validUntil, notes)
+  - apps/web/src/components/ui/calendar.tsx (new - Shadcn calendar component)
+  - apps/web/src/components/ui/popover.tsx (new - Shadcn popover component)
+  - apps/web/src/App.tsx (added routes for /quotes/new and /quotes/:id)
+  - apps/web/package.json (added date-fns, react-day-picker dependencies)
+- **Learnings for future iterations:**
+  - Date picker uses Shadcn Calendar + Popover components with date-fns for formatting
+  - Use `disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}` to disable past dates
+  - Client dropdown fetches with high limit (?limit=1000) to get all clients for selection
+  - Form uses separate loading state for clients fetch vs quote fetch in edit mode
+  - Placeholder item `{ description: 'Item placeholder', quantity: 1, unitPrice: 0 }` needed for create since API requires at least one item
+  - Edit mode (isEditing) determined by presence of id from useParams
+  - validUntil stored as Date in form, converted to ISO string for API
+---
