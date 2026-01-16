@@ -6,6 +6,7 @@ import clientsRoutes from './routes/clients';
 import materialsRoutes from './routes/materials';
 import productsRoutes from './routes/products';
 import quotesRoutes from './routes/quotes';
+import dashboardRoutes from './routes/dashboard';
 
 const app = express();
 const PORT = 3001;
@@ -35,6 +36,7 @@ app.use('/api/clients', clientsRoutes);
 app.use('/api/materials', materialsRoutes);
 app.use('/api/products', productsRoutes);
 app.use('/api/quotes', quotesRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Start server
 app.listen(PORT, () => {

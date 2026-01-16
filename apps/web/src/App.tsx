@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Toaster } from '@/components/ui/sonner'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { Layout } from '@/components/Layout'
 import LoginPage from '@/pages/LoginPage'
 import RegisterPage from '@/pages/RegisterPage'
+import DashboardPage from '@/pages/DashboardPage'
 import ClientsPage from '@/pages/ClientsPage'
 import ClientFormPage from '@/pages/ClientFormPage'
 import MaterialsPage from '@/pages/MaterialsPage'
@@ -16,25 +17,6 @@ import TechnicalSheetPage from '@/pages/TechnicalSheetPage'
 import QuotesPage from '@/pages/QuotesPage'
 import QuoteFormPage from '@/pages/QuoteFormPage'
 import QuotePreviewPage from '@/pages/QuotePreviewPage'
-
-function Dashboard() {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-      <Card className="max-w-md">
-        <CardHeader>
-          <CardTitle>Welcome to Artisan!</CardTitle>
-          <CardDescription>Your artisan management app</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            Manage your clients, products, materials, and quotes all in one place.
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
 
 function PlaceholderPage({ title }: { title: string }) {
   return (
@@ -65,7 +47,7 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <Dashboard />
+                  <DashboardPage />
                 </Layout>
               </ProtectedRoute>
             }
