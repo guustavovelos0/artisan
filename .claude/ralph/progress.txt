@@ -551,3 +551,17 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Select component already imported from Shadcn, no new dependencies needed
   - Existing materials with units outside the predefined list will still work - the Select just won't show a selected value initially
 ---
+
+## 2026-01-16 - US-046
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Mobile card layout for materials page
+- Files changed:
+  - apps/web/src/pages/MaterialsPage.tsx (added mobile card layout with md:hidden, desktop table with hidden md:block)
+- **Learnings for future iterations:**
+  - Same mobile responsive pattern as ProductsPage (US-044): md:hidden for mobile cards, hidden md:block for desktop table
+  - Mobile card structure: header (name + category), stats grid (stock, unit, price), action buttons in border-t section
+  - Low stock badge uses same amber styling (text-amber-600, bg-amber-50) in both mobile and desktop layouts
+  - flex-1 on primary action button (Editar) makes it take remaining space
+  - Delete button is icon-only on mobile to save horizontal space
+  - Empty state handled separately in both mobile and desktop layouts
+---

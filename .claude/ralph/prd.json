@@ -758,8 +758,8 @@
         "Verify in browser at 375px width using dev-browser skill"
       ],
       "priority": 46,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Added mobile card layout with md:hidden class. Cards show material name, category (Sem categoria fallback), stock with amber styling for low stock, unit, price, and action buttons. Desktop table uses hidden md:block. Verified at 375px width."
     },
     {
       "id": "US-047",
