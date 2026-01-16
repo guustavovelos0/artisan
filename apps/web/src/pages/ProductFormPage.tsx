@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { ArrowLeft, Loader2 } from 'lucide-react'
+import CategoryManager from '@/components/CategoryManager'
 
 const productSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório'),
@@ -309,24 +310,30 @@ export default function ProductFormPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Categoria</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      disabled={loadingCategories}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione uma categoria" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {categories.map((category) => (
-                          <SelectItem key={category.id} value={category.id}>
-                            {category.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="flex gap-2">
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        disabled={loadingCategories}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione uma categoria" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {categories.map((category) => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <CategoryManager
+                        type="PRODUCT"
+                        onCategoriesChange={fetchCategories}
+                      />
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}

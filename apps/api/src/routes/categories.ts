@@ -8,18 +8,25 @@ const router = Router();
 // All routes require authentication
 router.use(authMiddleware);
 
-// GET /api/categories - Get all user's categories
+// GET /api/categories - Get all user's categories (optionally filtered by type)
 router.get('/', async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.userId;
+    const type = req.query.type as CategoryType | undefined;
 
     if (!userId) {
       res.status(401).json({ error: 'Unauthorized' });
       return;
     }
 
+    // Build where clause with optional type filter
+    const where: { userId: string; type?: CategoryType } = { userId };
+    if (type && Object.values(CategoryType).includes(type)) {
+      where.type = type;
+    }
+
     const categories = await prisma.category.findMany({
-      where: { userId },
+      where,
       orderBy: { name: 'asc' },
     });
 
