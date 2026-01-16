@@ -460,8 +460,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 28,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Quotes list page with table, status badges with colors (Draft=slate, Sent=blue, Approved=green, Rejected=red, Completed=purple), status filter dropdown that updates URL params, and action buttons for edit/delete."
     },
     {
       "id": "US-029",

@@ -313,3 +313,19 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Validate all productIds belong to user before creating quote items
   - QuoteItem has optional productId for linking to products or manual entry
 ---
+
+## 2026-01-16 13:35 - US-028
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Quotes list page with table, status badges, and filter
+- Files changed:
+  - apps/web/src/pages/QuotesPage.tsx (new - quotes list with table, status badges, filter dropdown)
+  - apps/web/src/components/ui/badge.tsx (new - Shadcn badge component)
+  - apps/web/src/App.tsx (updated route to use QuotesPage)
+- **Learnings for future iterations:**
+  - Use useSearchParams from react-router-dom for URL-based filtering state
+  - Status badge colors: Draft=slate, Sent=blue, Approved=green, Rejected=red, Completed=purple
+  - Badge component from Shadcn uses className for custom colors with `hover:bg-*` to maintain hover state
+  - Select component with onValueChange updates URL params which triggers refetch via useEffect dependency
+  - API quote list response includes `_count: { items: number }` for item count
+  - Same list page pattern as ClientsPage with added filter functionality
+---
