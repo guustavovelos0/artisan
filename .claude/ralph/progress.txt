@@ -348,3 +348,19 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Edit mode (isEditing) determined by presence of id from useParams
   - validUntil stored as Date in form, converted to ISO string for API
 ---
+
+## 2026-01-16 10:55 - US-030
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented: Quote items section with product selector and manual entry
+- Files changed:
+  - apps/web/src/pages/QuoteFormPage.tsx (updated - added items section with table, product dialog, manual entry)
+- **Learnings for future iterations:**
+  - Use Dialog component from Shadcn for product selector modal
+  - Items state managed separately from form state using useState
+  - Calculate item total on quantity/unitPrice change: `item.total = item.quantity * item.unitPrice`
+  - Use TableFooter for subtotal row in items table
+  - Product dialog shows list of clickable product buttons that auto-fill description/price
+  - Form restructured to multiple Card sections: Quote Info, Items, Additional Info
+  - Items validation happens in onSubmit before API call
+  - When loading existing quote in edit mode, populate items state from API response
+---
