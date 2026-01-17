@@ -9,7 +9,7 @@ import quotesRoutes from './routes/quotes';
 import dashboardRoutes from './routes/dashboard';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = parseInt(process.env.PORT || '3001', 10);
 
 // Middleware
 const allowedOrigins = [
@@ -48,6 +48,6 @@ app.use('/api/quotes', quotesRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Artisan API Server running on port ${PORT}`);
 });
