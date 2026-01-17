@@ -9,19 +9,26 @@ import quotesRoutes from './routes/quotes';
 import dashboardRoutes from './routes/dashboard';
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'http://localhost:5176',
+  'http://localhost:5177',
+  'http://localhost:5178',
+  'http://localhost:5179',
+];
+
+// Add production frontend URL if configured
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:5175',
-    'http://localhost:5176',
-    'http://localhost:5177',
-    'http://localhost:5178',
-    'http://localhost:5179',
-  ],
+  origin: allowedOrigins,
   credentials: true,
 }));
 app.use(express.json());
@@ -42,5 +49,5 @@ app.use('/api/dashboard', dashboardRoutes);
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Artisan API Server running on http://localhost:${PORT}`);
+  console.log(`Artisan API Server running on port ${PORT}`);
 });
