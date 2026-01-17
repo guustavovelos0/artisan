@@ -2,6 +2,9 @@
   "name": "@artisan/api",
   "version": "1.0.0",
   "description": "Artisan API server",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
